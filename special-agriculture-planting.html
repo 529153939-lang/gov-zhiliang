@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>特色农产管理 - 种植</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">特色农产管理</a>
+      <span>></span>
+      <span>种植</span>
+    </div>
+    <h2 class="page-title" style="margin-bottom: 10px;">特色种植农产品管理</h2>
+    
+    <!-- 工具栏 -->
+    <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-primary" onclick="openAddModal()">添加</button>
+        <button class="btn btn-default" onclick="exportData()">导出</button>
+      </div>
+      <div class="search-box">
+        <input type="text" class="form-control" placeholder="搜索种植农产品">
+        <button class="btn btn-default">搜索</button>
+      </div>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div style="margin-top: 10px;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>农产名称</th>
+            <th>农产品种</th>
+            <th>种类类型</th>
+            <th>标准生长周期</th>
+            <th>标准亩产</th>
+            <th>产地</th>
+            <th>特点</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+
+            <td>1</td>
+            <td>凤城板栗</td>
+            <td>板栗</td>
+            <td>坚果</td>
+            <td>180天</td>
+            <td>200kg/亩</td>
+            <td>凤城市刘家河镇、凤城市蓝旗镇</td>
+            <td>个大皮薄，果肉饱满</td>
+            <td><span class="status-tag active">启用</span></td>
+            <td>2025-11-13 11:22:33</td>
+            <td>
+              <button class="btn btn-default" onclick="openEditModal(1)">编辑</button>
+              <button class="btn btn-danger" onclick="deleteProduct(1)">删除</button>
+            </td>
+          </tr>
+          <tr>
+
+            <td>2</td>
+            <td>凤城草莓</td>
+            <td>草莓</td>
+            <td>水果</td>
+            <td>90天</td>
+            <td>1000kg/亩</td>
+            <td>凤城市凤山街道、凤城市草河街道</td>
+            <td>甜度高，口感好</td>
+            <td><span class="status-tag active">启用</span></td>
+            <td>2025-11-13 11:22:33</td>
+            <td>
+              <button class="btn btn-default" onclick="openEditModal(2)">编辑</button>
+              <button class="btn btn-danger" onclick="deleteProduct(2)">删除</button>
+            </td>
+          </tr>
+          <tr>
+
+            <td>3</td>
+            <td>凤城蓝莓</td>
+            <td>蓝莓</td>
+            <td>水果</td>
+            <td>120天</td>
+            <td>800kg/亩</td>
+            <td>凤城市草河街道、凤城市赛马镇</td>
+            <td>花青素含量高</td>
+            <td><span class="status-tag active">启用</span></td>
+            <td>2025-08-04 16:12:34</td>
+            <td>
+              <button class="btn btn-default" onclick="openEditModal(3)">编辑</button>
+              <button class="btn btn-danger" onclick="deleteProduct(3)">删除</button>
+            </td>
+          </tr>
+          <tr>
+
+            <td>4</td>
+            <td>凤城五味子</td>
+            <td>五味子</td>
+            <td>中药材</td>
+            <td>365天</td>
+            <td>500kg/亩</td>
+            <td>凤城市赛马镇、凤城市刘家河镇</td>
+            <td>药用价值高</td>
+            <td><span class="status-tag">关闭</span></td>
+            <td>2024-06-14 09:45:12</td>
+            <td>
+              <button class="btn btn-default" onclick="openEditModal(4)">编辑</button>
+              <button class="btn btn-danger" onclick="deleteProduct(4)">删除</button>
+            </td>
+          </tr>
+          <tr>
+
+            <td>5</td>
+            <td>凤城食用菌</td>
+            <td>食用菌</td>
+            <td>菌类</td>
+            <td>30天</td>
+            <td>2000kg/亩</td>
+            <td>凤城市蓝旗镇、凤城市凤山街道</td>
+            <td>营养丰富</td>
+            <td><span class="status-tag active">启用</span></td>
+            <td>2024-06-14 09:45:12</td>
+            <td>
+              <button class="btn btn-default" onclick="openEditModal(5)">编辑</button>
+              <button class="btn btn-danger" onclick="deleteProduct(5)">删除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">3</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 添加/编辑抽屉 -->
+  <div id="productModal" class="drawer" style="display: none; position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: white; box-shadow: -2px 0 5px rgba(0,0,0,0.2); transition: right 0.3s ease; z-index: 1000;">
+    <div class="drawer-header" style="padding: 20px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
+      <h3 id="modalTitle">添加特色农产品</h3>
+      <button class="close" onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+    </div>
+    <div class="drawer-body" style="padding: 20px; height: calc(100% - 120px); overflow-y: auto;">
+      <form id="productForm">
+        <input type="hidden" id="productId">
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px;">农产名称</label>
+          <div style="display: flex; gap: 10px;">
+            <select class="form-control" id="productName" required style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="">请选择农产名称</option>
+              <option value="凤城板栗">凤城板栗</option>
+              <option value="凤城草莓">凤城草莓</option>
+              <option value="凤城蓝莓">凤城蓝莓</option>
+              <option value="凤城五味子">凤城五味子</option>
+              <option value="凤城食用菌">凤城食用菌</option>
+            </select>
+            <button type="button" onclick="showAddInput('productName')" style="padding: 0 12px; border: 1px solid #2662b7; border-radius: 4px; background: #2662b7; color: white; cursor: pointer;">+</button>
+          </div>
+          <div id="productNameInput" style="display: none; margin-top: 10px;">
+            <input type="text" id="newProductName" placeholder="输入新的农产名称" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <div style="margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end;">
+              <button type="button" onclick="addProductName()" style="padding: 4px 8px; border: 1px solid #2662b7; border-radius: 4px; background: #2662b7; color: white; cursor: pointer;">确定</button>
+              <button type="button" onclick="hideAddInput('productName')" style="padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; background: #f0f0f0; cursor: pointer;">取消</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px;">农产品种</label>
+          <div style="display: flex; gap: 10px;">
+            <select class="form-control" id="productSpecies" required style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="">请选择产品品种</option>
+              <option value="板栗">板栗</option>
+              <option value="草莓">草莓</option>
+              <option value="蓝莓">蓝莓</option>
+              <option value="五味子">五味子</option>
+              <option value="食用菌">食用菌</option>
+              <option value="玉米">玉米</option>
+              <option value="蔬菜">蔬菜</option>
+            </select>
+            <button type="button" onclick="showAddInput('productSpecies')" style="padding: 0 12px; border: 1px solid #2662b7; border-radius: 4px; background: #2662b7; color: white; cursor: pointer;">+</button>
+          </div>
+          <div id="productSpeciesInput" style="display: none; margin-top: 10px;">
+            <input type="text" id="newProductSpecies" placeholder="输入新的产品品种" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <div style="margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end;">
+              <button type="button" onclick="addProductSpecies()" style="padding: 4px 8px; border: 1px solid #2662b7; border-radius: 4px; background: #2662b7; color: white; cursor: pointer;">确定</button>
+              <button type="button" onclick="hideAddInput('productSpecies')" style="padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; background: #f0f0f0; cursor: pointer;">取消</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px;">种类类型</label>
+          <div style="display: flex; gap: 10px;">
+            <select class="form-control" id="productType" required style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="">请选择</option>
+              <option value="水果">水果</option>
+              <option value="坚果">坚果</option>
+              <option value="中药材">中药材</option>
+              <option value="菌类">菌类</option>
+              <option value="蔬菜">蔬菜</option>
+            </select>
+            <button type="button" onclick="showAddInput('productType')" style="padding: 0 12px; border: 1px solid #2662b7; border-radius: 4px; background: #2662b7; color: white; cursor: pointer;">+</button>
+          </div>
+          <div id="productTypeInput" style="display: none; margin-top: 10px;">
+            <input type="text" id="newProductType" placeholder="输入新的种类类型" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <div style="margin-top: 5px; display: flex; gap: 5px; justify-content: flex-end;">
+              <button type="button" onclick="addProductType()" style="padding: 4px 8px; border: 1px solid #2662b7; border-radius: 4px; background: #2662b7; color: white; cursor: pointer;">确定</button>
+              <button type="button" onclick="hideAddInput('productType')" style="padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; background: #f0f0f0; cursor: pointer;">取消</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px;">标准生长周期</label>
+          <input type="text" class="form-control" id="growthPeriod" placeholder="如：90天" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px;">标准亩产</label>
+          <input type="text" class="form-control" id="standardYield" placeholder="如：1000kg/亩" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px;">产地（多个产地用逗号分隔）</label>
+          <input type="text" class="form-control" id="productOrigin" placeholder="如：凤城市凤山街道、凤城市草河街道" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px;">状态</label>
+          <select class="form-control" id="productStatus" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <option value="启用">启用</option>
+            <option value="关闭">关闭</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label style="display: block; margin-bottom: 5px;">特点</label>
+          <textarea class="form-control" id="productFeature" rows="3" placeholder="请输入产品特点" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="drawer-footer" style="padding: 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: flex-end; gap: 10px;">
+      <button class="btn btn-default" onclick="closeModal()" style="padding: 8px 16px; border: 1px solid #ddd; border-radius: 4px; background: #f0f0f0; cursor: pointer;">取消</button>
+      <button class="btn btn-primary" onclick="saveProduct()" style="padding: 8px 16px; border: 1px solid #2662b7; border-radius: 4px; background: #2662b7; color: white; cursor: pointer;">保存</button>
+    </div>
+  </div>
+  
+  <!-- 遮罩层 -->
+  <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+  
+  <script>
+    function openAddModal() {
+      document.getElementById('productId').value = '';
+      document.getElementById('productName').value = '';
+      document.getElementById('productSpecies').value = '';
+      document.getElementById('productType').value = '';
+      document.getElementById('growthPeriod').value = '';
+      document.getElementById('standardYield').value = '';
+      document.getElementById('productOrigin').value = '';
+      document.getElementById('productStatus').value = '启用';
+      document.getElementById('productFeature').value = '';
+      document.getElementById('modalTitle').textContent = '添加特色农产品';
+      document.getElementById('productModal').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('productModal').style.right = '0';
+      }, 10);
+      document.getElementById('overlay').style.display = 'block';
+    }
+    
+    function openEditModal(id) {
+      // 模拟数据填充，根据id获取不同的产品数据
+      document.getElementById('productId').value = id;
+      
+      // 根据不同的id设置不同的产品数据
+      if (id === 1) {
+        document.getElementById('productName').value = '凤城板栗';
+        document.getElementById('productSpecies').value = '板栗';
+        document.getElementById('productType').value = '坚果';
+        document.getElementById('growthPeriod').value = '180天';
+        document.getElementById('standardYield').value = '200kg/亩';
+        document.getElementById('productOrigin').value = '凤城市刘家河镇、凤城市蓝旗镇';
+        document.getElementById('productStatus').value = '启用';
+        document.getElementById('productFeature').value = '个大皮薄，果肉饱满';
+      } else if (id === 2) {
+        document.getElementById('productName').value = '凤城草莓';
+        document.getElementById('productSpecies').value = '草莓';
+        document.getElementById('productType').value = '水果';
+        document.getElementById('growthPeriod').value = '90天';
+        document.getElementById('standardYield').value = '1000kg/亩';
+        document.getElementById('productOrigin').value = '凤城市凤山街道、凤城市草河街道';
+        document.getElementById('productStatus').value = '启用';
+        document.getElementById('productFeature').value = '甜度高，口感好';
+      } else if (id === 3) {
+        document.getElementById('productName').value = '凤城蓝莓';
+        document.getElementById('productSpecies').value = '蓝莓';
+        document.getElementById('productType').value = '水果';
+        document.getElementById('growthPeriod').value = '120天';
+        document.getElementById('standardYield').value = '800kg/亩';
+        document.getElementById('productOrigin').value = '凤城市草河街道、凤城市赛马镇';
+        document.getElementById('productStatus').value = '启用';
+        document.getElementById('productFeature').value = '花青素含量高';
+      } else if (id === 4) {
+        document.getElementById('productName').value = '凤城五味子';
+        document.getElementById('productSpecies').value = '五味子';
+        document.getElementById('productType').value = '中药材';
+        document.getElementById('growthPeriod').value = '365天';
+        document.getElementById('standardYield').value = '500kg/亩';
+        document.getElementById('productOrigin').value = '凤城市赛马镇、凤城市刘家河镇';
+        document.getElementById('productStatus').value = '关闭';
+        document.getElementById('productFeature').value = '药用价值高';
+      } else if (id === 5) {
+        document.getElementById('productName').value = '凤城食用菌';
+        document.getElementById('productSpecies').value = '食用菌';
+        document.getElementById('productType').value = '菌类';
+        document.getElementById('growthPeriod').value = '30天';
+        document.getElementById('standardYield').value = '2000kg/亩';
+        document.getElementById('productOrigin').value = '凤城市蓝旗镇、凤城市凤山街道';
+        document.getElementById('productStatus').value = '启用';
+        document.getElementById('productFeature').value = '营养丰富';
+      }
+      
+      // 隐藏所有添加输入框
+      hideAddInput('productName');
+      hideAddInput('productSpecies');
+      hideAddInput('productType');
+      
+      document.getElementById('modalTitle').textContent = '编辑特色农产品';
+      document.getElementById('productModal').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('productModal').style.right = '0';
+      }, 10);
+      document.getElementById('overlay').style.display = 'block';
+    }
+    
+    function closeModal() {
+      document.getElementById('productModal').style.right = '-400px';
+      document.getElementById('overlay').style.display = 'none';
+      setTimeout(() => {
+        document.getElementById('productModal').style.display = 'none';
+      }, 300);
+    }
+    
+    function saveProduct() {
+      // 模拟保存操作
+      alert('保存成功！');
+      closeModal();
+    }
+    
+    function deleteProduct(id) {
+      if (confirm('确定要删除该特色农产品吗？')) {
+        alert('删除成功！');
+      }
+    }
+    
+    function exportData() {
+      // 模拟导出操作
+      alert('导出成功！');
+    }
+    
+    // 显示添加输入框
+    function showAddInput(field) {
+      document.getElementById(field + 'Input').style.display = 'block';
+    }
+    
+    // 隐藏添加输入框
+    function hideAddInput(field) {
+      document.getElementById(field + 'Input').style.display = 'none';
+      document.getElementById('new' + field.charAt(0).toUpperCase() + field.slice(1)).value = '';
+    }
+    
+    // 添加新的农产名称
+    function addProductName() {
+      const newName = document.getElementById('newProductName').value.trim();
+      if (newName) {
+        const select = document.getElementById('productName');
+        const option = document.createElement('option');
+        option.value = newName;
+        option.textContent = newName;
+        select.appendChild(option);
+        select.value = newName;
+        hideAddInput('productName');
+      }
+    }
+    
+    // 添加新的产品品种
+    function addProductSpecies() {
+      const newSpecies = document.getElementById('newProductSpecies').value.trim();
+      if (newSpecies) {
+        const select = document.getElementById('productSpecies');
+        const option = document.createElement('option');
+        option.value = newSpecies;
+        option.textContent = newSpecies;
+        select.appendChild(option);
+        select.value = newSpecies;
+        hideAddInput('productSpecies');
+      }
+    }
+    
+    // 添加新的种类类型
+    function addProductType() {
+      const newType = document.getElementById('newProductType').value.trim();
+      if (newType) {
+        const select = document.getElementById('productType');
+        const option = document.createElement('option');
+        option.value = newType;
+        option.textContent = newType;
+        select.appendChild(option);
+        select.value = newType;
+        hideAddInput('productType');
+      }
+    }
+    
+    // 点击遮罩层关闭抽屉
+    document.getElementById('overlay').addEventListener('click', closeModal);
+  </script>
+</body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - 质量安全监督信息系统</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* 数据卡片样式 */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1890ff;
+      margin-bottom: 8px;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    /* 图表网格 */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .chart-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .chart-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .chart-container {
+      height: 300px;
+    }
+    
+    /* 预警通知样式 */
+    .alert-section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+    
+    .alert-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .alert-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .alert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .alert-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: 6px;
+      border-left: 4px solid;
+    }
+    
+    .alert-item.urgent {
+      background-color: #fff1f0;
+      border-left-color: #ff4d4f;
+    }
+    
+    .alert-item.warning {
+      background-color: #fffbe6;
+      border-left-color: #faad14;
+    }
+    
+    .alert-item.info {
+      background-color: #e6f7ff;
+      border-left-color: #1890ff;
+    }
+    
+    .alert-tag {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+    
+    .alert-tag.urgent {
+      background-color: #ff4d4f;
+      color: #fff;
+    }
+    
+    .alert-tag.warning {
+      background-color: #faad14;
+      color: #fff;
+    }
+    
+    .alert-tag.info {
+      background-color: #1890ff;
+      color: #fff;
+    }
+    
+    .alert-content {
+      flex: 1;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .alert-time {
+      font-size: 12px;
+      color: #999;
+      margin-left: 10px;
+    }
+    
+    /* 查看全部按钮 */
+    .view-all-btn {
+      padding: 4px 12px;
+      background: #2662b7;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    
+    .view-all-btn:hover {
+      background: #1e4c8c;
+    }
+    
+    /* 响应式 */
+    @media (max-width: 1400px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    @media (max-width: 992px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- 数据卡片 -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">1,234</div>
+        <div class="stat-label">经营主体总数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">567</div>
+        <div class="stat-label">大棚地块数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">890</div>
+        <div class="stat-label">生产记录数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">456</div>
+        <div class="stat-label">检测记录数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1,256</div>
+        <div class="stat-label">合格证编码数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">3,456万</div>
+        <div class="stat-label">季度总产值</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1.2亿</div>
+        <div class="stat-label">年度总产值</div>
+      </div>
+    </div>
+    
+    <!-- 预警通知 -->
+    <div class="alert-section">
+      <div class="alert-header">
+        <span class="alert-title">预警通知</span>
+        <button class="view-all-btn" onclick="viewAllAlerts()">查看全部</button>
+      </div>
+      <div class="alert-list">
+        <div class="alert-item urgent">
+          <span class="alert-tag urgent">紧急</span>
+          <span class="alert-content">红旗镇胜利村检测点土壤重金属超标，请及时处理</span>
+          <span class="alert-time">10分钟前</span>
+        </div>
+        <div class="alert-item urgent">
+          <span class="alert-tag urgent">紧急</span>
+          <span class="alert-content">青山镇前进村大棚水质检测异常</span>
+          <span class="alert-time">30分钟前</span>
+        </div>
+        <div class="alert-item warning">
+          <span class="alert-tag warning">警告</span>
+          <span class="alert-content">大河镇渔业村粮测点设备离线超过24小时</span>
+          <span class="alert-time">2小时前</span>
+        </div>
+        <div class="alert-item warning">
+          <span class="alert-tag warning">警告</span>
+          <span class="alert-content">白云镇多个大棚未及时上传生产记录</span>
+          <span class="alert-time">3小时前</span>
+        </div>
+        <div class="alert-item info">
+          <span class="alert-tag info">信息</span>
+          <span class="alert-content">今日有3个新的地标申请待审核</span>
+          <span class="alert-time">5小时前</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 图表区域 -->
+    <div class="chart-grid">
+      <!-- 主体活跃度趋势 -->
+      <div class="chart-card">
+        <div class="chart-title">主体活跃度趋势</div>
+        <div class="chart-container">
+          <canvas id="activityTrendChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 各镇村产值分布 -->
+      <div class="chart-card">
+        <div class="chart-title">各镇村产值分布</div>
+        <div class="chart-container">
+          <canvas id="townOutputChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 各镇村土地分布 -->
+      <div class="chart-card">
+        <div class="chart-title">各镇村土地分布</div>
+        <div class="chart-container">
+          <canvas id="townLandChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 经营主体类型分布 -->
+      <div class="chart-card">
+        <div class="chart-title">经营主体类型分布</div>
+        <div class="chart-container">
+          <canvas id="subjectTypeChart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 最近活动 -->
+    <div class="mt-20">
+      <h3>最近活动</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>操作类型</th>
+            <th>操作人</th>
+            <th>操作内容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2026-02-27 10:30</td>
+            <td>添加</td>
+            <td>管理员</td>
+            <td>添加了新的涉农企业</td>
+          </tr>
+          <tr>
+            <td>2026-02-27 09:15</td>
+            <td>编辑</td>
+            <td>管理员</td>
+            <td>更新了大棚地块信息</td>
+          </tr>
+          <tr>
+            <td>2026-02-26 16:45</td>
+            <td>删除</td>
+            <td>管理员</td>
+            <td>删除了过期的生产记录</td>
+          </tr>
+          <tr>
+            <td>2026-02-26 14:20</td>
+            <td>添加</td>
+            <td>管理员</td>
+            <td>添加了新的检测记录</td>
+          </tr>
+          <tr>
+            <td>2026-02-26 11:05</td>
+            <td>编辑</td>
+            <td>管理员</td>
+            <td>更新了经营主体信息</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <script>
+    // 淡雅色系配色
+    const colors = {
+      primary: '#7cb5ec',
+      secondary: '#90ed7d',
+      tertiary: '#f7a35c',
+      quaternary: '#8085e9',
+      quinary: '#f15c80',
+      senary: '#e4d354',
+      septenary: '#2b908f',
+      octonary: '#f45b5b'
+    };
+    
+    // 主体活跃度趋势图
+    const activityTrendCtx = document.getElementById('activityTrendChart').getContext('2d');
+    new Chart(activityTrendCtx, {
+      type: 'line',
+      data: {
+        labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        datasets: [{
+          label: '活跃主体数',
+          data: [820, 850, 890, 920, 950, 980, 1020, 1050, 1080, 1100, 1120, 1150],
+          borderColor: colors.primary,
+          backgroundColor: 'rgba(124, 181, 236, 0.1)',
+          tension: 0.4,
+          fill: true
+        }, {
+          label: '新增主体数',
+          data: [45, 52, 48, 55, 60, 58, 62, 65, 70, 68, 72, 75],
+          borderColor: colors.secondary,
+          backgroundColor: 'transparent',
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: '数量（个）'
+            }
+          }
+        }
+      }
+    });
+    
+    // 各镇村产值分布图
+    const townOutputCtx = document.getElementById('townOutputChart').getContext('2d');
+    new Chart(townOutputCtx, {
+      type: 'bar',
+      data: {
+        labels: ['凤山街道', '草河街道', '刘家河镇', '蓝旗镇', '红旗镇', '青山镇', '大河镇', '白云镇'],
+        datasets: [{
+          label: '产值（万元）',
+          data: [3500, 2800, 3200, 2600, 2900, 3100, 2700, 2400],
+          backgroundColor: [
+            colors.primary,
+            colors.secondary,
+            colors.tertiary,
+            colors.quaternary,
+            colors.quinary,
+            colors.senary,
+            colors.septenary,
+            colors.octonary
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: '产值（万元）'
+            }
+          }
+        }
+      }
+    });
+    
+    // 各镇村土地分布图
+    const townLandCtx = document.getElementById('townLandChart').getContext('2d');
+    new Chart(townLandCtx, {
+      type: 'pie',
+      data: {
+        labels: ['凤山街道', '草河街道', '刘家河镇', '蓝旗镇', '红旗镇', '青山镇', '大河镇', '白云镇'],
+        datasets: [{
+          data: [1250, 980, 1120, 890, 1050, 1180, 920, 850],
+          backgroundColor: [
+            colors.primary,
+            colors.secondary,
+            colors.tertiary,
+            colors.quaternary,
+            colors.quinary,
+            colors.senary,
+            colors.septenary,
+            colors.octonary
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right'
+          }
+        }
+      }
+    });
+    
+    // 经营主体类型分布图
+    const subjectTypeCtx = document.getElementById('subjectTypeChart').getContext('2d');
+    new Chart(subjectTypeCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['涉农企业', '专业合作社', '家庭农场', '包装中心', '一般农户', '经纪人'],
+        datasets: [{
+          data: [432, 309, 247, 123, 99, 24],
+          backgroundColor: [
+            colors.primary,
+            colors.secondary,
+            colors.tertiary,
+            colors.quaternary,
+            colors.quinary,
+            colors.senary
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right'
+          }
+        }
+      }
+    });
+    
+    // 查看全部预警
+    function viewAllAlerts() {
+      alert('查看全部预警通知');
+    }
+  </script>
+</body>
+</html>

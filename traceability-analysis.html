@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>追溯分析 - 质量安全监督信息系统</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1890ff;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+    .date-range input {
+      padding: 6px 12px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+    }
+    /* 指标解释说明样式 */
+    .tooltip-icon {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+      cursor: help;
+      vertical-align: middle;
+    }
+
+    .tooltip-icon svg {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+    }
+
+    .tooltip-icon:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 1000;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <!-- 页面头部 -->
+    <div class="page-header">
+      <div class="breadcrumb">
+        <a href="index.html">首页</a> &gt; <a href="traceability-management.html">追溯管理</a> &gt; 追溯分析
+      </div>
+    </div>
+
+    <!-- 分析头部 -->
+    <div class="analysis-header">
+      <h2>追溯分析</h2>
+      <div class="date-range">
+        <label>时间范围：</label>
+        <input type="date" id="startDate" value="2026-01-01">
+        <span>至</span>
+        <input type="date" id="endDate" value="2026-02-28">
+        <button class="btn btn-primary" onclick="updateData()">查询</button>
+      </div>
+    </div>
+    
+    <!-- 统计卡片 -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">12,456</div>
+        <div class="stat-label">
+          累计生码总量
+          <span class="tooltip-icon" data-tooltip="COUNT(溯源码) - 统计系统中生成的所有溯源码数量，反映追溯体系覆盖广度">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1,245</div>
+        <div class="stat-label">
+          活跃主体数
+          <span class="tooltip-icon" data-tooltip="COUNT(DISTINCT 生码主体) - 统计生成溯源码的不同主体数量，反映参与追溯体系的生产经营主体规模">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">89.2%</div>
+        <div class="stat-label">
+          产品赋码覆盖率
+          <span class="tooltip-icon" data-tooltip="(有码产品品类数 / 总品类数) × 100% - 统计已生成溯源码的产品品类占比，反映追溯体系覆盖的产品广度">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">45,678</div>
+        <div class="stat-label">
+          累计扫码总次数
+          <span class="tooltip-icon" data-tooltip="SUM(扫码次数) - 统计所有溯源码被扫描的总次数，反映消费者对产品追溯的关注度">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 图表网格 -->
+    <div class="chart-grid">
+      <!-- 追溯码生成趋势 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          追溯码生成趋势
+          <span class="tooltip-icon" data-tooltip="COUNT(溯源码) GROUP BY 时间 - 展示不同时间段内追溯码的生成数量变化，反映追溯体系建设进度">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="traceabilityTrendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 扫码地域分布 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          扫码地域分布
+          <span class="tooltip-icon" data-tooltip="按省份/城市聚合扫码次数 - 展示不同地区的扫码热度，反映产品销售流向和消费者关注区域">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="scanRegionChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 平均流转层级 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          平均流转层级
+          <span class="tooltip-icon" data-tooltip="AVG(MAX(子码的流转层级)) - 统计产品从生产到消费的平均流转环节数，反映供应链复杂度">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="flowLevelChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 产品流向图 - 独占一行 -->
+    <div class="chart-card" style="margin-bottom: 20px;">
+      <div class="chart-title" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          产品流向图
+          <span class="tooltip-icon" data-tooltip="基于扁平化中国地图，以气泡形式展示各城市的产品扫码热度，气泡大小与扫码次数成正比，带流动效果连线表示产品从辽宁流向全国各地">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="product-filter" style="display: flex; gap: 10px; align-items: center;">
+          <label style="font-size: 13px; font-weight: normal; color: #666;">产品种类：</label>
+          <select id="productTypeFilter" onchange="updateProductFlowChart()" style="padding: 5px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; background-color: #fff; cursor: pointer;">
+            <option value="all">全部产品</option>
+            <option value="草莓">草莓</option>
+            <option value="蓝莓">蓝莓</option>
+            <option value="蔬菜">蔬菜</option>
+            <option value="板栗">板栗</option>
+            <option value="五味子">五味子</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-container" id="productFlowContainer" style="height: 400px;"></div>
+    </div>
+    
+    <!-- 详细数据表格 -->
+    <div class="card">
+      <h3 class="card-title">
+        批次内扫码分布
+        <span class="tooltip-icon" data-tooltip="展示特定批次码下，各子码的扫码次数与地域分布，支持按批次号、产品名称筛选">
+          <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+        </span>
+      </h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>批次号</th>
+              <th>产品名称</th>
+              <th>子码数量</th>
+              <th>扫码次数</th>
+              <th>扫码率</th>
+              <th>流转层级</th>
+              <th>主要流向地区</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>BC202601001</td>
+              <td>草莓</td>
+              <td>100</td>
+              <td>95</td>
+              <td>95.0%</td>
+              <td>3.2</td>
+              <td>辽宁、北京、上海</td>
+            </tr>
+            <tr>
+              <td>BC202601002</td>
+              <td>蓝莓</td>
+              <td>80</td>
+              <td>76</td>
+              <td>95.0%</td>
+              <td>2.8</td>
+              <td>辽宁、山东、河北</td>
+            </tr>
+            <tr>
+              <td>BC202601003</td>
+              <td>蔬菜</td>
+              <td>120</td>
+              <td>110</td>
+              <td>91.7%</td>
+              <td>2.5</td>
+              <td>辽宁、广东、浙江</td>
+            </tr>
+            <tr>
+              <td>BC202601004</td>
+              <td>板栗</td>
+              <td>60</td>
+              <td>55</td>
+              <td>91.7%</td>
+              <td>3.5</td>
+              <td>辽宁、福建、山东</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 初始化图表
+    function initCharts() {
+      // 追溯码生成趋势
+      const trendCtx = document.getElementById('traceabilityTrendChart').getContext('2d');
+      const trendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+          labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          datasets: [{
+            label: '追溯码生成数量',
+            data: [850, 920, 1050, 1180, 1250, 1320, 1280, 1200, 1100, 1020, 950, 876],
+            borderColor: '#5B8FF9',
+            backgroundColor: 'rgba(91, 143, 249, 0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '数量 (个)'
+              }
+            }
+          }
+        }
+      });
+
+      // 扫码地域分布
+      const regionCtx = document.getElementById('scanRegionChart').getContext('2d');
+      const regionChart = new Chart(regionCtx, {
+        type: 'bar',
+        data: {
+          labels: ['辽宁', '北京', '上海', '广东', '山东', '河北', '浙江', '福建'],
+          datasets: [{
+            label: '扫码次数',
+            data: [18200, 8500, 6200, 4800, 4200, 3500, 2800, 2178],
+            backgroundColor: '#5B8FF9'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '扫码次数 (次)'
+              }
+            }
+          }
+        }
+      });
+
+      // 平均流转层级
+      const flowLevelCtx = document.getElementById('flowLevelChart').getContext('2d');
+      const flowLevelChart = new Chart(flowLevelCtx, {
+        type: 'bar',
+        data: {
+          labels: ['草莓', '蓝莓', '蔬菜', '板栗', '五味子'],
+          datasets: [{
+            label: '平均流转层级',
+            data: [3.2, 2.8, 2.5, 3.5, 2.9],
+            backgroundColor: [
+              '#5B8FF9',
+              '#5AD8A6',
+              '#F6BD16',
+              '#E86452',
+              '#945FB9'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 5,
+              title: {
+                display: true,
+                text: '层级 (级)'
+              }
+            }
+          }
+        }
+      });
+
+      // 产品流向图 - 使用ECharts散点图模拟地图气泡效果
+      let productFlowChart = echarts.init(document.getElementById('productFlowContainer'));
+      
+      // 城市坐标数据（简化版中国主要城市坐标）
+      const cityData = [
+        { name: '辽宁', value: [123.5, 41.8, 18200], total: 18200, products: { '草莓': 8200, '蓝莓': 4200, '蔬菜': 3500, '板栗': 1800, '五味子': 500 } },
+        { name: '北京', value: [116.4, 39.9, 8500], total: 8500, products: { '草莓': 3500, '蓝莓': 1800, '蔬菜': 2000, '板栗': 1000, '五味子': 200 } },
+        { name: '上海', value: [121.5, 31.2, 6200], total: 6200, products: { '草莓': 2800, '蓝莓': 1500, '蔬菜': 1200, '板栗': 600, '五味子': 100 } },
+        { name: '广东', value: [113.3, 23.1, 4800], total: 4800, products: { '草莓': 1200, '蓝莓': 800, '蔬菜': 1800, '板栗': 800, '五味子': 200 } },
+        { name: '山东', value: [117.0, 36.7, 4200], total: 4200, products: { '草莓': 800, '蓝莓': 600, '蔬菜': 1500, '板栗': 1200, '五味子': 100 } },
+        { name: '河北', value: [114.5, 38.0, 3500], total: 3500, products: { '草莓': 600, '蓝莓': 500, '蔬菜': 1200, '板栗': 1000, '五味子': 200 } },
+        { name: '浙江', value: [120.2, 30.3, 2800], total: 2800, products: { '草莓': 400, '蓝莓': 400, '蔬菜': 1000, '板栗': 800, '五味子': 200 } },
+        { name: '福建', value: [119.3, 26.1, 2178], total: 2178, products: { '草莓': 300, '蓝莓': 300, '蔬菜': 800, '板栗': 600, '五味子': 178 } },
+        { name: '江苏', value: [118.8, 32.1, 1500], total: 1500, products: { '草莓': 400, '蓝莓': 300, '蔬菜': 500, '板栗': 250, '五味子': 50 } },
+        { name: '天津', value: [117.2, 39.1, 1200], total: 1200, products: { '草莓': 300, '蓝莓': 200, '蔬菜': 400, '板栗': 250, '五味子': 50 } }
+      ];
+      
+      // 产品颜色配置
+      const productColors = {
+        '草莓': '#E898AA',
+        '蓝莓': '#5B8FF9',
+        '蔬菜': '#5AD8A6',
+        '板栗': '#F6BD16',
+        '五味子': '#945FB9'
+      };
+
+      const productFlowOption = {
+        title: {
+          text: '产品流向分布图（辽宁 → 全国各地）',
+          left: 'center',
+          top: 10,
+          textStyle: {
+            fontSize: 14,
+            fontWeight: 'normal'
+          }
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: function(params) {
+            const data = params.data;
+            let html = '<div style="padding: 10px;">';
+            html += '<strong style="font-size: 14px;">' + data.name + '</strong><br/>';
+            html += '<div style="margin-top: 8px;">总扫码次数：<strong>' + data.total + '</strong> 次</div>';
+            html += '<div style="margin-top: 5px; font-size: 12px; color: #666;">产品分布：</div>';
+            for (let product in data.products) {
+              html += '<div style="font-size: 11px; margin-left: 10px;">' + product + '：' + data.products[product] + ' 次</div>';
+            }
+            html += '</div>';
+            return html;
+          },
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          borderColor: '#ddd',
+          borderWidth: 1,
+          textStyle: {
+            color: '#333'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '3%',
+          top: '12%',
+          bottom: '8%',
+          containLabel: false
+        },
+        xAxis: {
+          type: 'value',
+          min: 105,
+          max: 128,
+          axisLine: { show: false },
+          axisTick: { show: false },
+          axisLabel: { show: false },
+          splitLine: { show: false }
+        },
+        yAxis: {
+          type: 'value',
+          min: 22,
+          max: 47,
+          axisLine: { show: false },
+          axisTick: { show: false },
+          axisLabel: { show: false },
+          splitLine: { show: false }
+        },
+        series: [
+          {
+            type: 'scatter',
+            symbolSize: function(data) {
+              // 根据扫码次数计算气泡大小，最小20，最大80
+              return Math.max(20, Math.min(80, Math.sqrt(data[2]) / 2));
+            },
+            data: cityData,
+            itemStyle: {
+              color: function(params) {
+                // 根据总扫码次数设置颜色深浅
+                const value = params.data.total;
+                if (value > 10000) return '#1890ff';
+                if (value > 5000) return '#52c41a';
+                if (value > 3000) return '#faad14';
+                if (value > 2000) return '#fa8c16';
+                return '#f5222d';
+              },
+              opacity: 0.8,
+              shadowBlur: 10,
+              shadowColor: 'rgba(0, 0, 0, 0.2)'
+            },
+            label: {
+              show: true,
+              formatter: '{b}',
+              position: 'top',
+              fontSize: 11,
+              color: '#333'
+            },
+            emphasis: {
+              itemStyle: {
+                opacity: 1,
+                shadowBlur: 20,
+                shadowColor: 'rgba(0, 0, 0, 0.3)'
+              }
+            }
+          },
+          // 添加辽宁到各城市的连线，表示流向
+          {
+            type: 'lines',
+            coordinateSystem: 'cartesian2d',
+            zlevel: 1,
+            effect: {
+              show: true,
+              period: 4,
+              trailLength: 0.7,
+              color: '#1890ff',
+              symbolSize: 3
+            },
+            lineStyle: {
+              color: '#a0c3ff',
+              width: 1,
+              opacity: 0.6,
+              curveness: 0.2
+            },
+            data: cityData.slice(1).map(function(city) {
+              return {
+                coords: [
+                  [123.5, 41.8], // 辽宁
+                  city.value.slice(0, 2) // 目标城市
+                ]
+              };
+            })
+          }
+        ],
+      };
+
+      productFlowChart.setOption(productFlowOption);
+
+      // 响应式处理
+      window.addEventListener('resize', function() {
+        productFlowChart.resize();
+      });
+    }
+    
+    // 更新产品流向图（根据筛选条件）
+    function updateProductFlowChart() {
+      const selectedProduct = document.getElementById('productTypeFilter').value;
+      
+      // 根据筛选条件处理数据
+      let filteredCityData;
+      let chartTitle;
+      let seriesData;
+      
+      if (selectedProduct === 'all') {
+        // 显示全部产品
+        filteredCityData = cityData.map(city => ({
+          ...city,
+          value: [city.value[0], city.value[1], city.total]
+        }));
+        chartTitle = '产品流向分布图（辽宁 → 全国各地）';
+        
+        // 多色气泡 - 按总量分层
+        seriesData = [{
+          type: 'scatter',
+          symbolSize: function(data) {
+            return Math.max(20, Math.min(80, Math.sqrt(data[2]) / 2));
+          },
+          data: filteredCityData,
+          itemStyle: {
+            color: function(params) {
+              const value = params.data.total;
+              if (value > 10000) return '#1890ff';
+              if (value > 5000) return '#52c41a';
+              if (value > 3000) return '#faad14';
+              if (value > 2000) return '#fa8c16';
+              return '#f5222d';
+            },
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowColor: 'rgba(0, 0, 0, 0.2)'
+          },
+          label: {
+            show: true,
+            formatter: '{b}',
+            position: 'top',
+            fontSize: 11,
+            color: '#333'
+          }
+        }];
+      } else {
+        // 显示特定产品
+        filteredCityData = cityData.map(city => {
+          const productValue = city.products[selectedProduct] || 0;
+          return {
+            ...city,
+            value: [city.value[0], city.value[1], productValue],
+            currentProduct: selectedProduct,
+            currentValue: productValue
+          };
+        }).filter(city => city.currentValue > 0); // 只显示有数据的城市
+        
+        chartTitle = selectedProduct + '流向分布图（辽宁 → 全国各地）';
+        
+        // 单色气泡 - 使用产品对应颜色
+        seriesData = [{
+          type: 'scatter',
+          symbolSize: function(data) {
+            return Math.max(15, Math.min(70, Math.sqrt(data[2]) / 1.5));
+          },
+          data: filteredCityData,
+          itemStyle: {
+            color: productColors[selectedProduct],
+            opacity: 0.85,
+            shadowBlur: 10,
+            shadowColor: 'rgba(0, 0, 0, 0.2)'
+          },
+          label: {
+            show: true,
+            formatter: '{b}',
+            position: 'top',
+            fontSize: 11,
+            color: '#333'
+          }
+        }];
+      }
+      
+      // 更新图表配置
+      const newOption = {
+        title: {
+          text: chartTitle,
+          left: 'center',
+          top: 10,
+          textStyle: {
+            fontSize: 14,
+            fontWeight: 'normal'
+          }
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: function(params) {
+            const data = params.data;
+            let html = '<div style="padding: 10px;">';
+            html += '<strong style="font-size: 14px;">' + data.name + '</strong><br/>';
+            
+            if (selectedProduct === 'all') {
+              html += '<div style="margin-top: 8px;">总扫码次数：<strong>' + data.total + '</strong> 次</div>';
+              html += '<div style="margin-top: 5px; font-size: 12px; color: #666;">产品分布：</div>';
+              for (let product in data.products) {
+                html += '<div style="font-size: 11px; margin-left: 10px;">' + product + '：' + data.products[product] + ' 次</div>';
+              }
+            } else {
+              html += '<div style="margin-top: 8px;">' + selectedProduct + '扫码次数：<strong>' + data.currentValue + '</strong> 次</div>';
+              html += '<div style="margin-top: 5px; font-size: 11px; color: #666;">占该城市总扫码 ' + ((data.currentValue / data.total) * 100).toFixed(1) + '%</div>';
+            }
+            html += '</div>';
+            return html;
+          },
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          borderColor: '#ddd',
+          borderWidth: 1,
+          textStyle: { color: '#333' }
+        },
+        series: seriesData.concat([{
+          // 流向连线
+          type: 'lines',
+          coordinateSystem: 'cartesian2d',
+          zlevel: 1,
+          effect: {
+            show: true,
+            period: 4,
+            trailLength: 0.7,
+            color: selectedProduct === 'all' ? '#1890ff' : productColors[selectedProduct],
+            symbolSize: 3
+          },
+          lineStyle: {
+            color: selectedProduct === 'all' ? '#a0c3ff' : productColors[selectedProduct] + '99',
+            width: 1,
+            opacity: 0.6,
+            curveness: 0.2
+          },
+          data: filteredCityData.slice(1).map(function(city) {
+            return {
+              coords: [
+                [123.5, 41.8],
+                city.value.slice(0, 2)
+              ]
+            };
+          })
+        }])
+      };
+      
+      productFlowChart.setOption(newOption);
+    }
+    
+    // 更新数据
+    function updateData() {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      // 实际项目中应该根据日期范围请求数据
+      alert('查询时间范围：' + startDate + ' 至 ' + endDate);
+    }
+    
+    // 页面加载完成后初始化图表
+    window.onload = function() {
+      initCharts();
+    };
+  </script>
+</body>
+</html>

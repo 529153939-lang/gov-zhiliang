@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计分析 - 环境监测统计</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* 指标解释说明样式 */
+      .tooltip-icon {
+        position: relative;
+        display: inline-block;
+        margin-left: 5px;
+        cursor: help;
+        vertical-align: middle;
+      }
+      
+      .tooltip-icon svg {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+      }
+      
+      .tooltip-icon:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 1000;
+        margin-bottom: 5px;
+      }
+      
+      /* 统计卡片主数据样式 */
+      .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1890ff;
+        margin-bottom: 5px;
+      }
+      
+      /* 标题工具栏样式 */
+      .header-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 0;
+      }
+      .header-toolbar .page-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .header-tools {
+        display: flex;
+        gap: 8px;
+      }
+      .header-tools .btn {
+        padding: 6px 16px;
+        font-size: 13px;
+      }
+      
+      /* 面包屑样式 */
+      .breadcrumb {
+        margin-bottom: 12px;
+        font-size: 13px;
+      }
+      
+      /* 筛选条件样式 - 与农事操作统计保持一致 */
+      .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 16px;
+        background: #f5f7fa;
+        border-radius: 4px;
+        margin-bottom: 12px;
+      }
+      .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .filter-group label {
+        font-size: 14px;
+        color: #333;
+        white-space: nowrap;
+      }
+      .filter-group .form-control {
+        width: 140px;
+        padding: 6px 10px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        font-size: 13px;
+        height: 32px;
+      }
+      .filter-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+      }
+      .filter-actions .btn {
+        padding: 6px 20px;
+        height: 32px;
+        font-size: 13px;
+      }
+      
+      /* 统计卡片间距压缩 */
+      .stats-grid {
+        margin-bottom: 12px;
+        gap: 12px;
+      }
+      .stat-card {
+        padding: 16px;
+      }
+      
+      /* 图表网格间距压缩 */
+      .chart-grid {
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .chart-card {
+        padding: 16px;
+      }
+    </style>
+  </head>
+<body>
+  <div class="page-container">
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+      <a href="index.html">首页</a> &gt; <a href="#">统计分析</a> &gt; <span>环境监测统计</span>
+    </div>
+    
+    <!-- 标题工具栏 -->
+    <div class="header-toolbar">
+      <h1 class="page-title">环境监测统计</h1>
+      <div class="header-tools">
+        <button class="btn btn-default">导出</button>
+        <button class="btn btn-default">打印</button>
+      </div>
+    </div>
+    
+    <!-- 筛选条件 -->
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>时间范围：</label>
+        <input type="date" class="form-control" id="startDate">
+        <span>至</span>
+        <input type="date" class="form-control" id="endDate">
+      </div>
+      <div class="filter-group">
+        <label>监测点位：</label>
+        <select class="form-control" id="monitorPoint">
+          <option value="">全部</option>
+          <option value="point1">监测点1</option>
+          <option value="point2">监测点2</option>
+          <option value="point3">监测点3</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>乡镇：</label>
+        <select class="form-control" id="townSelect">
+          <option value="">全部</option>
+          <option value="凤山街道">凤山街道</option>
+          <option value="草河街道">草河街道</option>
+          <option value="刘家河镇">刘家河镇</option>
+          <option value="蓝旗镇">蓝旗镇</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-primary" onclick="searchData()">查询</button>
+        <button class="btn btn-default" onclick="resetSearch()">重置</button>
+      </div>
+    </div>
+    
+    <!-- 数据卡片 - 环境监测指标 -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">6.5</div>
+        <div class="stat-label">
+          平均土壤pH值
+          <span class="tooltip-icon" data-tooltip="土壤酸碱度的平均值，影响土壤养分有效性和作物生长">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1.2</div>
+        <div class="stat-label">
+          平均EC值
+          <span class="tooltip-icon" data-tooltip="土壤电导率的平均值，反映土壤盐分水平">
+            <i class="icon-exclamation-circle"></i>
+          </span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">2.5%</div>
+        <div class="stat-label">
+          平均有机质含量
+          <span class="tooltip-icon" data-tooltip="土壤中有机质的平均含量，影响土壤肥力和结构">
+            <i class="icon-exclamation-circle"></i>
+          </span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">98.5%</div>
+        <div class="stat-label">
+          土壤达标率
+          <span class="tooltip-icon" data-tooltip="符合土壤环境质量标准的监测点占比">
+            <i class="icon-exclamation-circle"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 图表网格 -->
+    <div class="chart-grid">
+      <!-- 土壤pH值分布 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          土壤pH值分布
+          <span class="tooltip-icon" data-tooltip="不同pH值范围的土壤占比分布">
+            <i class="icon-exclamation-circle"></i>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="phChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 土壤EC值分布 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          土壤EC值分布
+          <span class="tooltip-icon" data-tooltip="不同EC值范围的土壤占比分布">
+            <i class="icon-exclamation-circle"></i>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="ecChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 土壤有机质含量分布 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          土壤有机质含量分布
+          <span class="tooltip-icon" data-tooltip="不同有机质含量范围的土壤占比分布">
+            <i class="icon-exclamation-circle"></i>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="organicChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 土壤养分含量 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          土壤养分含量
+          <span class="tooltip-icon" data-tooltip="土壤中氮、磷、钾等主要养分的含量水平">
+            <i class="icon-exclamation-circle"></i>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="nutrientChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 各乡镇物联网设备安装数量 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          各乡镇物联网设备安装数量
+          <span class="tooltip-icon" data-tooltip="统计各乡镇安装的物联网监测设备数量分布">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="townDeviceChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 物联网设备类型分布 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          物联网设备类型分布
+          <span class="tooltip-icon" data-tooltip="不同类型物联网设备的占比分布">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="deviceTypeChart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 土壤重金属含量 -->
+    <div class="card">
+      <h3 class="card-title">
+        土壤重金属含量
+        <span class="tooltip-icon" data-tooltip="土壤中镉、汞、铅等重金属元素的含量水平与国家标准对比">
+          <i class="icon-exclamation-circle"></i>
+        </span>
+      </h3>
+      <div class="chart-container">
+        <canvas id="heavyMetalChart" style="width: 100%; height: 300px;"></canvas>
+      </div>
+    </div>
+    
+    <!-- 土壤污染状况 -->
+    <div class="card">
+      <h3 class="card-title">
+        各乡镇土壤污染状况对比
+        <span class="tooltip-icon" data-tooltip="各乡镇不同污染程度的土壤监测点数量对比">
+          <i class="icon-exclamation-circle"></i>
+        </span>
+      </h3>
+      <div class="chart-container">
+        <canvas id="pollutionChart" style="width: 100%; height: 300px;"></canvas>
+      </div>
+    </div>
+    
+    <!-- 详细数据表格 -->
+    <div class="card">
+      <h3 class="card-title">土壤环境监测详情</h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>监测点位</th>
+              <th>所在镇村</th>
+              <th>pH值</th>
+              <th>EC值</th>
+              <th>有机质(%)</th>
+              <th>氮(mg/kg)</th>
+              <th>磷(mg/kg)</th>
+              <th>钾(mg/kg)</th>
+              <th>污染状况</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>JCD001</td>
+              <td>凤山街道</td>
+              <td>6.5</td>
+              <td>1.2</td>
+              <td>2.5</td>
+              <td>120</td>
+              <td>45</td>
+              <td>180</td>
+              <td><span class="status-tag active">无污染</span></td>
+            </tr>
+            <tr>
+              <td>JCD002</td>
+              <td>草河街道</td>
+              <td>6.2</td>
+              <td>1.1</td>
+              <td>2.3</td>
+              <td>115</td>
+              <td>42</td>
+              <td>175</td>
+              <td><span class="status-tag active">无污染</span></td>
+            </tr>
+            <tr>
+              <td>JCD003</td>
+              <td>刘家河镇</td>
+              <td>6.8</td>
+              <td>1.3</td>
+              <td>2.7</td>
+              <td>125</td>
+              <td>48</td>
+              <td>185</td>
+              <td><span class="status-tag active">无污染</span></td>
+            </tr>
+            <tr>
+              <td>JCD004</td>
+              <td>蓝旗镇</td>
+              <td>6.3</td>
+              <td>1.0</td>
+              <td>2.4</td>
+              <td>118</td>
+              <td>44</td>
+              <td>178</td>
+              <td><span class="status-tag active">无污染</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 初始化图表
+    function initCharts() {
+      // 土壤pH值分布图表
+      const phCtx = document.getElementById('phChart').getContext('2d');
+      const phChart = new Chart(phCtx, {
+        type: 'bar',
+        data: {
+          labels: ['pH 5.5-6.0', 'pH 6.0-6.5', 'pH 6.5-7.0', 'pH 7.0-7.5', 'pH 7.5-8.0'],
+          datasets: [{
+            label: '占比 (%)',
+            data: [10, 30, 40, 15, 5],
+            backgroundColor: '#5AD8A6'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 50,
+              title: {
+                display: true,
+                text: '占比 (%)'
+              },
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // 土壤EC值分布图表
+      const ecCtx = document.getElementById('ecChart').getContext('2d');
+      const ecChart = new Chart(ecCtx, {
+        type: 'bar',
+        data: {
+          labels: ['EC 0.5-1.0', 'EC 1.0-1.5', 'EC 1.5-2.0', 'EC 2.0-2.5', 'EC 2.5以上'],
+          datasets: [{
+            label: '占比 (%)',
+            data: [25, 45, 20, 8, 2],
+            backgroundColor: '#5B8FF9'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 50,
+              title: {
+                display: true,
+                text: '占比 (%)'
+              },
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // 土壤有机质含量分布图表
+      const organicCtx = document.getElementById('organicChart').getContext('2d');
+      const organicChart = new Chart(organicCtx, {
+        type: 'bar',
+        data: {
+          labels: ['<1%', '1-2%', '2-3%', '3-4%', '>4%'],
+          datasets: [{
+            label: '占比 (%)',
+            data: [5, 25, 45, 20, 5],
+            backgroundColor: '#F6BD16'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 50,
+              title: {
+                display: true,
+                text: '占比 (%)'
+              },
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // 土壤养分含量图表
+      const nutrientCtx = document.getElementById('nutrientChart').getContext('2d');
+      const nutrientChart = new Chart(nutrientCtx, {
+        type: 'radar',
+        data: {
+          labels: ['氮', '磷', '钾', '钙', '镁', '硫'],
+          datasets: [{
+            label: '平均水平 (mg/kg)',
+            data: [120, 45, 180, 2500, 400, 150],
+            backgroundColor: 'rgba(24, 144, 255, 0.2)',
+            borderColor: '#1890ff',
+            pointBackgroundColor: '#1890ff',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#1890ff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            }
+          },
+          scales: {
+            r: {
+              beginAtZero: true,
+              pointLabels: {
+                font: {
+                  size: 12
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // 土壤重金属含量图表
+      const heavyMetalCtx = document.getElementById('heavyMetalChart').getContext('2d');
+      const heavyMetalChart = new Chart(heavyMetalCtx, {
+        type: 'bar',
+        data: {
+          labels: ['镉', '汞', '铅', '砷', '铬', '铜', '锌'],
+          datasets: [
+            {
+              label: '检测值 (mg/kg)',
+              data: [0.12, 0.08, 25.5, 8.5, 45.2, 28.5, 65.8],
+              backgroundColor: '#5B8FF9'
+            },
+            {
+              label: '国家标准 (mg/kg)',
+              data: [0.3, 0.5, 300, 30, 250, 100, 300],
+              backgroundColor: '#E86452'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              type: 'logarithmic',
+              title: {
+                display: true,
+                text: '含量 (mg/kg)'
+              }
+            }
+          }
+        }
+      });
+
+      // 土壤污染状况图表 - 按乡镇对比的水平条形图
+      const pollutionCtx = document.getElementById('pollutionChart').getContext('2d');
+      const pollutionChart = new Chart(pollutionCtx, {
+        type: 'bar',
+        data: {
+          labels: ['凤山街道', '草河街道', '刘家河镇', '蓝旗镇', '其他乡镇'],
+          datasets: [
+            {
+              label: '无污染',
+              data: [45, 38, 32, 28, 22],
+              backgroundColor: '#5AD8A6'
+            },
+            {
+              label: '轻度污染',
+              data: [3, 2, 2, 1, 1],
+              backgroundColor: '#F6BD16'
+            },
+            {
+              label: '中度污染',
+              data: [1, 1, 0, 0, 0],
+              backgroundColor: '#E86452'
+            },
+            {
+              label: '重度污染',
+              data: [0, 0, 0, 0, 0],
+              backgroundColor: '#945FB9'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          plugins: {
+            legend: {
+              position: 'bottom',
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              stacked: true,
+              title: {
+                display: true,
+                text: '数量 (个)'
+              }
+            },
+            y: {
+              stacked: true
+            }
+          }
+        }
+      });
+
+      // 各乡镇物联网设备安装数量图表
+      const townDeviceCtx = document.getElementById('townDeviceChart').getContext('2d');
+      const townDeviceChart = new Chart(townDeviceCtx, {
+        type: 'bar',
+        data: {
+          labels: ['凤山街道', '草河街道', '刘家河镇', '蓝旗镇', '其他乡镇'],
+          datasets: [{
+            label: '设备数量',
+            data: [125, 98, 76, 58, 43],
+            backgroundColor: '#5B8FF9'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '数量 (个)'
+              }
+            }
+          }
+        }
+      });
+
+      // 物联网设备类型分布图表
+      const deviceTypeCtx = document.getElementById('deviceTypeChart').getContext('2d');
+      const deviceTypeChart = new Chart(deviceTypeCtx, {
+        type: 'pie',
+        data: {
+          labels: ['土壤传感器', '气象监测站', '水质监测仪', '视频监控', '虫情测报灯'],
+          datasets: [{
+            data: [156, 89, 45, 78, 32],
+            backgroundColor: [
+              '#5B8FF9',
+              '#5AD8A6',
+              '#F6BD16',
+              '#945FB9',
+              '#E86452'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            }
+          }
+        }
+      });
+    }
+    
+    // 页面加载完成后初始化图表
+    window.onload = function() {
+      initCharts();
+    };
+    
+    // 查询数据
+    function searchData() {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const monitorPoint = document.getElementById('monitorPoint').value;
+      const town = document.getElementById('townSelect').value;
+      
+      console.log('查询条件：', { startDate, endDate, monitorPoint, town });
+      alert('查询条件：开始日期=' + startDate + ', 结束日期=' + endDate + ', 监测点位=' + monitorPoint + ', 镇村=' + town);
+    }
+    
+    // 重置搜索条件
+    function resetSearch() {
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      document.getElementById('monitorPoint').value = '';
+      document.getElementById('townSelect').value = '';
+      console.log('搜索条件已重置');
+    }
+  </script>
+</body>
+</html>

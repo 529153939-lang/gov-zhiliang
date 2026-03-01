@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>气象监督</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">气象监督</a>
+      <span>></span>
+      <span>气象监督</span>
+    </div>
+    <h2 class="page-title">气象监督</h2>
+    
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="left-tools">
+        <button class="btn btn-default">刷新数据</button>
+        <button class="btn btn-default">导出</button>
+      </div>
+      <div class="right-tools">
+        <div class="search-box">
+          <input type="text" class="form-control" placeholder="搜索">
+          <button class="btn btn-default">搜索</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 数据卡片 -->
+    <div class="d-flex gap-10">
+      <div class="data-card flex-1">
+        <div class="data-value">18.5°C</div>
+        <div class="data-label">当前温度</div>
+      </div>
+      <div class="data-card flex-1">
+        <div class="data-value">65%</div>
+        <div class="data-label">当前湿度</div>
+      </div>
+      <div class="data-card flex-1">
+        <div class="data-value">1013hPa</div>
+        <div class="data-label">当前气压</div>
+      </div>
+      <div class="data-card flex-1">
+        <div class="data-value">东南风 3级</div>
+        <div class="data-label">当前风向风速</div>
+      </div>
+    </div>
+    
+    <!-- 图表区域 -->
+    <div class="mt-20">
+      <h3>温度变化趋势</h3>
+      <div class="chart-container">
+        <!-- 这里可以放置图表，例如使用ECharts -->
+        <div id="temperatureChart" style="width: 100%; height: 400px;"></div>
+      </div>
+    </div>
+    
+    <div class="mt-20">
+      <h3>湿度变化趋势</h3>
+      <div class="chart-container">
+        <!-- 这里可以放置图表，例如使用ECharts -->
+        <div id="humidityChart" style="width: 100%; height: 400px;"></div>
+      </div>
+    </div>
+    
+    <div class="mt-20">
+      <h3>未来7天天气预报</h3>
+      <div class="chart-container">
+        <!-- 这里可以放置图表，例如使用ECharts -->
+        <div id="forecastChart" style="width: 100%; height: 400px;"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 模拟图表数据
+    // 实际项目中应该使用ECharts等图表库
+    document.addEventListener('DOMContentLoaded', function() {
+      // 温度变化趋势图表
+      const temperatureChart = document.getElementById('temperatureChart');
+      temperatureChart.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+          <div style="text-align: center;">
+            <h4>温度变化趋势</h4>
+            <p>00:00: 15°C</p>
+            <p>03:00: 14°C</p>
+            <p>06:00: 13°C</p>
+            <p>09:00: 16°C</p>
+            <p>12:00: 19°C</p>
+            <p>15:00: 20°C</p>
+            <p>18:00: 18°C</p>
+            <p>21:00: 16°C</p>
+          </div>
+        </div>
+      `;
+      
+      // 湿度变化趋势图表
+      const humidityChart = document.getElementById('humidityChart');
+      humidityChart.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+          <div style="text-align: center;">
+            <h4>湿度变化趋势</h4>
+            <p>00:00: 70%</p>
+            <p>03:00: 75%</p>
+            <p>06:00: 80%</p>
+            <p>09:00: 75%</p>
+            <p>12:00: 65%</p>
+            <p>15:00: 60%</p>
+            <p>18:00: 65%</p>
+            <p>21:00: 70%</p>
+          </div>
+        </div>
+      `;
+      
+      // 未来7天天气预报图表
+      const forecastChart = document.getElementById('forecastChart');
+      forecastChart.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+          <div style="text-align: center;">
+            <h4>未来7天天气预报</h4>
+            <p>今天: 晴 15-20°C</p>
+            <p>明天: 多云 14-19°C</p>
+            <p>后天: 阴 13-18°C</p>
+            <p>第4天: 晴 14-19°C</p>
+            <p>第5天: 晴 15-21°C</p>
+            <p>第6天: 多云 16-22°C</p>
+            <p>第7天: 晴 17-23°C</p>
+          </div>
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>

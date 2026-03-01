@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>质量安全监督信息系统</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 顶部导航 -->
+    <div class="top-nav">
+      <div class="logo">质量安全监督信息系统</div>
+      <div class="user-info">
+        <span class="user-name">管理员</span>
+        <button class="logout-btn" onclick="logout()">退出</button>
+      </div>
+    </div>
+    
+    <!-- 主内容区 -->
+    <div class="main-content">
+      <!-- 左侧菜单 -->
+      <div class="sidebar" id="sidebar">
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                <line x1="6" y1="18" x2="6.01" y2="18"></line>
+              </svg>
+            </span>
+            <span class="menu-text">Dashboard</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('dashboard.html')">数据概览</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="10" r="3"></circle>
+                <path d="M12 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16z"></path>
+              </svg>
+            </span>
+            <span class="menu-text">行政区划管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('administrative-division.html')">行政区划</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </span>
+            <span class="menu-text">特色农产管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('special-agriculture-planting.html')">种植</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('special-agriculture-pickling.html')">养殖</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('special-agriculture-aquatic.html')">水产</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8z"></path>
+                <polyline points="3 6 12 3 21 6"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </span>
+            <span class="menu-text">经营主体管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('business-subject-enterprise.html')">涉农企业</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('business-subject-cooperative.html')">专业合作社</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('business-subject-farm.html')">家庭农场</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('business-subject-packaging.html')">包装中心</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('business-subject-farmer.html')">一般农户</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('business-subject-broker.html')">经纪人</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="14" y1="2" x2="14" y2="22"></line>
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2z"></path>
+              </svg>
+            </span>
+            <span class="menu-text">生产管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('production-record.html')">生产记录</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <span class="menu-text">追溯管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('traceability-management.html')">追溯明细</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('traceability-analysis.html')">追溯分析</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
+            </span>
+            <span class="menu-text">检验检测管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('inspection-management.html')">检验检测管理</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('inspection-analysis.html')">检验检测分析</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </span>
+            <span class="menu-text">合格证管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('certificate-management.html')">合格证管理</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('certificate-analysis.html')">合格证分析</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+              </svg>
+            </span>
+            <span class="menu-text">土地管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('land-management.html')">地块信息</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('land-supply-demand.html')">供求信息</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('land-analysis.html')">土地分析</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+            </span>
+            <span class="menu-text">购销台账</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('purchase-sales-ledger.html')">购销台账监管</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 20V10"></path>
+                <path d="M12 20V4"></path>
+                <path d="M6 20v-6"></path>
+              </svg>
+            </span>
+            <span class="menu-text">统计分析</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('statistics-employee.html')">从业人员统计</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('statistics-environment.html')">环境监测统计</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('statistics-output.html')">农业产值统计</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('statistics-farming.html')">农事操作统计</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('statistics-ledger.html')">购销台账统计</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+            </span>
+            <span class="menu-text">气象监督</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('weather-monitoring.html')">气象监督</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <a href="#" class="menu-link" onclick="toggleSubMenu(this)">
+            <span class="menu-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </span>
+            <span class="menu-text">系统管理</span>
+          </a>
+          <div class="sub-menu">
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('system-user.html')">用户管理</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('system-role.html')">角色管理</a>
+            </div>
+            <div class="sub-menu-item">
+              <a href="#" onclick="loadPage('system-permission.html')">权限配置</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 内容区域 -->
+      <div class="content" id="content">
+        <!-- 页面内容将通过JavaScript动态加载 -->
+        <div class="card">
+          <h2 class="page-title">欢迎使用质量安全监督信息系统</h2>
+          <p>请从左侧菜单选择功能模块进行操作。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 当前选中的页面
+    let currentPage = 'dashboard.html';
+    
+    // 切换子菜单
+    function toggleSubMenu(element) {
+      const menuItem = element.parentElement;
+      menuItem.classList.toggle('open');
+    }
+    
+    // 加载页面内容
+    function loadPage(pageUrl) {
+      currentPage = pageUrl;
+      
+      // 移除所有菜单项的活动状态
+      const menuItems = document.querySelectorAll('.menu-item');
+      menuItems.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 移除所有子菜单项的活动状态
+      const subMenuItems = document.querySelectorAll('.sub-menu-item');
+      subMenuItems.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 获取当前点击的元素
+      const currentLink = event.target.closest('a');
+      
+      // 判断是一级菜单还是二级菜单
+      const parentMenuItem = currentLink.closest('.menu-item');
+      const subMenuItem = currentLink.closest('.sub-menu-item');
+      
+      if (subMenuItem) {
+        // 二级菜单选中
+        subMenuItem.classList.add('active');
+        parentMenuItem.classList.add('active');
+        parentMenuItem.classList.add('open');
+      } else {
+        // 一级菜单选中（无子菜单的情况，如Dashboard）
+        parentMenuItem.classList.add('active');
+      }
+      
+      // 加载页面内容
+      const contentDiv = document.getElementById('content');
+      contentDiv.innerHTML = '<div class="loading"></div> 加载中...';
+      
+      // 模拟加载延迟
+      setTimeout(() => {
+        contentDiv.innerHTML = `<iframe src="${pageUrl}" width="100%" height="100%" frameborder="0"></iframe>`;
+      }, 500);
+    }
+    
+    // 退出登录
+    function logout() {
+      if (confirm('确定要退出登录吗？')) {
+        window.location.href = 'login.html';
+      }
+    }
+    
+    // 初始加载dashboard页面
+      window.onload = function() {
+        // 设置Dashboard的二级菜单为默认选中
+        const dashboardMenu = document.querySelector('.menu-item:first-child');
+        const dashboardSubMenu = document.querySelector('.menu-item:first-child .sub-menu-item');
+        if (dashboardMenu && dashboardSubMenu) {
+          dashboardMenu.classList.add('active', 'open');
+          dashboardSubMenu.classList.add('active');
+        }
+        
+        const contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = '<div class="loading"></div> 加载中...';
+        
+        setTimeout(() => {
+          contentDiv.innerHTML = `<iframe src="dashboard.html" width="100%" height="100%" frameborder="0"></iframe>`;
+        }, 500);
+      };
+  </script>
+</body>
+</html>

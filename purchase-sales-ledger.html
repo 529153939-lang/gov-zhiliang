@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>购销台账 - 购销台账监管</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">购销台账</a>
+      <span>></span>
+      <span>购销台账监管</span>
+    </div>
+    <h2 class="page-title">购销台账监管</h2>
+    
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="right-tools">
+        <div class="search-box">
+          <input type="text" class="form-control" placeholder="搜索购销台账">
+          <button class="btn btn-default">搜索</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div class="mt-20">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>交易类型</th>
+            <th>主体名称</th>
+            <th>产品名称</th>
+            <th>交易数量</th>
+            <th>交易单价</th>
+            <th>交易金额</th>
+            <th>交易日期</th>
+            <th>对方主体</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+
+            <td>1</td>
+            <td><span style="color: #333;">采购</span></td>
+            <td>绿源农业科技发展有限公司</td>
+            <td>番茄</td>
+            <td>500kg</td>
+            <td>5.2元/kg</td>
+            <td>2,600元</td>
+            <td>2026-02-10</td>
+            <td>王家蔬菜农场</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewLedgerDetail('1')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+
+            <td>2</td>
+            <td><span style="color: #f5222d;">销售</span></td>
+            <td>绿源农业科技发展有限公司</td>
+            <td>番茄</td>
+            <td>450kg</td>
+            <td>6.5元/kg</td>
+            <td>2,925元</td>
+            <td>2026-02-11</td>
+            <td>东方果蔬分拣中心</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewLedgerDetail('2')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+
+            <td>3</td>
+            <td><span style="color: #333;">采购</span></td>
+            <td>丰收蔬菜专业合作社</td>
+            <td>黄瓜</td>
+            <td>300kg</td>
+            <td>4.8元/kg</td>
+            <td>1,440元</td>
+            <td>2026-02-10</td>
+            <td>李四农户</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewLedgerDetail('3')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+
+            <td>4</td>
+            <td><span style="color: #f5222d;">销售</span></td>
+            <td>丰收蔬菜专业合作社</td>
+            <td>黄瓜</td>
+            <td>280kg</td>
+            <td>5.9元/kg</td>
+            <td>1,652元</td>
+            <td>2026-02-12</td>
+            <td>张三农产品经纪人</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewLedgerDetail('4')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+
+            <td>5</td>
+            <td><span style="color: #333;">采购</span></td>
+            <td>东方果蔬分拣中心</td>
+            <td>草莓</td>
+            <td>200kg</td>
+            <td>15.6元/kg</td>
+            <td>3,120元</td>
+            <td>2026-02-11</td>
+            <td>王家蔬菜农场</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewLedgerDetail('5')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+
+            <td>6</td>
+            <td><span style="color: #f5222d;">销售</span></td>
+            <td>东方果蔬分拣中心</td>
+            <td>草莓</td>
+            <td>180kg</td>
+            <td>18.6元/kg</td>
+            <td>3,348元</td>
+            <td>2026-02-13</td>
+            <td>张三农产品经纪人</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewLedgerDetail('6')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">3</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function viewLedgerDetail(id) {
+      window.location.href = 'purchase-sales-ledger-detail.html?id=' + id;
+    }
+  </script>
+</body>
+</html>

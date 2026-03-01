@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大棚实时监管</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .card {
+      margin-bottom: 20px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .info-item {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .info-item label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .image-item {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .image-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .image-caption {
+      padding: 10px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    .video-container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .video-placeholder {
+      width: 100%;
+      height: 400px;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .map-container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .map-placeholder {
+      width: 100%;
+      height: 300px;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .environment-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .environment-item {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .environment-value {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .environment-range {
+      font-size: 12px;
+      color: #666;
+    }
+    .chart-container {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 5px;
+    }
+    .chart-placeholder {
+      width: 100%;
+      height: 200px;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="land-management.html">土地管理</a>
+      <span>></span>
+      <span>地块信息</span>
+      <span>></span>
+      <span>大棚实时监管</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 class="page-title">大棚实时监管</h2>
+      <button class="btn btn-default" onclick="window.history.back()">返回</button>
+    </div>
+    
+    <!-- 大棚基本信息 -->
+    <div class="card">
+      <h3>大棚基本信息</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>大棚编号：</label>
+          <span>DP-2024-001 番茄大棚</span>
+        </div>
+        <div class="info-item">
+          <label>所在位置：</label>
+          <span>红旗镇胜利村</span>
+        </div>
+        <div class="info-item">
+          <label>当前作物：</label>
+          <span>番茄（品种：普罗旺斯）</span>
+        </div>
+        <div class="info-item">
+          <label>面积：</label>
+          <span>2.5亩</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 大棚照片 -->
+    <div class="card">
+      <h3>大棚照片</h3>
+      <div class="image-grid">
+        <div class="image-item">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20greenhouse%20exterior%20with%20transparent%20roof%20and%20white%20structure&image_size=square_hd" alt="大棚正面图">
+          <div class="image-caption">大棚正面图</div>
+        </div>
+        <div class="image-item">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=tomato%20plants%20growing%20in%20greenhouse%20with%20red%20tomatoes&image_size=square_hd" alt="大棚内部图">
+          <div class="image-caption">大棚内部图</div>
+        </div>
+        <div class="image-item">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=irrigation%20system%20in%20greenhouse%20with%20water%20pipes%20and%20drip%20irrigation&image_size=square_hd" alt="灌溉系统">
+          <div class="image-caption">灌溉系统</div>
+        </div>
+        <div class="image-item">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=iot%20sensors%20and%20equipment%20in%20greenhouse&image_size=square_hd" alt="物联网设备">
+          <div class="image-caption">物联网设备</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 实时影像 -->
+    <div class="card">
+      <h3>实时影像</h3>
+      <div class="video-container">
+        <div class="video-placeholder">
+          <div>
+            <p>大棚内部摄像头</p>
+            <p>摄像头实时影像</p>
+            <p>设备型号：IP-Camera-001</p>
+            <p>最新更新：2026/02/28 19:35:20</p>
+          </div>
+        </div>
+        <button class="btn btn-default">刷新</button>
+      </div>
+    </div>
+    
+    <!-- 地理位置 -->
+    <div class="card">
+      <h3>地理位置</h3>
+      <div class="map-container">
+        <h4>卫星地图</h4>
+        <div class="map-placeholder">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=satellite%20view%20of%20greenhouse%20complex%20with%20surrounding%20fields&image_size=landscape_16_9" alt="卫星地图" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+      </div>
+    </div>
+    
+    <!-- 实时环境数据 -->
+    <div class="card">
+      <h3>实时环境数据</h3>
+      <div class="environment-grid">
+        <div class="environment-item">
+          <div class="environment-value">23.5°C</div>
+          <div class="environment-range">适宜范围: 20-28°C</div>
+          <div>空气温度</div>
+        </div>
+        <div class="environment-item">
+          <div class="environment-value">75%</div>
+          <div class="environment-range">适宜范围: 60-85%</div>
+          <div>空气湿度</div>
+        </div>
+        <div class="environment-item">
+          <div class="environment-value">65%</div>
+          <div class="environment-range">适宜范围: 60-80%</div>
+          <div>土壤湿度</div>
+        </div>
+        <div class="environment-item">
+          <div class="environment-value">385000 lux</div>
+          <div>光照强度</div>
+        </div>
+        <div class="environment-item">
+          <div class="environment-value">420 ppm</div>
+          <div>CO2浓度</div>
+        </div>
+        <div class="environment-item">
+          <div class="environment-value">22.0°C</div>
+          <div>土壤温度</div>
+        </div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-placeholder">
+          <p>环境数据趋势图</p>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <button class="btn btn-default">更多环境数据</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>检验检测管理</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">检验检测管理</a>
+      <span>></span>
+      <span>检验检测管理</span>
+    </div>
+    <h2 class="page-title">检测信息管理</h2>
+    
+    <!-- 统计卡片 -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px;">
+      <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="font-size: 24px; font-weight: bold; color: #2662b7;">5,600</div>
+        <div style="font-size: 14px; color: #666; margin-top: 5px;">累计检测批次</div>
+      </div>
+      <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="font-size: 24px; font-weight: bold; color: #52c41a;">99.8%</div>
+        <div style="font-size: 14px; color: #666; margin-top: 5px;">综合合格率</div>
+      </div>
+      <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="font-size: 24px; font-weight: bold; color: #faad14;">12</div>
+        <div style="font-size: 14px; color: #666; margin-top: 5px;">今日申请</div>
+      </div>
+      <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="font-size: 24px; font-weight: bold; color: #f5222d;">5</div>
+        <div style="font-size: 14px; color: #666; margin-top: 5px;">本月不合格</div>
+      </div>
+    </div>
+    
+    <!-- 筛选标签 -->
+    <div style="margin-bottom: 20px;">
+      <button class="btn btn-primary">全部</button>
+      <button class="btn btn-default" style="margin-left: 10px;">合格</button>
+      <button class="btn btn-default" style="margin-left: 10px;">不合格</button>
+      <button class="btn btn-default" style="margin-left: 10px;">申请中</button>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div class="mt-20">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>检测单号</th>
+            <th>检测主体</th>
+            <th>样品名称</th>
+            <th>检测项目</th>
+            <th>检测结果</th>
+            <th>检测时间</th>
+            <th>检测员机构</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>JC-202602110001</td>
+            <td>张三</td>
+            <td>红颜草莓</td>
+            <td>农药定性</td>
+            <td><span style="display: inline-block; padding: 2px 8px; background-color: #f6ffed; color: #52c41a; border-radius: 4px; font-size: 12px;">合格</span></td>
+            <td>2026-02-11 09:30</td>
+            <td>城关监管站</td>
+          </tr>
+          <tr>
+            <td>JC-202602110002</td>
+            <td>李四</td>
+            <td>蓝莓</td>
+            <td>有机磷(定量)</td>
+            <td><span style="display: inline-block; padding: 2px 8px; background-color: #fff2f0; color: #f5222d; border-radius: 4px; font-size: 12px;">不合格</span></td>
+            <td>2026-02-11 10:15</td>
+            <td>县检中心</td>
+          </tr>
+          <tr>
+            <td>JC-202602110003</td>
+            <td>王五</td>
+            <td>西瓜</td>
+            <td>农药定性</td>
+            <td><span style="display: inline-block; padding: 2px 8px; background-color: #fffbf0; color: #faad14; border-radius: 4px; font-size: 12px;">申请中-待审核</span></td>
+            <td>---</td>
+            <td>---</td>
+          </tr>
+          <tr>
+            <td>JC-202602100005</td>
+            <td>赵六</td>
+            <td>葡萄</td>
+            <td>农药定性</td>
+            <td><span style="display: inline-block; padding: 2px 8px; background-color: #f6ffed; color: #52c41a; border-radius: 4px; font-size: 12px;">合格</span></td>
+            <td>2026-02-10 16:00</td>
+            <td>城关监管站</td>
+          </tr>
+          <tr>
+            <td>JC-202602100004</td>
+            <td>孙七</td>
+            <td>番茄</td>
+            <td>重金属检测</td>
+            <td><span style="display: inline-block; padding: 2px 8px; background-color: #f6ffed; color: #52c41a; border-radius: 4px; font-size: 12px;">合格</span></td>
+            <td>2026-02-10 14:30</td>
+            <td>县检中心</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">3</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>系统管理 - 用户管理</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">系统管理</a>
+      <span>></span>
+      <span>用户管理</span>
+    </div>
+    <h2 class="page-title">用户管理</h2>
+    
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="left-tools">
+        <button class="btn btn-primary">添加</button>
+        <button class="btn btn-default">编辑</button>
+        <button class="btn btn-danger">删除</button>
+      </div>
+      <div class="right-tools">
+        <div class="search-box">
+          <input type="text" class="form-control" placeholder="搜索用户">
+          <button class="btn btn-default">搜索</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div class="mt-20">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><input type="checkbox"></th>
+            <th>序号</th>
+            <th>用户名</th>
+            <th>姓名</th>
+            <th>角色</th>
+            <th>联系电话</th>
+            <th>邮箱</th>
+            <th>状态</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>1</td>
+            <td>admin</td>
+            <td>系统管理员</td>
+            <td>系统管理员</td>
+            <td>13800138000</td>
+            <td>admin@example.com</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>2020-01-01</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default">编辑</button>
+                <button class="btn btn-default">重置密码</button>
+                <button class="btn btn-danger">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>2</td>
+            <td>user1</td>
+            <td>张三</td>
+            <td>质量安全组人员</td>
+            <td>13900139000</td>
+            <td>user1@example.com</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>2020-01-02</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default">编辑</button>
+                <button class="btn btn-default">重置密码</button>
+                <button class="btn btn-danger">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>3</td>
+            <td>user2</td>
+            <td>李四</td>
+            <td>质量安全组人员</td>
+            <td>13700137000</td>
+            <td>user2@example.com</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>2020-01-03</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default">编辑</button>
+                <button class="btn btn-default">重置密码</button>
+                <button class="btn btn-danger">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>4</td>
+            <td>user3</td>
+            <td>王五</td>
+            <td>质量安全组人员</td>
+            <td>13600136000</td>
+            <td>user3@example.com</td>
+            <td><span class="status-tag inactive">禁用</span></td>
+            <td>2020-01-04</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default">编辑</button>
+                <button class="btn btn-default">重置密码</button>
+                <button class="btn btn-danger">删除</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

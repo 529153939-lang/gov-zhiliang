@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生产记录详情</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+    }
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .detail-header h2 {
+      margin: 0;
+    }
+    .info-section {
+      background: white;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .info-section h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ddd;
+      font-size: 16px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .info-item {
+      padding: 0;
+    }
+    .info-item label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 3px;
+      color: #666;
+      font-size: 14px;
+    }
+    .info-item value {
+      display: block;
+      color: #333;
+      font-size: 14px;
+    }
+    .content {
+      padding: 15px;
+    }
+    .card {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <div class="card">
+        <div class="breadcrumb">
+          <a href="index.html">首页</a>
+          <span>></span>
+          <a href="production-record.html">生产记录管理</a>
+          <span>></span>
+          <span>生产记录详情</span>
+        </div>
+        
+        <div class="detail-header">
+          <h2>生产记录详情</h2>
+          <button class="btn btn-default" onclick="window.history.back()">返回</button>
+        </div>
+        
+        <!-- 操作基本信息 -->
+        <div class="info-section">
+          <h3>一、操作基本信息</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>操作编号：</label>
+              <value>PR-20260212-001</value>
+            </div>
+            <div class="info-item">
+              <label>农户信息：</label>
+              <value>张大山 (13800138000)</value>
+            </div>
+            <div class="info-item">
+              <label>地块名称：</label>
+              <value>1号番茄</value>
+            </div>
+            <div class="info-item">
+              <label>地块编号：</label>
+              <value>DP-2024-001</value>
+            </div>
+            <div class="info-item">
+              <label>所属区域：</label>
+              <value>凤城市凤山街道凤凰村</value>
+            </div>
+            <div class="info-item">
+              <label>作物品种：</label>
+              <value>番茄</value>
+            </div>
+            <div class="info-item">
+              <label>生育阶段：</label>
+              <value>结果期</value>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 操作信息 -->
+        <div class="info-section">
+          <h3>二、操作信息</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>农事类型：</label>
+              <value>施肥</value>
+            </div>
+            <div class="info-item">
+              <label>农资名称：</label>
+              <value>复合肥 (15-15-15)</value>
+            </div>
+            <div class="info-item">
+              <label>生产厂家：</label>
+              <value>凤凰化肥有限公司</value>
+            </div>
+            <div class="info-item">
+              <label>产品登记证：</label>
+              <value>农肥准字12345号</value>
+            </div>
+            <div class="info-item">
+              <label>批号：</label>
+              <value>20260101</value>
+            </div>
+            <div class="info-item">
+              <label>用量：</label>
+              <value>15kg</value>
+            </div>
+            <div class="info-item">
+              <label>施用方式：</label>
+              <value>穴施</value>
+            </div>
+            <div class="info-item">
+              <label>操作人员：</label>
+              <value>张大山</value>
+            </div>
+            <div class="info-item">
+              <label>操作时间：</label>
+              <value>2026-02-12 08:30:00</value>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 多媒体证据 -->
+        <div class="info-section">
+          <h3>三、多媒体证据</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>施肥过程照片：</label>
+              <value><a href="#" class="media-link">施肥照片1.jpg</a> (2026-02-12 08:35:22)</value>
+            </div>
+            <div class="info-item">
+              <label>农资包装扫码：</label>
+              <value><a href="#" class="media-link">包装扫码.jpg</a> (2026-02-12 08:20:15)</value>
+            </div>
+            <div class="info-item">
+              <label>施肥说明音频：</label>
+              <value><a href="#" class="media-link">施肥说明.mp3</a> (2026-02-12 08:15:30)</value>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 合规检查 -->
+        <div class="info-section">
+          <h3>四、合规检查</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>农资产品备案状态：</label>
+              <value><span class="status-tag active">已备案</span></value>
+            </div>
+            <div class="info-item">
+              <label>使用量合规状态：</label>
+              <value><span class="status-tag active">合规</span></value>
+            </div>
+            <div class="info-item">
+              <label>安全间隔期合规状态：</label>
+              <value><span class="status-tag active">合规</span></value>
+            </div>
+            <div class="info-item">
+              <label>合规判定结果：</label>
+              <value><span class="status-tag active">合规</span></value>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

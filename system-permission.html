@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>系统管理 - 权限配置</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">系统管理</a>
+      <span>></span>
+      <span>权限配置</span>
+    </div>
+    <h2 class="page-title">权限配置</h2>
+    
+    <!-- 角色选择 -->
+    <div class="mb-20">
+      <label class="form-label">选择角色：</label>
+      <select class="form-control" style="width: 300px;">
+        <option value="1">系统管理员</option>
+        <option value="2" selected>质量安全组人员</option>
+        <option value="3">只读用户</option>
+        <option value="4">审计人员</option>
+      </select>
+    </div>
+    
+    <!-- 权限树 -->
+    <div class="permission-tree">
+      <h3>菜单权限</h3>
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>系统管理</span>
+        </div>
+        <div class="tree-node-children">
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>用户管理</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>角色管理</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>权限配置</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>行政区划管理</span>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>特色农产管理</span>
+        </div>
+        <div class="tree-node-children">
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>种植管理</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>腌制管理</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>水产管理</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>经营主体管理</span>
+        </div>
+        <div class="tree-node-children">
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>涉农企业</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>专业合作社</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>家庭农场</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>包装中心</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>一般农户</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>经纪人</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>生产管理</span>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>追溯管理</span>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>检验检测管理</span>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>合格证管理</span>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>土地管理</span>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>购销台账</span>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>统计分析</span>
+        </div>
+        <div class="tree-node-children">
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>从业人员统计</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>产地环境监测看板</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>土地产值监测看板</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>农事操作统计</span>
+          </div>
+          <div class="tree-node">
+            <input type="checkbox" checked>
+            <span>购销台账统计</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tree-node">
+        <div class="tree-node-header">
+          <input type="checkbox" checked>
+          <span>气象监督</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 操作按钮 -->
+    <div class="mt-20">
+      <button class="btn btn-primary">保存</button>
+      <button class="btn btn-default">取消</button>
+    </div>
+  </div>
+  
+  <style>
+    .permission-tree {
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    
+    .tree-node {
+      margin-bottom: 10px;
+    }
+    
+    .tree-node-header {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .tree-node-children {
+      margin-left: 20px;
+      margin-top: 5px;
+    }
+    
+    .tree-node input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    
+    .form-label {
+      display: inline-block;
+      width: 100px;
+      font-weight: bold;
+    }
+    
+    .mb-20 {
+      margin-bottom: 20px;
+    }
+  </style>
+</body>
+</html>

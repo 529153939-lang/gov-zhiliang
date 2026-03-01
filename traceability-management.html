@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>追溯管理 - 追溯明细</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .parent-row {
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .parent-row:hover {
+      background-color: #f5f7fa;
+    }
+    
+    .parent-row td:first-child::before {
+      content: '▼';
+      display: inline-block;
+      margin-right: 5px;
+      font-size: 10px;
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">追溯管理</a>
+      <span>></span>
+      <span>追溯明细</span>
+    </div>
+    <h2 class="page-title">追溯明细</h2>
+    
+    <!-- 筛选条件 -->
+    <div class="filter-row" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; background: #f5f7fa; border-radius: 4px; margin-bottom: 12px;">
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">合格证编码</label>
+        <input type="text" class="form-control" placeholder="输入合格证编码" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">产品名称</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="凤城草莓">凤城草莓</option>
+          <option value="凤城番茄">凤城番茄</option>
+          <option value="凤城黄瓜">凤城黄瓜</option>
+          <option value="凤城水稻">凤城水稻</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">生码主体</label>
+        <input type="text" class="form-control" placeholder="输入生码主体" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">生成时间</label>
+        <input type="date" class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+        <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">查询</button>
+        <button class="btn btn-default" style="padding: 6px 16px; font-size: 13px;">重置</button>
+      </div>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div class="mt-20">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>合格证编码</th>
+            <th>产品名称</th>
+            <th>生码主体</th>
+            <th>批次号</th>
+            <th>生成时间</th>
+            <th>扫码次数</th>
+            <th>最近扫码地点</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 行 1 -->
+          <tr class="parent-row" onclick="toggleRow('row1')">
+            <td>HQ202602270001</td>
+            <td>凤城草莓</td>
+            <td>凤凰农业有限公司</td>
+            <td>B20260227</td>
+            <td>2026-02-27 10:30:00</td>
+            <td>12</td>
+            <td>辽宁丹东，辽宁沈阳</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewDetail('FC202602270001')">详情</button>
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewCirculation('FC202602270001')">追溯流</button>
+              </div>
+            </td>
+          </tr>
+          <tr id="row1" class="child-row" style="display: none;">
+            <td colspan="8">
+              <div style="padding: 15px; background-color: #f9f9f9; border-left: 3px solid #2662b7;">
+                <h5>子码信息：</h5>
+                <table class="table" style="margin-top: 10px;">
+                  <thead>
+                    <tr>
+                      <th>合格证码子码</th>
+                      <th>产品名称</th>
+                      <th>生码主体</th>
+                      <th>批次号</th>
+                      <th>生码时间</th>
+                      <th>扫码次数</th>
+                      <th>最近扫码地点</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>HQ202602270001-01</td>
+                      <td>凤城草莓</td>
+                      <td>凤凰农业有限公司</td>
+                      <td>B20260227</td>
+                      <td>2026-02-27 10:31:00</td>
+                      <td>3</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602270001-01')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602270001-02</td>
+                      <td>凤城草莓</td>
+                      <td>凤凰农业有限公司</td>
+                      <td>B20260227</td>
+                      <td>2026-02-27 10:32:00</td>
+                      <td>2</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602270001-02')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602270001-03</td>
+                      <td>凤城草莓</td>
+                      <td>凤凰农业有限公司</td>
+                      <td>B20260227</td>
+                      <td>2026-02-27 10:33:00</td>
+                      <td>4</td>
+                      <td>辽宁省沈阳市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602270001-03')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602270001-04</td>
+                      <td>凤城草莓</td>
+                      <td>凤凰农业有限公司</td>
+                      <td>B20260227</td>
+                      <td>2026-02-27 10:34:00</td>
+                      <td>3</td>
+                      <td>辽宁省大连市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602270001-04')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- 行 2 -->
+          <tr class="parent-row" onclick="toggleRow('row2')">
+            <td>HQ202602260002</td>
+            <td>凤城蓝莓</td>
+            <td>凤凰农业有限公司</td>
+            <td>B20260226</td>
+            <td>2026-02-26 09:15:00</td>
+            <td>8</td>
+            <td>辽宁丹东，辽宁大连</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewDetail('FC202602260002')">详情</button>
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewCirculation('FC202602260002')">追溯流</button>
+              </div>
+            </td>
+          </tr>
+          <tr id="row2" class="child-row" style="display: none;">
+            <td colspan="8">
+              <div style="padding: 15px; background-color: #f9f9f9; border-left: 3px solid #2662b7;">
+                <h5>子码信息：</h5>
+                <table class="table" style="margin-top: 10px;">
+                  <thead>
+                    <tr>
+                      <th>合格证码子码</th>
+                      <th>产品名称</th>
+                      <th>生码主体</th>
+                      <th>批次号</th>
+                      <th>生码时间</th>
+                      <th>扫码次数</th>
+                      <th>最近扫码地点</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>HQ202602260002-01</td>
+                      <td>凤城蓝莓</td>
+                      <td>凤凰农业有限公司</td>
+                      <td>B20260226</td>
+                      <td>2026-02-26 09:16:00</td>
+                      <td>2</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602260002-01')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602260002-02</td>
+                      <td>凤城蓝莓</td>
+                      <td>凤凰农业有限公司</td>
+                      <td>B20260226</td>
+                      <td>2026-02-26 09:17:00</td>
+                      <td>3</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602260002-02')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602260002-03</td>
+                      <td>凤城蓝莓</td>
+                      <td>凤凰农业有限公司</td>
+                      <td>B20260226</td>
+                      <td>2026-02-26 09:18:00</td>
+                      <td>1</td>
+                      <td>辽宁省沈阳市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602260002-03')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602260002-04</td>
+                      <td>凤城蓝莓</td>
+                      <td>凤凰农业有限公司</td>
+                      <td>B20260226</td>
+                      <td>2026-02-26 09:19:00</td>
+                      <td>2</td>
+                      <td>辽宁省大连市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602260002-04')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- 行 3 -->
+          <tr class="parent-row" onclick="toggleRow('row3')">
+            <td>HQ202602250003</td>
+            <td>凤城板栗</td>
+            <td>刘家农场</td>
+            <td>B20260225</td>
+            <td>2026-02-25 14:45:00</td>
+            <td>5</td>
+            <td>辽宁丹东，辽宁沈阳</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewDetail('FC202602250003')">详情</button>
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewCirculation('FC202602250003')">追溯流</button>
+              </div>
+            </td>
+          </tr>
+          <tr id="row3" class="child-row" style="display: none;">
+            <td colspan="8">
+              <div style="padding: 15px; background-color: #f9f9f9; border-left: 3px solid #2662b7;">
+                <h5>子码信息：</h5>
+                <table class="table" style="margin-top: 10px;">
+                  <thead>
+                    <tr>
+                      <th>合格证码子码</th>
+                      <th>产品名称</th>
+                      <th>生码主体</th>
+                      <th>批次号</th>
+                      <th>生码时间</th>
+                      <th>扫码次数</th>
+                      <th>最近扫码地点</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>HQ202602250003-01</td>
+                      <td>凤城板栗</td>
+                      <td>刘家农场</td>
+                      <td>B20260225</td>
+                      <td>2026-02-25 14:46:00</td>
+                      <td>1</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602250003-01')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602250003-02</td>
+                      <td>凤城板栗</td>
+                      <td>刘家农场</td>
+                      <td>B20260225</td>
+                      <td>2026-02-25 14:47:00</td>
+                      <td>2</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602250003-02')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602250003-03</td>
+                      <td>凤城板栗</td>
+                      <td>刘家农场</td>
+                      <td>B20260225</td>
+                      <td>2026-02-25 14:48:00</td>
+                      <td>1</td>
+                      <td>辽宁省沈阳市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602250003-03')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602250003-04</td>
+                      <td>凤城板栗</td>
+                      <td>刘家农场</td>
+                      <td>B20260225</td>
+                      <td>2026-02-25 14:49:00</td>
+                      <td>1</td>
+                      <td>辽宁省大连市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602250003-04')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- 行 4 -->
+          <tr class="parent-row" onclick="toggleRow('row4')">
+            <td>HQ202602240004</td>
+            <td>凤城蔬菜</td>
+            <td>花园农业合作社</td>
+            <td>B20260224</td>
+            <td>2026-02-24 11:20:00</td>
+            <td>15</td>
+            <td>辽宁丹东，辽宁大连，辽宁沈阳</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewDetail('FC202602240004')">详情</button>
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewCirculation('FC202602240004')">追溯流</button>
+              </div>
+            </td>
+          </tr>
+          <tr id="row4" class="child-row" style="display: none;">
+            <td colspan="8">
+              <div style="padding: 15px; background-color: #f9f9f9; border-left: 3px solid #2662b7;">
+                <h5>子码信息：</h5>
+                <table class="table" style="margin-top: 10px;">
+                  <thead>
+                    <tr>
+                      <th>合格证码子码</th>
+                      <th>产品名称</th>
+                      <th>生码主体</th>
+                      <th>批次号</th>
+                      <th>生码时间</th>
+                      <th>扫码次数</th>
+                      <th>最近扫码地点</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>HQ202602240004-01</td>
+                      <td>凤城蔬菜</td>
+                      <td>花园农业合作社</td>
+                      <td>B20260224</td>
+                      <td>2026-02-24 11:21:00</td>
+                      <td>4</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602240004-01')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602240004-02</td>
+                      <td>凤城蔬菜</td>
+                      <td>花园农业合作社</td>
+                      <td>B20260224</td>
+                      <td>2026-02-24 11:22:00</td>
+                      <td>3</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602240004-02')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602240004-03</td>
+                      <td>凤城蔬菜</td>
+                      <td>花园农业合作社</td>
+                      <td>B20260224</td>
+                      <td>2026-02-24 11:23:00</td>
+                      <td>2</td>
+                      <td>辽宁省沈阳市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602240004-03')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602240004-04</td>
+                      <td>凤城蔬菜</td>
+                      <td>花园农业合作社</td>
+                      <td>B20260224</td>
+                      <td>2026-02-24 11:24:00</td>
+                      <td>3</td>
+                      <td>辽宁省大连市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602240004-04')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- 行 5 -->
+          <tr class="parent-row" onclick="toggleRow('row5')">
+            <td>HQ202602230005</td>
+            <td>凤城五味子</td>
+            <td>草河农业公司</td>
+            <td>B20260223</td>
+            <td>2026-02-23 16:50:00</td>
+            <td>3</td>
+            <td>辽宁丹东，辽宁沈阳</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewDetail('FC202602230005')">详情</button>
+                <button class="btn btn-default" onclick="event.stopPropagation(); viewCirculation('FC202602230005')">追溯流</button>
+              </div>
+            </td>
+          </tr>
+          <tr id="row5" class="child-row" style="display: none;">
+            <td colspan="8">
+              <div style="padding: 15px; background-color: #f9f9f9; border-left: 3px solid #2662b7;">
+                <h5>子码信息：</h5>
+                <table class="table" style="margin-top: 10px;">
+                  <thead>
+                    <tr>
+                      <th>合格证码子码</th>
+                      <th>产品名称</th>
+                      <th>生码主体</th>
+                      <th>批次号</th>
+                      <th>生码时间</th>
+                      <th>扫码次数</th>
+                      <th>最近扫码地点</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>HQ202602230005-01</td>
+                      <td>凤城五味子</td>
+                      <td>草河农业公司</td>
+                      <td>B20260223</td>
+                      <td>2026-02-23 16:51:00</td>
+                      <td>2</td>
+                      <td>辽宁省丹东市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602230005-01')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>HQ202602230005-02</td>
+                      <td>凤城五味子</td>
+                      <td>草河农业公司</td>
+                      <td>B20260223</td>
+                      <td>2026-02-23 16:52:00</td>
+                      <td>1</td>
+                      <td>辽宁省沈阳市</td>
+                      <td>
+                        <div class="action-buttons">
+                          <button class="btn btn-default" onclick="event.stopPropagation(); viewSubDetail('HQ202602230005-02')">详情</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">3</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 右侧抽屉 -->
+  <div id="circulationDrawer" class="drawer" style="position: fixed; top: 0; right: -500px; width: 500px; height: 100vh; background: white; box-shadow: -2px 0 8px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease;">
+    <div class="drawer-header" style="padding: 20px; border-bottom: 1px solid #e6e9ed; display: flex; justify-content: space-between; align-items: center;">
+      <h3>流通信息</h3>
+      <button class="btn btn-default" onclick="closeDrawer()">关闭</button>
+    </div>
+    <div class="drawer-content" style="padding: 20px; height: calc(100vh - 80px); overflow-y: auto;">
+      <div id="circulationContent">
+        <!-- 流通路径内容将通过JavaScript动态填充 -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- 遮罩层 -->
+  <div id="drawerOverlay" class="drawer-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none;"></div>
+  
+  <script>
+    function viewDetail(codeId) {
+      // 跳转到详情页面
+      window.location.href = `traceability-detail.html?id=${codeId}`;
+    }
+    
+    function viewSubDetail(subCodeId) {
+      // 跳转到子码详情页面
+      window.location.href = `traceability-sub-detail.html?id=${subCodeId}`;
+    }
+    
+    function viewCirculation(codeId) {
+      // 显示右侧抽屉
+      document.getElementById('circulationDrawer').style.right = '0';
+      document.getElementById('drawerOverlay').style.display = 'block';
+      
+      // 填充流通路径内容
+      const circulationContent = document.getElementById('circulationContent');
+      circulationContent.innerHTML = `
+        <h4>流通路径：</h4>
+        <div style="position: relative; height: 400px; overflow: hidden; margin-top: 20px;">
+          <svg width="100%" height="400" viewBox="0 0 800 400" style="position: absolute; top: 30px; left: 30px;">
+            <!-- 连接线 -->
+            <line x1="100" y1="150" x2="200" y2="150" stroke="#17a2b8" stroke-width="2"/>
+            <line x1="250" y1="150" x2="350" y2="150" stroke="#17a2b8" stroke-width="2"/>
+            <line x1="400" y1="150" x2="500" y2="150" stroke="#17a2b8" stroke-width="2"/>
+            <line x1="550" y1="150" x2="650" y2="150" stroke="#17a2b8" stroke-width="2"/>
+            <line x1="500" y1="150" x2="500" y2="50" stroke="#17a2b8" stroke-width="2"/>
+            <line x1="500" y1="50" x2="600" y2="50" stroke="#17a2b8" stroke-width="2"/>
+            <line x1="500" y1="50" x2="400" y2="50" stroke="#17a2b8" stroke-width="2"/>
+            <line x1="500" y1="150" x2="500" y2="250" stroke="#17a2b8" stroke-width="2"/>
+            <line x1="500" y1="250" x2="600" y2="250" stroke="#17a2b8" stroke-width="2"/>
+            
+            <!-- 农户节点 -->
+            <circle cx="100" cy="150" r="20" fill="#a8e6cf" stroke="#28a745" stroke-width="2"/>
+            <text x="100" y="190" text-anchor="middle" font-size="12" fill="#333333">农户</text>
+            <text x="100" y="205" text-anchor="middle" font-size="10" fill="#666666">张大山</text>
+            
+            <!-- 经纪人节点 -->
+            <circle cx="250" cy="150" r="20" fill="#dcedc1" stroke="#8bc34a" stroke-width="2"/>
+            <text x="250" y="190" text-anchor="middle" font-size="12" fill="#333333">经纪人</text>
+            <text x="250" y="205" text-anchor="middle" font-size="10" fill="#666666">王权富贵</text>
+            
+            <!-- 收购节点 -->
+            <circle cx="400" cy="150" r="20" fill="#ffd93d" stroke="#ffc107" stroke-width="2"/>
+            <text x="400" y="190" text-anchor="middle" font-size="12" fill="#333333">收购</text>
+            <text x="400" y="205" text-anchor="middle" font-size="10" fill="#666666">凤城市农贸批发市场</text>
+            
+            <!-- 商超节点 -->
+            <circle cx="500" cy="150" r="20" fill="#ffadad" stroke="#ff5722" stroke-width="2"/>
+            <text x="500" y="190" text-anchor="middle" font-size="12" fill="#333333">商超</text>
+            <text x="500" y="205" text-anchor="middle" font-size="10" fill="#666666">大红福超市</text>
+            
+            <!-- 终端节点 1 -->
+            <circle cx="650" cy="150" r="20" fill="#b39ddb" stroke="#9c27b0" stroke-width="2"/>
+            <text x="650" y="190" text-anchor="middle" font-size="12" fill="#333333">终端</text>
+            <text x="650" y="205" text-anchor="middle" font-size="10" fill="#666666">客户1</text>
+            
+            <!-- 终端节点 2 -->
+            <circle cx="400" cy="50" r="20" fill="#b39ddb" stroke="#9c27b0" stroke-width="2"/>
+            <text x="400" y="90" text-anchor="middle" font-size="12" fill="#333333">终端</text>
+            <text x="400" y="105" text-anchor="middle" font-size="10" fill="#666666">客户2</text>
+            
+            <!-- 终端节点 3 -->
+            <circle cx="600" cy="50" r="20" fill="#b39ddb" stroke="#9c27b0" stroke-width="2"/>
+            <text x="600" y="90" text-anchor="middle" font-size="12" fill="#333333">终端</text>
+            <text x="600" y="105" text-anchor="middle" font-size="10" fill="#666666">客户3</text>
+            
+            <!-- 百姓菜市场节点 -->
+            <circle cx="600" cy="250" r="20" fill="#ffadad" stroke="#dc3545" stroke-width="2"/>
+            <text x="600" y="290" text-anchor="middle" font-size="12" fill="#333333">市场</text>
+            <text x="600" y="305" text-anchor="middle" font-size="10" fill="#666666">百姓菜市场</text>
+            
+            <!-- 百姓菜市场终端节点 -->
+            <circle cx="700" cy="250" r="20" fill="#b39ddb" stroke="#9c27b0" stroke-width="2"/>
+            <text x="700" y="290" text-anchor="middle" font-size="12" fill="#333333">终端</text>
+            <text x="700" y="305" text-anchor="middle" font-size="10" fill="#666666">赵大妈</text>
+            <line x1="650" y1="250" x2="700" y2="250" stroke="#17a2b8" stroke-width="2"/>
+          </svg>
+        </div>
+        
+        <h4 style="margin-top: 30px;">流通记录：</h4>
+        <table class="table" style="margin-top: 10px;">
+          <thead>
+            <tr>
+              <th>销售去向</th>
+              <th>销售时间</th>
+              <th>购买方</th>
+              <th>销售数量</th>
+              <th>销售单价</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>王权富经-经纪人收购</td>
+              <td>2026-02-12 10:30</td>
+              <td>王权富（经纪人）</td>
+              <td>100kg</td>
+              <td>8元/kg</td>
+            </tr>
+            <tr>
+              <td>凤城市农贸批发市场</td>
+              <td>2026-02-12 14:20</td>
+              <td>李经理（收购商）</td>
+              <td>80kg</td>
+              <td>9元/kg</td>
+            </tr>
+            <tr>
+              <td>大红旗超市</td>
+              <td>2026-02-12 16:45</td>
+              <td>赵经理（超市采购）</td>
+              <td>40kg</td>
+              <td>8.5元/kg</td>
+            </tr>
+            <tr>
+              <td>百姓菜市场</td>
+              <td>2026-02-12 17:45</td>
+              <td>赵大妈（菜贩）</td>
+              <td>40kg</td>
+              <td>8.5元/kg</td>
+            </tr>
+            <tr>
+              <td>客户1</td>
+              <td>2026-02-13 16:45</td>
+              <td>***（终端消费者）</td>
+              <td>10kg</td>
+              <td>18.5元/kg</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+    }
+    
+    function closeDrawer() {
+      // 关闭右侧抽屉
+      document.getElementById('circulationDrawer').style.right = '-500px';
+      document.getElementById('drawerOverlay').style.display = 'none';
+    }
+    
+    // 点击遮罩层关闭抽屉
+    document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
+    
+    // 切换行展开/收起
+    function toggleRow(rowId) {
+      const childRow = document.getElementById(rowId);
+      if (childRow.style.display === 'none') {
+        childRow.style.display = 'table-row';
+      } else {
+        childRow.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

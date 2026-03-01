@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>统计分析 - 从业人员统计</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* 指标解释说明样式 */
+    .tooltip-icon {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+      cursor: help;
+      vertical-align: middle;
+    }
+    
+    .tooltip-icon svg {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+    }
+    
+    .tooltip-icon:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 1000;
+      margin-bottom: 5px;
+    }
+    
+    /* 统计卡片环比和占比样式 */
+    .stat-change {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    .stat-change.up {
+      color: #52c41a;
+    }
+    .stat-change.down {
+      color: #ff4d4f;
+    }
+    .stat-ratio {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    /* 统计卡片主数据样式 */
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1890ff;
+      margin-bottom: 5px;
+    }
+    
+    /* 筛选条件样式 - 与农事操作统计保持一致 */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: #f5f7fa;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .filter-group label {
+      font-size: 14px;
+      color: #333;
+      white-space: nowrap;
+    }
+    .filter-group .form-control {
+      width: 140px;
+      padding: 6px 10px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      font-size: 13px;
+      height: 32px;
+    }
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .filter-actions .btn {
+      padding: 6px 20px;
+      height: 32px;
+      font-size: 13px;
+    }
+    
+    /* 标题工具栏样式 */
+    .header-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 0;
+    }
+    .header-toolbar .page-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .header-tools {
+      display: flex;
+      gap: 8px;
+    }
+    .header-tools .btn {
+      padding: 6px 16px;
+      font-size: 13px;
+    }
+    
+    /* 面包屑样式 */
+    .breadcrumb {
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+    
+    /* 统计卡片间距压缩 */
+    .stats-grid {
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .stat-card {
+      padding: 16px;
+    }
+    
+    /* 图表网格间距压缩 */
+    .chart-grid {
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .chart-card {
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+      <a href="index.html">首页</a> &gt; <a href="#">统计分析</a> &gt; <span>从业人员统计</span>
+    </div>
+    
+    <!-- 标题工具栏 -->
+    <div class="header-toolbar">
+      <h1 class="page-title">从业人员统计</h1>
+      <div class="header-tools">
+        <button class="btn btn-default">导出</button>
+        <button class="btn btn-default">打印</button>
+      </div>
+    </div>
+    
+    <!-- 筛选条件 -->
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>时间范围：</label>
+        <input type="date" class="form-control" id="startDate">
+        <span>至</span>
+        <input type="date" class="form-control" id="endDate">
+      </div>
+      <div class="filter-group">
+        <label>主体类型：</label>
+        <select class="form-control" id="subjectType">
+          <option value="">全部</option>
+          <option value="cooperative">合作社</option>
+          <option value="enterprise">企业</option>
+          <option value="individual">个体户</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>乡镇：</label>
+        <select class="form-control" id="townSelect">
+          <option value="">全部</option>
+          <option value="fengshan">凤山街道</option>
+          <option value="caohe">草河街道</option>
+          <option value="liujiahe">刘家河镇</option>
+          <option value="lanqi">蓝旗镇</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-primary" onclick="searchData()">查询</button>
+        <button class="btn btn-default" onclick="resetSearch()">重置</button>
+      </div>
+    </div>
+    
+    <!-- 数据卡片 - 主体统计 -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">1,258</div>
+        <div class="stat-label">
+          总从业主体数
+          <span class="tooltip-icon" data-tooltip="统计区域内所有从事农业生产和经营的主体总数">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="stat-change up">较上月 +5.2%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">986</div>
+        <div class="stat-label">
+          正常使用主体
+          <span class="tooltip-icon" data-tooltip="统计区域内正常运营的从业主体数量">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="stat-ratio">占比 78.4%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">156</div>
+        <div class="stat-label">
+          合作社数量
+          <span class="tooltip-icon" data-tooltip="统计区域内农业合作社的数量">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="stat-ratio">占比 12.4%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">289</div>
+        <div class="stat-label">
+          家庭农场数量
+          <span class="tooltip-icon" data-tooltip="统计区域内家庭农场的数量">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="stat-ratio">占比 23.0%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">623</div>
+        <div class="stat-label">
+          农户数量
+          <span class="tooltip-icon" data-tooltip="统计区域内个体农户的数量">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="stat-ratio">占比 49.5%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">190</div>
+        <div class="stat-label">
+          其他主体数量
+          <span class="tooltip-icon" data-tooltip="统计区域内其他类型从业主体的数量">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="stat-ratio">占比 15.1%</div>
+      </div>
+    </div>
+    
+    <!-- 图表网格 - 主体统计 -->
+    <div class="chart-grid">
+      <!-- 主体性质分布 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          主体性质分布
+          <span class="tooltip-icon" data-tooltip="展示不同类型从业主体的分布情况">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="subjectTypeChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 主体活跃度趋势 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          主体活跃度趋势
+          <span class="tooltip-icon" data-tooltip="展示正常使用主体数量的月度变化趋势">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="subjectActivityChart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 图表网格 - 从业人员统计 -->
+    <div class="chart-grid">
+      <!-- 从业人员性别分布 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          从业人员数量统计
+          <span class="tooltip-icon" data-tooltip="展示从业人员性别分布情况">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="employeeGenderChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 从业人员年龄结构 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          从业人员年龄结构
+          <span class="tooltip-icon" data-tooltip="展示从业人员年龄分布情况">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="employeeAgeChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- 从业人员学历分布 -->
+      <div class="chart-card">
+        <div class="chart-title">
+          从业人员学历分布
+          <span class="tooltip-icon" data-tooltip="展示从业人员学历层次分布情况">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+        <div class="chart-container">
+          <canvas id="employeeEduChart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 详细数据表格 -->
+    <div class="card">
+      <h3 class="card-title">从业人员详情</h3>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>镇村</th>
+              <th>种植人员</th>
+              <th>养殖人员</th>
+              <th>经纪人</th>
+              <th>合计</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>凤山街道</td>
+              <td>120</td>
+              <td>85</td>
+              <td>95</td>
+              <td>300</td>
+            </tr>
+            <tr>
+              <td>草河街道</td>
+              <td>95</td>
+              <td>78</td>
+              <td>82</td>
+              <td>255</td>
+            </tr>
+            <tr>
+              <td>刘家河镇</td>
+              <td>88</td>
+              <td>72</td>
+              <td>90</td>
+              <td>250</td>
+            </tr>
+            <tr>
+              <td>蓝旗镇</td>
+              <td>75</td>
+              <td>45</td>
+              <td>95</td>
+              <td>215</td>
+            </tr>
+            <tr>
+              <td>其他乡镇</td>
+              <td>78</td>
+              <td>40</td>
+              <td>96</td>
+              <td>214</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 初始化图表
+    function initCharts() {
+      // 主体性质分布图表
+      const subjectTypeCtx = document.getElementById('subjectTypeChart').getContext('2d');
+      const subjectTypeChart = new Chart(subjectTypeCtx, {
+        type: 'pie',
+        data: {
+          labels: ['农户', '家庭农场', '合作社', '经纪人', '分销商', '其他'],
+          datasets: [{
+            data: [623, 289, 156, 85, 45, 60],
+            backgroundColor: [
+              '#5B8FF9',
+              '#5AD8A6',
+              '#F6BD16',
+              '#945FB9',
+              '#E86452',
+              '#DCDCE6'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            }
+          }
+        }
+      });
+      
+      // 主体活跃度趋势图表
+      const subjectActivityCtx = document.getElementById('subjectActivityChart').getContext('2d');
+      const subjectActivityChart = new Chart(subjectActivityCtx, {
+        type: 'line',
+        data: {
+          labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          datasets: [{
+            label: '正常使用主体数',
+            data: [850, 865, 880, 895, 910, 925, 940, 955, 970, 978, 982, 986],
+            borderColor: '#5B8FF9',
+            backgroundColor: 'rgba(91, 143, 249, 0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 800,
+              max: 1000,
+              title: {
+                display: true,
+                text: '数量 (个)'
+              }
+            }
+          }
+        }
+      });
+      
+      // 从业人员性别分布图表
+      const genderCtx = document.getElementById('employeeGenderChart').getContext('2d');
+      const genderChart = new Chart(genderCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['男性', '女性'],
+          datasets: [{
+            data: [3245, 2617],
+            backgroundColor: [
+              '#5B8FF9',
+              '#E86452'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            },
+            title: {
+              display: false
+            }
+          }
+        }
+      });
+      
+      // 从业人员年龄结构图表
+      const ageCtx = document.getElementById('employeeAgeChart').getContext('2d');
+      const ageChart = new Chart(ageCtx, {
+        type: 'bar',
+        data: {
+          labels: ['18-30岁', '31-40岁', '41-60岁', '61-69岁', '69岁以上'],
+          datasets: [{
+            label: '人数',
+            data: [900, 1500, 1900, 1300, 262],
+            backgroundColor: '#5AD8A6'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '人数 (人)'
+              }
+            }
+          }
+        }
+      });
+      
+      // 从业人员学历分布图表
+      const eduCtx = document.getElementById('employeeEduChart').getContext('2d');
+      const eduChart = new Chart(eduCtx, {
+        type: 'pie',
+        data: {
+          labels: ['小学及以下', '初中', '高中/中专', '大专', '本科及以上'],
+          datasets: [{
+            data: [1200, 2500, 1400, 600, 162],
+            backgroundColor: [
+              '#DCDCE6',
+              '#F6BD16',
+              '#5B8FF9',
+              '#945FB9',
+              '#5AD8A6'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            }
+          }
+        }
+      });
+    }
+    
+    // 页面加载完成后初始化图表
+    window.onload = function() {
+      initCharts();
+    };
+    
+    // 查询数据
+    function searchData() {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      
+      if (!startDate || !endDate) {
+        alert('请选择开始日期和结束日期');
+        return;
+      }
+      
+      if (startDate > endDate) {
+        alert('开始日期不能大于结束日期');
+        return;
+      }
+      
+      // 实际项目中应该根据日期范围请求数据
+      console.log('查询时间范围：' + startDate + ' 至 ' + endDate);
+      alert('查询时间范围：' + startDate + ' 至 ' + endDate);
+    }
+    
+    // 重置搜索条件
+    function resetSearch() {
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      console.log('搜索条件已重置');
+    }
+  </script>
+</body>
+</html>

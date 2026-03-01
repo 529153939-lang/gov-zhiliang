@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计分析 - 农事操作统计</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* 指标解释说明样式 */
+      .tooltip-icon {
+        position: relative;
+        display: inline-block;
+        margin-left: 5px;
+        cursor: help;
+        vertical-align: middle;
+      }
+      
+      .tooltip-icon svg {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+      }
+      
+      .tooltip-icon:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 1000;
+        margin-bottom: 5px;
+      }
+      
+      /* 标题行样式 */
+      .title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .title-row .page-title {
+        margin: 0;
+      }
+      .title-actions {
+        display: flex;
+        gap: 8px;
+      }
+      
+      /* 筛选条件样式 */
+      .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 16px;
+        background: #f5f7fa;
+        border-radius: 4px;
+        margin-bottom: 12px;
+      }
+      .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .filter-group label {
+        font-size: 14px;
+        color: #333;
+        white-space: nowrap;
+      }
+      .filter-group .form-control {
+        width: 140px;
+      }
+      .filter-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+      }
+      
+      /* 数据卡片样式 */
+      .data-cards {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+      .data-card {
+        flex: 1;
+        background: #fff;
+        padding: 16px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        text-align: center;
+      }
+      .data-card .data-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1890ff;
+        margin-bottom: 4px;
+      }
+      .data-card .data-trend {
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+      .data-card .data-trend.up {
+        color: #52c41a;
+      }
+      .data-card .data-trend.down {
+        color: #ff4d4f;
+      }
+      .data-card .data-label {
+        font-size: 14px;
+        color: #666;
+      }
+      
+      /* 图表区域样式 */
+      .chart-section {
+        margin-bottom: 12px;
+      }
+      .chart-row {
+        display: flex;
+        gap: 16px;
+      }
+      .chart-title {
+        margin-bottom: 12px;
+      }
+      
+      /* 表格区域样式 */
+      .table-section {
+        margin-bottom: 12px;
+      }
+      .section-title {
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">统计分析</a>
+      <span>></span>
+      <span>农事操作统计</span>
+    </div>
+    
+    <!-- 标题行 -->
+    <div class="title-row">
+      <h2 class="page-title">农事操作统计</h2>
+      <div class="title-actions">
+        <button class="btn btn-default">导出</button>
+        <button class="btn btn-default">打印</button>
+      </div>
+    </div>
+    
+    <!-- 筛选条件 -->
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>时间范围：</label>
+        <input type="date" class="form-control" id="startDate">
+        <span>至</span>
+        <input type="date" class="form-control" id="endDate">
+      </div>
+      <div class="filter-group">
+        <label>操作类型：</label>
+        <select class="form-control" id="operationType">
+          <option value="">全部</option>
+          <option value="fertilize">施肥</option>
+          <option value="water">浇水</option>
+          <option value="pest">病虫害防治</option>
+          <option value="harvest">采摘</option>
+          <option value="prune">修剪</option>
+          <option value="weed">除草</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>乡镇：</label>
+        <select class="form-control" id="townSelect">
+          <option value="">全部</option>
+          <option value="fengshan">凤山街道</option>
+          <option value="caohe">草河街道</option>
+          <option value="liujiahe">刘家河镇</option>
+          <option value="lanqi">蓝旗镇</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-primary" onclick="handleSearch()">查询</button>
+        <button class="btn btn-default" onclick="resetSearch()">重置</button>
+      </div>
+    </div>
+    
+    <!-- 数据卡片 -->
+    <div class="data-cards">
+      <div class="data-card">
+        <div class="data-value">2,580</div>
+        <div class="data-trend up">↑ 8.5%</div>
+        <div class="data-label">
+          总操作次数
+          <span class="tooltip-icon" data-tooltip="统计所有类型农事操作的总次数">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="data-card">
+        <div class="data-value">486</div>
+        <div class="data-trend up">↑ 5.2%</div>
+        <div class="data-label">
+          参与农户数
+          <span class="tooltip-icon" data-tooltip="参与农事操作的农户总数">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="data-card">
+        <div class="data-value">328</div>
+        <div class="data-trend up">↑ 3.8%</div>
+        <div class="data-label">
+          覆盖地块数
+          <span class="tooltip-icon" data-tooltip="农事操作覆盖的地块总数">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="data-card">
+        <div class="data-value">5.3</div>
+        <div class="data-trend down">↓ 2.1%</div>
+        <div class="data-label">
+          平均操作次数(次/农户)
+          <span class="tooltip-icon" data-tooltip="平均每个农户的操作次数，计算方式：总操作次数 / 参与农户数">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 图表网格 -->
+    <div class="chart-section">
+      <div class="chart-row">
+        <!-- 各类型农事操作次数 -->
+        <div class="card flex-1">
+          <h3 class="chart-title">
+            各类型农事操作次数
+            <span class="tooltip-icon" data-tooltip="展示不同类型农事操作的次数分布">
+              <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+            </span>
+          </h3>
+          <div class="chart-container">
+            <canvas id="farmingTypeChart" style="width: 100%; height: 300px;"></canvas>
+          </div>
+        </div>
+        
+        <!-- 各镇村农事操作次数 -->
+        <div class="card flex-1">
+          <h3 class="chart-title">
+            各镇村农事操作次数
+            <span class="tooltip-icon" data-tooltip="展示不同镇村的农事操作次数分布">
+              <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+            </span>
+          </h3>
+          <div class="chart-container">
+            <canvas id="townFarmingChart" style="width: 100%; height: 300px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 农事操作时间分布 -->
+    <div class="chart-section">
+      <h3 class="chart-title">
+        农事操作时间分布
+        <span class="tooltip-icon" data-tooltip="展示不同月份的农事操作次数变化趋势">
+          <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+        </span>
+      </h3>
+      <div class="chart-container">
+        <canvas id="farmingTimeChart" style="width: 100%; height: 400px;"></canvas>
+      </div>
+    </div>
+    
+    <!-- 农事操作详情表格 -->
+    <div class="table-section">
+      <h3 class="section-title">农事操作详情</h3>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>操作类型</th>
+              <th>操作次数</th>
+              <th>涉及地块数</th>
+              <th>涉及面积(亩)</th>
+              <th>主要作物</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>施肥</td>
+              <td>680</td>
+              <td>450</td>
+              <td>2,850</td>
+              <td>草莓、蔬菜</td>
+            </tr>
+            <tr>
+              <td>浇水</td>
+              <td>520</td>
+              <td>380</td>
+              <td>2,450</td>
+              <td>草莓、蓝莓</td>
+            </tr>
+            <tr>
+              <td>病虫害防治</td>
+              <td>450</td>
+              <td>320</td>
+              <td>1,890</td>
+              <td>蔬菜、板栗</td>
+            </tr>
+            <tr>
+              <td>采摘</td>
+              <td>380</td>
+              <td>280</td>
+              <td>1,650</td>
+              <td>草莓、蓝莓</td>
+            </tr>
+            <tr>
+              <td>修剪</td>
+              <td>320</td>
+              <td>240</td>
+              <td>1,420</td>
+              <td>蓝莓、板栗</td>
+            </tr>
+            <tr>
+              <td>除草</td>
+              <td>280</td>
+              <td>200</td>
+              <td>1,280</td>
+              <td>蔬菜、板栗</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 各类型农事操作次数图表
+      const farmingTypeCtx = document.getElementById('farmingTypeChart').getContext('2d');
+      const farmingTypeChart = new Chart(farmingTypeCtx, {
+        type: 'bar',
+        data: {
+          labels: ['施肥', '浇水', '病虫害防治', '采摘', '修剪', '除草'],
+          datasets: [{
+            label: '操作次数',
+            data: [680, 520, 450, 380, 320, 280],
+            backgroundColor: '#5B8FF9'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '次数 (次)'
+              }
+            }
+          }
+        }
+      });
+
+      // 各镇村农事操作次数图表
+      const townFarmingCtx = document.getElementById('townFarmingChart').getContext('2d');
+      const townFarmingChart = new Chart(townFarmingCtx, {
+        type: 'bar',
+        data: {
+          labels: ['凤山街道', '草河街道', '刘家河镇', '蓝旗镇', '其他乡镇'],
+          datasets: [{
+            label: '操作次数',
+            data: [650, 520, 480, 420, 510],
+            backgroundColor: '#5AD8A6'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '次数 (次)'
+              }
+            }
+          }
+        }
+      });
+
+      // 农事操作时间分布图表
+      const farmingTimeCtx = document.getElementById('farmingTimeChart').getContext('2d');
+      const farmingTimeChart = new Chart(farmingTimeCtx, {
+        type: 'line',
+        data: {
+          labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          datasets: [
+            {
+              label: '施肥',
+              data: [45, 52, 68, 85, 95, 88, 72, 58, 42, 35, 28, 22],
+              borderColor: '#5B8FF9',
+              backgroundColor: 'rgba(91, 143, 249, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: '浇水',
+              data: [38, 45, 55, 65, 72, 68, 58, 48, 38, 32, 28, 23],
+              borderColor: '#5AD8A6',
+              backgroundColor: 'rgba(90, 216, 166, 0.1)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: '病虫害防治',
+              data: [28, 32, 42, 55, 68, 75, 62, 52, 42, 35, 28, 21],
+              borderColor: '#F6BD16',
+              backgroundColor: 'rgba(246, 189, 22, 0.1)',
+              tension: 0.3,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '次数 (次)'
+              }
+            }
+          }
+        }
+      });
+    });
+
+    // 查询功能
+    function handleSearch() {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const operationType = document.getElementById('operationType').value;
+      const townSelect = document.getElementById('townSelect').value;
+      
+      if (startDate && endDate && startDate > endDate) {
+        alert('开始日期不能大于结束日期');
+        return;
+      }
+      
+      console.log('查询条件：', {
+        startDate,
+        endDate,
+        operationType,
+        townSelect
+      });
+      
+      alert('查询成功');
+    }
+    
+    // 重置功能
+    function resetSearch() {
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      document.getElementById('operationType').value = '';
+      document.getElementById('townSelect').value = '';
+      console.log('搜索条件已重置');
+    }
+  </script>
+</body>
+</html>

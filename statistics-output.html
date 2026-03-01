@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计分析 - 农业产值统计</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* 指标解释说明样式 */
+      .tooltip-icon {
+        position: relative;
+        display: inline-block;
+        margin-left: 5px;
+        cursor: help;
+        vertical-align: middle;
+      }
+      
+      .tooltip-icon svg {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+      }
+      
+      .tooltip-icon:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 1000;
+        margin-bottom: 5px;
+      }
+      
+      /* 标题工具栏样式 */
+      .header-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding: 0;
+      }
+      .header-toolbar .page-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .header-tools {
+        display: flex;
+        gap: 8px;
+      }
+      .header-tools .btn {
+        padding: 6px 16px;
+        font-size: 13px;
+      }
+      
+      /* 面包屑样式 */
+      .breadcrumb {
+        margin-bottom: 12px;
+        font-size: 13px;
+      }
+      
+      /* 筛选条件样式 - 与农事操作统计保持一致 */
+      .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 16px;
+        background: #f5f7fa;
+        border-radius: 4px;
+        margin-bottom: 12px;
+      }
+      .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .filter-group label {
+        font-size: 14px;
+        color: #333;
+        white-space: nowrap;
+      }
+      .filter-group .form-control {
+        width: 140px;
+        padding: 6px 10px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        font-size: 13px;
+        height: 32px;
+      }
+      .filter-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+      }
+      .filter-actions .btn {
+        padding: 6px 20px;
+        height: 32px;
+        font-size: 13px;
+      }
+      
+      /* 统计卡片间距压缩 */
+      .stats-grid {
+        margin-bottom: 12px;
+        gap: 12px;
+      }
+      .data-card {
+        padding: 16px;
+      }
+      
+      /* 图表网格间距压缩 */
+      .chart-grid {
+        margin-bottom: 12px;
+      }
+      .chart-grid .d-flex {
+        gap: 12px;
+      }
+      .chart-card {
+        padding: 16px;
+      }
+      .chart-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+      
+      /* 图表区域间距 */
+      .chart-section {
+        margin-bottom: 12px;
+        padding: 16px;
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+      }
+      
+      /* 数据卡片主数据样式 */
+      .data-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1890ff;
+        margin-bottom: 5px;
+      }
+      
+      /* Tab切换样式 */
+      .tab-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .tab-buttons {
+        display: flex;
+        gap: 0;
+      }
+      .tab-btn {
+        padding: 8px 24px;
+        border: 1px solid #d9d9d9;
+        background: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        color: #333;
+        transition: all 0.3s;
+      }
+      .tab-btn:first-child {
+        border-radius: 4px 0 0 4px;
+      }
+      .tab-btn:last-child {
+        border-radius: 0 4px 4px 0;
+      }
+      .tab-btn:not(:last-child) {
+        border-right: none;
+      }
+      .tab-btn.active {
+        background: #1890ff;
+        color: #fff;
+        border-color: #1890ff;
+      }
+      .tab-btn:hover:not(.active) {
+        background: #f5f5f5;
+      }
+      .tab-tooltip {
+        position: relative;
+      }
+      .tab-content {
+        position: relative;
+      }
+      .tab-pane {
+        animation: fadeIn 0.3s ease;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    </style>
+  </head>
+<body>
+  <div class="card">
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">统计分析</a>
+      <span>></span>
+      <span>农业产值统计</span>
+    </div>
+    
+    <!-- 标题工具栏 -->
+    <div class="header-toolbar">
+      <h2 class="page-title">农业产值统计</h2>
+      <div class="header-tools">
+        <button class="btn btn-default">导出</button>
+        <button class="btn btn-default">打印</button>
+      </div>
+    </div>
+    
+    <!-- 筛选条件 -->
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>时间范围：</label>
+        <input type="date" class="form-control" id="startDate">
+        <span>至</span>
+        <input type="date" class="form-control" id="endDate">
+      </div>
+      <div class="filter-group">
+        <label>作物名称：</label>
+        <select class="form-control" id="cropSelect">
+          <option value="">全部</option>
+          <option value="草莓">草莓</option>
+          <option value="蓝莓">蓝莓</option>
+          <option value="蔬菜">蔬菜</option>
+          <option value="板栗">板栗</option>
+          <option value="五味子">五味子</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>乡镇：</label>
+        <select class="form-control" id="townSelect">
+          <option value="">全部</option>
+          <option value="凤山街道">凤山街道</option>
+          <option value="草河街道">草河街道</option>
+          <option value="刘家河镇">刘家河镇</option>
+          <option value="蓝旗镇">蓝旗镇</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-primary" onclick="searchData()">查询</button>
+        <button class="btn btn-default" onclick="resetSearch()">重置</button>
+      </div>
+    </div>
+    
+    <!-- 数据卡片 -->
+    <div class="d-flex gap-10 stats-grid">
+      <div class="data-card flex-1">
+        <div class="data-value">3,850</div>
+        <div class="data-label">
+          总种植面积(亩)
+          <span class="tooltip-icon" data-tooltip="统计所有作物的种植总面积">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="data-card flex-1">
+        <div class="data-value">16,000</div>
+        <div class="data-label">
+          总产量(吨)
+          <span class="tooltip-icon" data-tooltip="统计所有作物的总产量">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="data-card flex-1">
+        <div class="data-value">4,600</div>
+        <div class="data-label">
+          总产值(万元)
+          <span class="tooltip-icon" data-tooltip="统计所有作物的总产值，计算方式：销售数量 * 销售单价">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+      <div class="data-card flex-1">
+        <div class="data-value">11,948</div>
+        <div class="data-label">
+          平均亩产值(元)
+          <span class="tooltip-icon" data-tooltip="统计平均每亩土地的产值，计算方式：总产值 / 总种植面积">
+            <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 图表网格 -->
+    <div class="chart-grid">
+      <div class="d-flex gap-10">
+        <!-- 各作物产值占比 -->
+        <div class="card flex-1 chart-card">
+          <h3 class="chart-title">
+            各作物产值占比
+            <span class="tooltip-icon" data-tooltip="展示不同作物的产值占总产值的比例">
+              <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+            </span>
+          </h3>
+          <div class="chart-container">
+            <canvas id="cropOutputChart" style="width: 100%; height: 300px;"></canvas>
+          </div>
+        </div>
+        
+        <!-- 各作物总产量占比 -->
+        <div class="card flex-1 chart-card">
+          <h3 class="chart-title">
+            各作物总产量占比
+            <span class="tooltip-icon" data-tooltip="展示不同作物的产量占总产量的比例">
+              <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+            </span>
+          </h3>
+          <div class="chart-container">
+            <canvas id="cropYieldChart" style="width: 100%; height: 300px;"></canvas>
+          </div>
+        </div>
+        
+        <!-- 各镇村产值分布 -->
+        <div class="card flex-1 chart-card">
+          <h3 class="chart-title">
+            各镇村产值分布
+            <span class="tooltip-icon" data-tooltip="展示不同镇村的产值分布情况">
+              <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+            </span>
+          </h3>
+          <div class="chart-container">
+            <canvas id="townOutputChart" style="width: 100%; height: 300px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 趋势分析图表 - Tab切换 -->
+    <div class="chart-section">
+      <div class="tab-header">
+        <div class="tab-buttons">
+          <button class="tab-btn active" onclick="switchTab('output')">产值趋势分析</button>
+          <button class="tab-btn" onclick="switchTab('yield')">产量趋势分析</button>
+        </div>
+        <span class="tooltip-icon tab-tooltip" title="展示不同时间周期的产值/产量变化趋势">
+          <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+        </span>
+      </div>
+      <div class="tab-content">
+        <div id="outputTab" class="tab-pane active">
+          <div class="chart-container">
+            <canvas id="outputTrendChart" style="width: 100%; height: 400px;"></canvas>
+          </div>
+        </div>
+        <div id="yieldTab" class="tab-pane" style="display: none;">
+          <div class="chart-container">
+            <canvas id="yieldTrendChart" style="width: 100%; height: 400px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 作物种植与收益分析表格 -->
+    <div class="mt-20">
+      <h3>作物种植与收益分析</h3>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>作物名称</th>
+              <th>种植面积(亩)</th>
+              <th>总产量(吨)</th>
+              <th>单产(kg/亩)</th>
+              <th>单价(元/kg)</th>
+              <th>总产值(万元)</th>
+              <th>平均亩产值(元)</th>
+              <th>
+                产值占比
+                <span class="tooltip-icon" data-tooltip="该作物产值占总产值的比例，计算方式：作物产值 / 总产值 * 100%">
+                  <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>草莓</td>
+              <td>1200</td>
+              <td>18</td>
+              <td>1500</td>
+              <td>30</td>
+              <td>540</td>
+              <td>45000</td>
+              <td>65.7%</td>
+            </tr>
+            <tr>
+              <td>蓝莓</td>
+              <td>800</td>
+              <td>1</td>
+              <td>125</td>
+              <td>50</td>
+              <td>50</td>
+              <td>6250</td>
+              <td>24.7%</td>
+            </tr>
+            <tr>
+              <td>蔬菜</td>
+              <td>1500</td>
+              <td>80</td>
+              <td>5333</td>
+              <td>1</td>
+              <td>80</td>
+              <td>5333</td>
+              <td>15.6%</td>
+            </tr>
+            <tr>
+              <td>板栗</td>
+              <td>500</td>
+              <td>2</td>
+              <td>400</td>
+              <td>20</td>
+              <td>40</td>
+              <td>8000</td>
+              <td>28.3%</td>
+            </tr>
+            <tr>
+              <td>五味子</td>
+              <td>350</td>
+              <td>0.5</td>
+              <td>143</td>
+              <td>60</td>
+              <td>30</td>
+              <td>8571</td>
+              <td>18.5%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 各作物产值占比图表
+      const cropOutputCtx = document.getElementById('cropOutputChart').getContext('2d');
+      const cropOutputChart = new Chart(cropOutputCtx, {
+        type: 'pie',
+        data: {
+          labels: ['草莓', '蓝莓', '蔬菜', '板栗', '五味子'],
+          datasets: [{
+            data: [540, 50, 80, 40, 30],
+            backgroundColor: [
+              '#5B8FF9',
+              '#5AD8A6',
+              '#F6BD16',
+              '#E86452',
+              '#945FB9'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            }
+          }
+        }
+      });
+      
+      // 各作物总产量占比图表
+      const cropYieldCtx = document.getElementById('cropYieldChart').getContext('2d');
+      const cropYieldChart = new Chart(cropYieldCtx, {
+        type: 'pie',
+        data: {
+          labels: ['草莓', '蓝莓', '蔬菜', '板栗', '五味子'],
+          datasets: [{
+            data: [18, 1, 80, 2, 0.5],
+            backgroundColor: [
+              '#5B8FF9',
+              '#5AD8A6',
+              '#F6BD16',
+              '#E86452',
+              '#945FB9'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            }
+          }
+        }
+      });
+      
+      // 各镇村产值分布图表
+      const townOutputCtx = document.getElementById('townOutputChart').getContext('2d');
+      const townOutputChart = new Chart(townOutputCtx, {
+        type: 'bar',
+        data: {
+          labels: ['凤山街道', '草河街道', '刘家河镇', '蓝旗镇', '其他乡镇'],
+          datasets: [{
+            label: '产值(万元)',
+            data: [1250, 980, 850, 720, 800],
+            backgroundColor: '#5AD8A6'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '产值 (万元)'
+              }
+            }
+          }
+        }
+      });
+
+      // 产值趋势分析图表
+      const outputTrendCtx = document.getElementById('outputTrendChart').getContext('2d');
+      const outputTrendChart = new Chart(outputTrendCtx, {
+        type: 'line',
+        data: {
+          labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          datasets: [
+            {
+              label: '草莓',
+              data: [35, 38, 42, 45, 48, 50, 49, 47, 45, 43, 40, 38],
+              borderColor: '#E898AA',
+              backgroundColor: 'rgba(232, 152, 170, 0.1)',
+              tension: 0.4
+            },
+            {
+              label: '蓝莓',
+              data: [5, 5.2, 5.5, 5.8, 6, 6.2, 6.3, 6.2, 6, 5.8, 5.5, 5.2],
+              borderColor: '#5B8FF9',
+              backgroundColor: 'rgba(91, 143, 249, 0.1)',
+              tension: 0.4
+            },
+            {
+              label: '蔬菜',
+              data: [4.5, 4.8, 5, 5.2, 5.3, 5.4, 5.3, 5.2, 5.1, 4.9, 4.7, 4.5],
+              borderColor: '#5AD8A6',
+              backgroundColor: 'rgba(90, 216, 166, 0.1)',
+              tension: 0.4
+            },
+            {
+              label: '板栗',
+              data: [6, 6.2, 6.5, 6.8, 7, 7.2, 7.5, 7.8, 8, 7.8, 7.5, 7],
+              borderColor: 'rgba(255, 206, 86, 1)',
+              backgroundColor: 'rgba(255, 206, 86, 0.1)',
+              tension: 0.4
+            },
+            {
+              label: '五味子',
+              data: [3, 3.2, 3.5, 3.8, 4, 4.2, 4.3, 4.2, 4, 3.8, 3.5, 3.2],
+              borderColor: '#945FB9',
+              backgroundColor: 'rgba(148, 95, 185, 0.1)',
+              tension: 0.4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: '作物产值趋势分析'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '产值 (万元)'
+              }
+            }
+          }
+        }
+      });
+    });
+    
+    // 查询数据
+    function searchData() {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const crop = document.getElementById('cropSelect').value;
+      const town = document.getElementById('townSelect').value;
+      
+      console.log('查询条件：', { startDate, endDate, crop, town });
+      alert('查询条件：开始日期=' + startDate + ', 结束日期=' + endDate + ', 作物=' + crop + ', 镇村=' + town);
+    }
+    
+    // 重置搜索条件
+    function resetSearch() {
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      document.getElementById('cropSelect').value = '';
+      document.getElementById('townSelect').value = '';
+      console.log('搜索条件已重置');
+    }
+    
+    // Tab切换功能
+    let yieldTrendChart = null;
+    
+    function switchTab(type) {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const outputTab = document.getElementById('outputTab');
+      const yieldTab = document.getElementById('yieldTab');
+      
+      tabBtns.forEach(btn => btn.classList.remove('active'));
+      
+      if (type === 'output') {
+        tabBtns[0].classList.add('active');
+        outputTab.style.display = 'block';
+        yieldTab.style.display = 'none';
+      } else {
+        tabBtns[1].classList.add('active');
+        outputTab.style.display = 'none';
+        yieldTab.style.display = 'block';
+        
+        // 初始化产量趋势图表（仅初始化一次）
+        if (!yieldTrendChart) {
+          initYieldTrendChart();
+        }
+      }
+    }
+    
+    // 初始化产量趋势图表
+    function initYieldTrendChart() {
+      const yieldTrendCtx = document.getElementById('yieldTrendChart').getContext('2d');
+      yieldTrendChart = new Chart(yieldTrendCtx, {
+        type: 'line',
+        data: {
+          labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          datasets: [
+            {
+              label: '草莓',
+              data: [1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.65, 1.55, 1.5, 1.4, 1.35, 1.25],
+              borderColor: '#E898AA',
+              backgroundColor: 'rgba(232, 152, 170, 0.1)',
+              tension: 0.4
+            },
+            {
+              label: '蓝莓',
+              data: [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.105, 0.1, 0.095, 0.09, 0.085],
+              borderColor: '#5B8FF9',
+              backgroundColor: 'rgba(91, 143, 249, 0.1)',
+              tension: 0.4
+            },
+            {
+              label: '蔬菜',
+              data: [6.5, 6.8, 7.0, 7.2, 7.3, 7.4, 7.3, 7.2, 7.1, 6.9, 6.7, 6.5],
+              borderColor: '#5AD8A6',
+              backgroundColor: 'rgba(90, 216, 166, 0.1)',
+              tension: 0.4
+            },
+            {
+              label: '板栗',
+              data: [0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.21, 0.22, 0.23, 0.22, 0.2, 0.18],
+              borderColor: 'rgba(255, 206, 86, 1)',
+              backgroundColor: 'rgba(255, 206, 86, 0.1)',
+              tension: 0.4
+            },
+            {
+              label: '五味子',
+              data: [0.04, 0.042, 0.045, 0.048, 0.05, 0.052, 0.054, 0.052, 0.05, 0.048, 0.045, 0.042],
+              borderColor: '#945FB9',
+              backgroundColor: 'rgba(148, 95, 185, 0.1)',
+              tension: 0.4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: '作物产量趋势分析'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: '产量 (吨)'
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

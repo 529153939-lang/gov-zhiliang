@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生产大棚详情</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+    }
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .detail-header h2 {
+      margin: 0;
+    }
+    .info-section {
+      margin-bottom: 20px;
+    }
+    .info-section h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .info-item {
+      background: white;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .info-item label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #666;
+    }
+    .info-item value {
+      display: block;
+      color: #333;
+    }
+    .chart-container {
+      background: white;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    .chart-legend {
+      margin-bottom: 15px;
+    }
+    .legend-item {
+      display: inline-block;
+      margin-right: 20px;
+    }
+    .legend-color {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin-right: 5px;
+      border-radius: 2px;
+    }
+    .status-online {
+      color: #52c41a;
+    }
+    .status-offline {
+      color: #f5222d;
+    }
+    .content {
+      padding: 20px;
+    }
+    .card {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <div class="card">
+        <div class="breadcrumb">
+          <a href="index.html">首页</a>
+          <span>></span>
+          <a href="land-management.html">土地管理</a>
+          <span>></span>
+          <span>大棚地块管理</span>
+          <span>></span>
+          <span>生产大棚详情</span>
+        </div>
+        
+        <div class="detail-header">
+          <h2>生产大棚详情</h2>
+          <button class="btn btn-default" onclick="window.history.back()">返回</button>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab-header">
+            <div class="tab-item active" onclick="switchTab('basic')">大棚基本信息</div>
+            <div class="tab-item" onclick="switchTab('device')">物联网设备清单</div>
+            <div class="tab-item" onclick="switchTab('environment')">实时环境数据</div>
+            <div class="tab-item" onclick="switchTab('person')">负责人信息</div>
+            <div class="tab-item" onclick="switchTab('history')">种植历史记录</div>
+            <div class="tab-item" onclick="switchTab('production')">生产过程追溯</div>
+          </div>
+          
+          <!-- 大棚基本信息 -->
+          <div class="tab-content active" id="basic">
+            <div class="info-section">
+              <h3 id="basic-info">一、大棚基本信息</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>大棚编号：</label>
+                  <value>DP-2024-001</value>
+                </div>
+                <div class="info-item">
+                  <label>所在检地点：</label>
+                  <value>DQ-2026-001 红旗镇胜利村蔬菜基地</value>
+                </div>
+                <div class="info-item">
+                  <label>设施类型：</label>
+                  <value>日光温室（土墙）</value>
+                </div>
+                <div class="info-item">
+                  <label>建造年份：</label>
+                  <value>2022年</value>
+                </div>
+                <div class="info-item">
+                  <label>大棚规格：</label>
+                  <value>长度80m × 宽度10m × 脊高4.5m</value>
+                </div>
+                <div class="info-item">
+                  <label>种植面积：</label>
+                  <value>2.5亩（实际种植面积）</value>
+                </div>
+                <div class="info-item">
+                  <label>保温方式：</label>
+                  <value>棉被覆盖/自动卷膜</value>
+                </div>
+                <div class="info-item">
+                  <label>灌溉方式：</label>
+                  <value>滴灌</value>
+                </div>
+                <div class="info-item">
+                  <label>当前作物：</label>
+                  <value>番茄（品种：普罗旺斯）</value>
+                </div>
+                <div class="info-item">
+                  <label>定植日期：</label>
+                  <value>2026-01-15</value>
+                </div>
+                <div class="info-item">
+                  <label>预计采收：</label>
+                  <value>2026-03-20</value>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 物联网设备清单 -->
+          <div class="tab-content" id="device">
+            <div class="info-section">
+              <h3 id="device-info">二、物联网设备清单</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>设备类型</th>
+                    <th>设备编号</th>
+                    <th>安装位置</th>
+                    <th>状态</th>
+                    <th>最后在线时间</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>温湿度传感器</td>
+                    <td>WS-001</td>
+                    <td>中部</td>
+                    <td><span class="status-online">在线</span></td>
+                    <td>10-25</td>
+                  </tr>
+                  <tr>
+                    <td>土壤传感器</td>
+                    <td>SS-001</td>
+                    <td>棚区</td>
+                    <td><span class="status-online">在线</span></td>
+                    <td>10-25</td>
+                  </tr>
+                  <tr>
+                    <td>光照传感器</td>
+                    <td>LS-001</td>
+                    <td>顶部</td>
+                    <td><span class="status-offline">离线</span></td>
+                    <td>02-10 19:30</td>
+                  </tr>
+                  <tr>
+                    <td>CO2传感器</td>
+                    <td>CS-001</td>
+                    <td>中部</td>
+                    <td><span class="status-online">在线</span></td>
+                    <td>10-25</td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="btn btn-default mt-10">查看历史数据</button>
+            </div>
+          </div>
+          
+          <!-- 实时环境数据 -->
+          <div class="tab-content" id="environment">
+            <div class="info-section">
+              <h3 id="environment-info">三、实时环境数据</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>温度：</label>
+                  <value>23.5°C（适宜 20-28°C）</value>
+                </div>
+                <div class="info-item">
+                  <label>湿度：</label>
+                  <value>75%（适宜 60-85%）</value>
+                </div>
+                <div class="info-item">
+                  <label>土壤湿度：</label>
+                  <value>65%（适宜 60-80%）</value>
+                </div>
+                <div class="info-item">
+                  <label>光照强度：</label>
+                  <value>38500 Lux</value>
+                </div>
+                <div class="info-item">
+                  <label>CO2浓度：</label>
+                  <value>420 ppm</value>
+                </div>
+                <div class="info-item">
+                  <label>数据更新时间：</label>
+                  <value>2026-02-12 10:25:15</value>
+                </div>
+              </div>
+              
+              <div class="chart-container">
+                <div class="chart-legend">
+                  <span class="legend-item"><span class="legend-color" style="background-color: #f44336;"></span>温度(℃)</span>
+                  <span class="legend-item"><span class="legend-color" style="background-color: #2196F3;"></span>湿度(%)</span>
+                  <span class="legend-item"><span class="legend-color" style="background-color: #4CAF50;"></span>土壤湿度(%)</span>
+                </div>
+                <div style="height: 300px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                  <p>环境数据趋势图</p>
+                </div>
+                <div style="margin-top: 10px;">
+                  <button class="btn btn-sm btn-default">24小时趋势</button>
+                  <button class="btn btn-sm btn-default">7天趋势</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 负责人信息 -->
+          <div class="tab-content" id="person">
+            <div class="info-section">
+              <h3 id="person-info">四、负责人信息</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>承包负责人：</label>
+                  <value>张建国 133****1234</value>
+                </div>
+                <div class="info-item">
+                  <label>实际负责人：</label>
+                  <value>张建国 133****1234</value>
+                </div>
+                <div class="info-item">
+                  <label>技术负责人：</label>
+                  <value>王技术员 133****5678（农业局）</value>
+                </div>
+                <div class="info-item">
+                  <label>承包合同号：</label>
+                  <value>HT-2024-001</value>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 种植历史记录 -->
+          <div class="tab-content" id="history">
+            <div class="info-section">
+              <h3 id="history-info">五、种植历史记录</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>种植季次</th>
+                    <th>作物</th>
+                    <th>定植日期</th>
+                    <th>采收日期</th>
+                    <th>周期</th>
+                    <th>产量(kg)</th>
+                    <th>备注</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2022年春</td>
+                    <td>番茄</td>
+                    <td>2024-02-15</td>
+                    <td>2024-05-20</td>
+                    <td>3个月5天</td>
+                    <td>3500</td>
+                    <td>合格</td>
+                  </tr>
+                  <tr>
+                    <td>2022年秋</td>
+                    <td>黄瓜</td>
+                    <td>2024-08-10</td>
+                    <td>2024-11-15</td>
+                    <td>3个月5天</td>
+                    <td>4200</td>
+                    <td>合格</td>
+                  </tr>
+                  <tr>
+                    <td>2025年春</td>
+                    <td>番茄</td>
+                    <td>2025-02-20</td>
+                    <td>2025-05-25</td>
+                    <td>3个月5天</td>
+                    <td>3800</td>
+                    <td>合格</td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="btn btn-default mt-10">查看全部</button>
+            </div>
+          </div>
+          
+          <!-- 生产过程追溯 -->
+          <div class="tab-content" id="production">
+            <div class="info-section">
+              <h3 id="production-info">六、生产过程追溯</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>时间</th>
+                    <th>农事类型</th>
+                    <th>农事操作</th>
+                    <th>用量</th>
+                    <th>操作人</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2026-01-15</td>
+                    <td>定苗</td>
+                    <td>番茄苗</td>
+                    <td>2500株</td>
+                    <td>张大山</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-01</td>
+                    <td>施肥</td>
+                    <td>复合肥</td>
+                    <td>15kg</td>
+                    <td>张大山</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-05</td>
+                    <td>施药</td>
+                    <td>低虫啉</td>
+                    <td>200ml</td>
+                    <td>张大山</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-08</td>
+                    <td>灌溉</td>
+                    <td>滴灌</td>
+                    <td>2小时</td>
+                    <td>自动</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-12</td>
+                    <td>采收</td>
+                    <td>-</td>
+                    <td>120kg</td>
+                    <td>张大山</td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="btn btn-default mt-10">查看完整生产档案</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function switchTab(tabId) {
+      // 隐藏所有标签内容
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // 移除所有标签头的活动状态
+      const tabItems = document.querySelectorAll('.tab-item');
+      tabItems.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 显示当前标签内容
+      document.getElementById(tabId).classList.add('active');
+      
+      // 设置当前标签头为活动状态
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>经营主体管理 - 家庭农场</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">经营主体管理</a>
+      <span>></span>
+      <span>家庭农场</span>
+    </div>
+    <h2 class="page-title">家庭农场管理</h2>
+    
+    <!-- 筛选条件 -->
+    <div class="filter-row" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; background: #f5f7fa; border-radius: 4px; margin-bottom: 12px;">
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">农场名称</label>
+        <input type="text" class="form-control" placeholder="输入农场名称" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">所属乡镇</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="凤山街道">凤山街道</option>
+          <option value="草河街道">草河街道</option>
+          <option value="刘家河镇">刘家河镇</option>
+          <option value="蓝旗镇">蓝旗镇</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">农场状态</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="正常">正常</option>
+          <option value="注销">注销</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">注册日期</label>
+        <input type="date" class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+        <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">查询</button>
+        <button class="btn btn-default" style="padding: 6px 16px; font-size: 13px;">重置</button>
+      </div>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div class="mt-20">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>农场名称</th>
+            <th>统一社会信用代码</th>
+            <th>农场主</th>
+            <th>联系电话</th>
+            <th>注册日期</th>
+            <th>经营地址</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>凤凰家庭农场</td>
+            <td>91210682MA12345678</td>
+            <td>张三</td>
+            <td>13800138000</td>
+            <td>2020-01-01</td>
+            <td>凤城市凤山街道凤凰村</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail(1)">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>花园家庭农场</td>
+            <td>91210682MA87654321</td>
+            <td>李四</td>
+            <td>13900139000</td>
+            <td>2021-02-02</td>
+            <td>凤城市凤山街道花园村</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail(2)">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>草河家庭农场</td>
+            <td>91210682MA13579246</td>
+            <td>王五</td>
+            <td>13700137000</td>
+            <td>2019-03-03</td>
+            <td>凤城市草河街道草河村</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail(3)">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>刘家家庭农场</td>
+            <td>91210682MA24680135</td>
+            <td>赵六</td>
+            <td>13600136000</td>
+            <td>2022-04-04</td>
+            <td>凤城市刘家河镇刘家村</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail(4)">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>蓝旗家庭农场</td>
+            <td>91210682MA98765432</td>
+            <td>孙七</td>
+            <td>13500135000</td>
+            <td>2020-05-05</td>
+            <td>凤城市蓝旗镇蓝旗村</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail(5)">查看详情</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">3</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function viewDetail(id) {
+      // 跳转到详情页面
+      window.location.href = `business-subject-farm-detail.html?id=${id}`;
+    }
+  </script>
+</body>
+</html>

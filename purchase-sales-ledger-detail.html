@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>购销台账详情</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+    }
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .detail-header h2 {
+      margin: 0;
+    }
+    .info-section {
+      margin-bottom: 20px;
+    }
+    .info-section h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .info-item {
+      background: white;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .info-item label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #666;
+    }
+    .info-item value {
+      display: block;
+      color: #333;
+    }
+    .status-active {
+      color: #52c41a;
+    }
+    .flow-step {
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 20px;
+    }
+    .flow-step::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 16px;
+      height: 16px;
+      background: #2662b7;
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .flow-step:nth-child(1)::before {
+      content: '1';
+    }
+    .flow-step:nth-child(2)::before {
+      content: '2';
+    }
+    .flow-step:nth-child(3)::before {
+      content: '3';
+    }
+    .flow-step:nth-child(4)::before {
+      content: '4';
+    }
+    .flow-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 21px;
+      width: 2px;
+      height: calc(100% + 10px);
+      background: #ddd;
+    }
+    .flow-step-content {
+      background: white;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .flow-step-content h4 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .flow-step-content p {
+      margin: 0 0 5px 0;
+      color: #666;
+      font-size: 14px;
+    }
+    .flow-step-content .time {
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+    }
+    .content {
+      padding: 20px;
+    }
+    .card {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <div class="card">
+        <div class="breadcrumb">
+          <a href="index.html">首页</a>
+          <span>></span>
+          <a href="purchase-sales-ledger.html">购销台账</a>
+          <span>></span>
+          <span>购销台账监管</span>
+          <span>></span>
+          <span>购销台账详情</span>
+        </div>
+        
+        <div class="detail-header">
+          <h2>购销台账详情</h2>
+          <button class="btn btn-default" onclick="window.history.back()">返回</button>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab-header">
+            <div class="tab-item active" onclick="switchTab('basic')">交易基本信息</div>
+            <div class="tab-item" onclick="switchTab('traceability')">关联溯源码信息</div>
+            <div class="tab-item" onclick="switchTab('flow')">交易流转记录</div>
+          </div>
+          
+          <!-- 交易基本信息 -->
+          <div class="tab-content active" id="basic">
+            <div class="info-section">
+              <h3 id="basic-info">一、交易基本信息</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>交易类型：</label>
+                  <value>销售</value>
+                </div>
+                <div class="info-item">
+                  <label>主体名称：</label>
+                  <value>绿源农业科技发展有限公司</value>
+                </div>
+                <div class="info-item">
+                  <label>产品名称：</label>
+                  <value>番茄</value>
+                </div>
+                <div class="info-item">
+                  <label>交易数量：</label>
+                  <value>450kg</value>
+                </div>
+                <div class="info-item">
+                  <label>交易单价：</label>
+                  <value>6.5元/kg</value>
+                </div>
+                <div class="info-item">
+                  <label>交易金额：</label>
+                  <value>2,925元</value>
+                </div>
+                <div class="info-item">
+                  <label>交易日期：</label>
+                  <value>2026-02-11</value>
+                </div>
+                <div class="info-item">
+                  <label>对方主体：</label>
+                  <value>东方果蔬分拣中心</value>
+                </div>
+                <div class="info-item">
+                  <label>交易凭证：</label>
+                  <value><a href="#" class="media-link">查看凭证</a></value>
+                </div>
+                <div class="info-item">
+                  <label>备注信息：</label>
+                  <value>常规销售，现款现货</value>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 关联溯源码信息 -->
+          <div class="tab-content" id="traceability">
+            <div class="info-section">
+              <h3 id="traceability-info">二、关联溯源码信息</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>溯源码</th>
+                    <th>产品批次</th>
+                    <th>数量</th>
+                    <th>生产日期</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>FC2026-001234</td>
+                    <td>B2026-001</td>
+                    <td>100kg</td>
+                    <td>2026-02-10</td>
+                    <td><span class="status-active">有效</span></td>
+                    <td>
+                      <div class="action-buttons">
+                        <button class="btn btn-default">查看详情</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>FC2026-001235</td>
+                    <td>B2026-001</td>
+                    <td>150kg</td>
+                    <td>2026-02-10</td>
+                    <td><span class="status-active">有效</span></td>
+                    <td>
+                      <div class="action-buttons">
+                        <button class="btn btn-default">查看详情</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>FC2026-001236</td>
+                    <td>B2026-001</td>
+                    <td>200kg</td>
+                    <td>2026-02-10</td>
+                    <td><span class="status-active">有效</span></td>
+                    <td>
+                      <div class="action-buttons">
+                        <button class="btn btn-default">查看详情</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- 交易流转记录 -->
+          <div class="tab-content" id="flow">
+            <div class="info-section">
+              <h3 id="flow-info">三、交易流转记录</h3>
+              
+              <div class="flow-step">
+                <div class="flow-step-content">
+                  <h4>1. 生产环节</h4>
+                  <p>绿源农业科技发展有限公司在智慧大棚环境下种植，共收获500kg。</p>
+                  <p>涉及溯源码：FC2026-001234、FC2026-001235、FC2026-001236</p>
+                  <div class="time">2026-02-10 08:30</div>
+                </div>
+              </div>
+              
+              <div class="flow-step">
+                <div class="flow-step-content">
+                  <h4>2. 加工包装</h4>
+                  <p>绿源农业科技发展有限公司对采收的番茄进行分拣、包装，共包装90箱（5kg/箱）。</p>
+                  <p>涉及溯源码：FC2026-001234、FC2026-001235、FC2026-001236</p>
+                  <div class="time">2026-02-10 10:00</div>
+                </div>
+              </div>
+              
+              <div class="flow-step">
+                <div class="flow-step-content">
+                  <h4>3. 销售交易</h4>
+                  <p>绿源农业科技发展有限公司将450kg番茄销售给东方果蔬分拣中心，交易金额2,925元。</p>
+                  <p>涉及溯源码：FC2026-001234、FC2026-001235、FC2026-001236</p>
+                  <div class="time">2026-02-11 14:00</div>
+                </div>
+              </div>
+              
+              <div class="flow-step">
+                <div class="flow-step-content">
+                  <h4>4. 流通环节</h4>
+                  <p>东方果蔬分拣中心收到番茄并完成检验，入库存储。</p>
+                  <p>涉及溯源码：FC2026-001234、FC2026-001235、FC2026-001236</p>
+                  <div class="time">2026-02-11 16:30</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function switchTab(tabId) {
+      // 隐藏所有标签内容
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // 移除所有标签头的活动状态
+      const tabItems = document.querySelectorAll('.tab-item');
+      tabItems.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 显示当前标签内容
+      document.getElementById(tabId).classList.add('active');
+      
+      // 设置当前标签头为活动状态
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

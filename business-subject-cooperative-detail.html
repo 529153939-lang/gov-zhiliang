@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>经营主体详情 - 质量安全监督信息系统</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+    }
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .detail-header h2 {
+      margin: 0;
+    }
+    .info-section {
+      margin-bottom: 20px;
+    }
+    .info-section h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .info-item {
+      background: white;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .info-item label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #666;
+    }
+    .info-item value {
+      display: block;
+      color: #333;
+    }
+    .content {
+      padding: 20px;
+    }
+    .card {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <div class="card">
+        <div class="breadcrumb">
+          <a href="index.html">首页</a>
+          <span>></span>
+          <a href="#">经营主体管理</a>
+          <span>></span>
+          <a href="business-subject-cooperative.html">专业合作社</a>
+          <span>></span>
+          <span>合作社详情</span>
+        </div>
+        
+        <div class="detail-header">
+          <h2>凤凰果蔬专业合作社 - 详情</h2>
+          <button class="btn btn-default" onclick="window.history.back()">返回</button>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab-header">
+            <div class="tab-item active" onclick="switchTab('basic')">企业信息</div>
+            <div class="tab-item" onclick="switchTab('certification')">认证/资质信息</div>
+            <div class="tab-item" onclick="switchTab('land')">授权地块</div>
+            <div class="tab-item" onclick="switchTab('greenhouse')">关联大棚资产</div>
+            <div class="tab-item" onclick="switchTab('account')">账户信息</div>
+            <div class="tab-item" onclick="switchTab('log')">操作日志</div>
+          </div>
+          
+          <!-- 企业信息 -->
+          <div class="tab-content active" id="basic">
+            <div class="info-section">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 14px;">
+                <div><strong>主体名称：</strong>凤凰果蔬专业合作社</div>
+                <div><strong>主体性质：</strong>专业合作社</div>
+                <div><strong>主体备案编号：</strong>FCNY20200001</div>
+                <div><strong>联系电话：</strong>13800138000</div>
+                <div><strong>注册日期：</strong>2020-01-01</div>
+                <div><strong>经营地址：</strong>凤城市凤山街道凤凰村</div>
+                <div><strong>统一社会信用代码：</strong>93210682MA12345678</div>
+                <div><strong>注册资本：</strong>1000万元</div>
+                <div><strong>法定代表人：</strong>张三</div>
+                <div><strong>法人身份证号：</strong>110101199001011234</div>
+                <div><strong>法人联系电话：</strong>13800138000</div>
+                <div><strong>合作社类型：</strong>专业合作社</div>
+                <div><strong>经营范围：</strong>农产品种植、加工、销售；农业技术推广服务</div>
+                <div><strong>营业期限：</strong>2020-01-01 至 2030-12-31</div>
+                <div><strong>营业执照（附件）：</strong><a href="#">营业执照.pdf</a></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 认证/资质信息 -->
+          <div class="tab-content" id="certification">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>认证类型</th>
+                    <th>认证编号</th>
+                    <th>认证起始日期</th>
+                    <th>认证截止日期</th>
+                    <th>认证状态</th>
+                    <th>证书附件</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>有机认证</td>
+                    <td>OC20200001</td>
+                    <td>2020-06-01</td>
+                    <td>2023-05-31</td>
+                    <td><span class="status-tag active">有效</span></td>
+                    <td><a href="#">有机认证证书.pdf</a></td>
+                  </tr>
+                  <tr>
+                    <td>绿色食品认证</td>
+                    <td>GF20200002</td>
+                    <td>2020-07-01</td>
+                    <td>2023-06-30</td>
+                    <td><span class="status-tag active">有效</span></td>
+                    <td><a href="#">绿色食品认证证书.pdf</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- 授权地块 -->
+          <div class="tab-content" id="land">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>地块名称</th>
+                    <th>地块位置</th>
+                    <th>地理坐标</th>
+                    <th>种植面积</th>
+                    <th>土地性质</th>
+                    <th>认证类型</th>
+                    <th>合同期限</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>凤凰地块1</td>
+                    <td>凤城市凤山街道凤凰村</td>
+                    <td>124.0245°E, 40.4872°N</td>
+                    <td>100亩</td>
+                    <td>耕地</td>
+                    <td>有机认证</td>
+                    <td>2020-01-01 至 2025-12-31</td>
+                    <td><span class="status-tag active">正常</span></td>
+                  </tr>
+                  <tr>
+                    <td>凤凰地块2</td>
+                    <td>凤城市凤山街道凤凰村</td>
+                    <td>124.0321°E, 40.4912°N</td>
+                    <td>80亩</td>
+                    <td>耕地</td>
+                    <td>绿色食品认证</td>
+                    <td>2020-01-01 至 2025-12-31</td>
+                    <td><span class="status-tag active">正常</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- 关联大棚资产 -->
+          <div class="tab-content" id="greenhouse">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>大棚名称</th>
+                    <th>大棚编号</th>
+                    <th>所属地块</th>
+                    <th>大棚类型</th>
+                    <th>建设面积</th>
+                    <th>种植作物</th>
+                    <th>建设日期</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>大棚1</td>
+                    <td>DP20200001</td>
+                    <td>凤凰地块1</td>
+                    <td>日光温室</td>
+                    <td>1000㎡</td>
+                    <td>草莓</td>
+                    <td>2020-03-01</td>
+                    <td><span class="status-tag active">正常</span></td>
+                    <td><button class="btn btn-default">查看详情</button></td>
+                  </tr>
+                  <tr>
+                    <td>大棚2</td>
+                    <td>DP20200002</td>
+                    <td>凤凰地块1</td>
+                    <td>日光温室</td>
+                    <td>1200㎡</td>
+                    <td>蓝莓</td>
+                    <td>2020-04-01</td>
+                    <td><span class="status-tag active">正常</span></td>
+                    <td><button class="btn btn-default">查看详情</button></td>
+                  </tr>
+                  <tr>
+                    <td>大棚3</td>
+                    <td>DP20200003</td>
+                    <td>凤凰地块2</td>
+                    <td>连栋温室</td>
+                    <td>2000㎡</td>
+                    <td>蔬菜</td>
+                    <td>2020-05-01</td>
+                    <td><span class="status-tag active">正常</span></td>
+                    <td><button class="btn btn-default">查看详情</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- 账户信息 -->
+          <div class="tab-content" id="account">
+            <div class="info-section">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 14px;">
+                <div><strong>账号状态：</strong><span class="status-tag active">正常</span></div>
+                <div><strong>实名认证：</strong>已认证</div>
+                <div><strong>注册时间：</strong>2020-01-01 10:00:00</div>
+                <div><strong>最后登录：</strong>2026-02-26 15:30:00</div>
+                <div><strong>登录次数：</strong>1234</div>
+                <div><strong>账号操作：</strong><button class="btn btn-danger">禁用账号</button></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 操作日志 -->
+          <div class="tab-content" id="log">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>操作时间</th>
+                    <th>操作类型</th>
+                    <th>操作人</th>
+                    <th>操作内容</th>
+                    <th>IP地址</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2026-02-27 10:30:00</td>
+                    <td>编辑</td>
+                    <td>管理员</td>
+                    <td>更新了企业信息</td>
+                    <td>192.168.1.100</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-26 16:45:00</td>
+                    <td>添加</td>
+                    <td>管理员</td>
+                    <td>添加了新的大棚资产</td>
+                    <td>192.168.1.100</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-25 09:15:00</td>
+                    <td>编辑</td>
+                    <td>管理员</td>
+                    <td>更新了认证信息</td>
+                    <td>192.168.1.100</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-24 14:20:00</td>
+                    <td>登录</td>
+                    <td>张三</td>
+                    <td>企业账号登录</td>
+                    <td>192.168.1.200</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function switchTab(tabId) {
+      // 隐藏所有标签内容
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // 移除所有标签头的活动状态
+      const tabItems = document.querySelectorAll('.tab-item');
+      tabItems.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 显示当前标签内容
+      document.getElementById(tabId).classList.add('active');
+      
+      // 设置当前标签头为活动状态
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

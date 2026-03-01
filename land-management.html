@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>土地管理 - 地块信息</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">土地管理</a>
+      <span>></span>
+          <span>地块信息</span>
+        </div>
+        <h2 class="page-title">地块信息</h2>
+    
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="right-tools">
+        <div class="search-box">
+          <input type="text" class="form-control" placeholder="搜索大棚地块">
+          <button class="btn btn-default">搜索</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div class="mt-20">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>大棚名称编号</th>
+            <th>所在镇村</th>
+            <th>当前作物</th>
+            <th>面积(亩)</th>
+            <th>生产量</th>
+            <th>生产率/平均产量</th>
+            <th>土地/环境信息</th>
+            <th>位置(经纬度)</th>
+            <th>承包负责人</th>
+            <th>实际负责人</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>DP-2024-001 番茄大棚</td>
+            <td>红旗镇胜利村</td>
+            <td>番茄</td>
+            <td>2.5</td>
+            <td>1200 kg</td>
+            <td>40% / 3000 kg</td>
+            <td>土质: 壤土, 水分: 65%, 养分: 中, 光照: 充足, PH值: 6.5, EC值: 1.2, 污染: 无</td>
+            <td>123.456, 41.789</td>
+            <td>张建国</td>
+            <td>张建国</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showPlantingHistory('DP-2024-001')">种植历史记录</button>
+                <button class="btn btn-success" onclick="showProductionPotential('DP-2024-001')">生产潜力分析</button>
+                <button class="btn btn-default" onclick="viewLandDetail('DP-2024-001')">详情</button>
+                <button class="btn btn-warning" onclick="viewRealTimeManagement('DP-2024-001')">实时管理</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>DP-2024-002 黄瓜大棚</td>
+            <td>红旗镇胜利村</td>
+            <td>黄瓜</td>
+            <td>3.0</td>
+            <td>1800 kg</td>
+            <td>60% / 3000 kg</td>
+            <td>土质: 砂壤土, 水分: 60%, 养分: 高, 光照: 充足, PH值: 6.8, EC值: 1.0, 污染: 无</td>
+            <td>123.457, 41.790</td>
+            <td>张建国</td>
+            <td>张建国</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showPlantingHistory('DP-2024-002')">种植历史记录</button>
+                <button class="btn btn-success" onclick="showProductionPotential('DP-2024-002')">生产潜力分析</button>
+                <button class="btn btn-default" onclick="viewLandDetail('DP-2024-002')">详情</button>
+                <button class="btn btn-warning" onclick="viewRealTimeManagement('DP-2024-002')">实时管理</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>DP-2024-003 辣椒大棚</td>
+            <td>红旗镇胜利村</td>
+            <td>辣椒</td>
+            <td>3.0</td>
+            <td>800 kg</td>
+            <td>30% / 2500 kg</td>
+            <td>土质: 粘土, 水分: 62%, 养分: 中, 光照: 中等, PH值: 7.0, EC值: 1.5, 污染: 无</td>
+            <td>123.458, 41.791</td>
+            <td>张建国</td>
+            <td>李长河</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showPlantingHistory('DP-2024-003')">种植历史记录</button>
+                <button class="btn btn-success" onclick="showProductionPotential('DP-2024-003')">生产潜力分析</button>
+                <button class="btn btn-default" onclick="viewLandDetail('DP-2024-003')">详情</button>
+                <button class="btn btn-warning" onclick="viewRealTimeManagement('DP-2024-003')">实时管理</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>DP-2024-004 草莓大棚</td>
+            <td>白云镇和平村</td>
+            <td>草莓</td>
+            <td>1.8</td>
+            <td>600 kg</td>
+            <td>75% / 800 kg</td>
+            <td>土质: 壤土, 水分: 62%, 养分: 高, 光照: 充足, PH值: 6.2, EC值: 0.8, 污染: 无</td>
+            <td>123.459, 41.792</td>
+            <td>刘德强</td>
+            <td>刘德强</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showPlantingHistory('DP-2024-004')">种植历史记录</button>
+                <button class="btn btn-success" onclick="showProductionPotential('DP-2024-004')">生产潜力分析</button>
+                <button class="btn btn-default" onclick="viewLandDetail('DP-2024-004')">详情</button>
+                <button class="btn btn-warning" onclick="viewRealTimeManagement('DP-2024-004')">实时管理</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>DP-2024-005 番茄大棚</td>
+            <td>白云镇和平村</td>
+            <td>番茄</td>
+            <td>2.2</td>
+            <td>900 kg</td>
+            <td>35% / 2500 kg</td>
+            <td>土质: 砂壤土, 水分: 60%, 养分: 中, 光照: 充足, PH值: 6.6, EC值: 1.1, 污染: 无</td>
+            <td>123.460, 41.793</td>
+            <td>刘德强</td>
+            <td>刘德强</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showPlantingHistory('DP-2024-005')">种植历史记录</button>
+                <button class="btn btn-success" onclick="showProductionPotential('DP-2024-005')">生产潜力分析</button>
+                <button class="btn btn-default" onclick="viewLandDetail('DP-2024-005')">详情</button>
+                <button class="btn btn-warning" onclick="viewRealTimeManagement('DP-2024-005')">实时管理</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">3</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 种植历史记录模态框 -->
+  <div id="plantingHistoryModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);">
+    <div class="modal-content" style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 900px; border-radius: 5px;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 id="plantingHistoryTitle">种植历史记录 - DP-2024-001</h3>
+        <button class="btn btn-default" onclick="closePlantingHistoryModal()">关闭</button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>种植季次</th>
+              <th>作物</th>
+              <th>定植日期</th>
+              <th>采收日期</th>
+              <th>周期</th>
+              <th>实际生产产量</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2024年春</td>
+              <td>番茄</td>
+              <td>2024-02-15</td>
+              <td>2024-05-20</td>
+              <td>3个月5天</td>
+              <td>3500 kg</td>
+              <td>合格</td>
+            </tr>
+            <tr>
+              <td>2024年秋</td>
+              <td>黄瓜</td>
+              <td>2024-08-10</td>
+              <td>2024-11-15</td>
+              <td>3个月5天</td>
+              <td>4200 kg</td>
+              <td>合格</td>
+            </tr>
+            <tr>
+              <td>2025年春</td>
+              <td>番茄</td>
+              <td>2025-02-20</td>
+              <td>2025-05-25</td>
+              <td>3个月5天</td>
+              <td>3800 kg</td>
+              <td>合格</td>
+            </tr>
+            <tr>
+              <td>2026年春</td>
+              <td>番茄</td>
+              <td>2026-01-15</td>
+              <td>2026-03-20</td>
+              <td>2个月5天</td>
+              <td>1200 kg</td>
+              <td>未完成</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="margin-top: 20px; text-align: right;">
+        <button class="btn btn-default" onclick="closePlantingHistoryModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产潜力分析模态框 -->
+  <div id="productionPotentialModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);">
+    <div class="modal-content" style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 900px; border-radius: 5px;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 id="productionPotentialTitle">生产潜力分析 - DP-2024-001</h3>
+        <button class="btn btn-default" onclick="closeProductionPotentialModal()">关闭</button>
+      </div>
+      <div class="modal-body">
+        <h4>作物分析</h4>
+        <table class="table" style="margin-bottom: 20px;">
+          <thead>
+            <tr>
+              <th>作物类型</th>
+              <th>种植面积(亩)</th>
+              <th>标准亩产(斤/亩)</th>
+              <th>标准生码产量(斤)</th>
+              <th>已生成溯源码产量(斤)</th>
+              <th>剩余可生成溯源码量(斤)</th>
+              <th>达成进度</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>番茄</td>
+              <td>2.5</td>
+              <td>8000</td>
+              <td>2.5*8000=20,000</td>
+              <td>6000</td>
+              <td>14000</td>
+              <td>30.0%</td>
+            </tr>
+          </tbody>
+        </table>
+        <h4>分析建议</h4>
+        <div style="background-color: #e3f2fd; padding: 15px; border-radius: 5px;">
+          <p>基于标准亩产计算，该大棚可生成溯源码总产量 20000 斤。</p>
+          <p>当前已生成 6000 斤，进度达到 30%。</p>
+          <p>建议：适当提升亩产产量，可增加整体溯源码可生成产量；结合作物上市周期，尽快跟进溯源达成率数据情况，从而避免的产能、未能及时上市等相关风险。</p>
+        </div>
+      </div>
+      <div class="modal-footer" style="margin-top: 20px; text-align: right;">
+        <button class="btn btn-default" onclick="closeProductionPotentialModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function viewLandDetail(id) {
+      window.location.href = 'land-management-detail.html?id=' + id;
+    }
+
+    function viewRealTimeManagement(id) {
+      window.location.href = 'land-real-time-management.html?id=' + id;
+    }
+
+    function showPlantingHistory(id) {
+      document.getElementById('plantingHistoryTitle').textContent = '种植历史记录 - ' + id;
+      document.getElementById('plantingHistoryModal').style.display = 'block';
+    }
+
+    function closePlantingHistoryModal() {
+      document.getElementById('plantingHistoryModal').style.display = 'none';
+    }
+
+    function showProductionPotential(id) {
+      document.getElementById('productionPotentialTitle').textContent = '生产潜力分析 - ' + id;
+      document.getElementById('productionPotentialModal').style.display = 'block';
+    }
+
+    function closeProductionPotentialModal() {
+      document.getElementById('productionPotentialModal').style.display = 'none';
+    }
+
+    // 点击模态框外部关闭模态框
+    window.onclick = function(event) {
+      const plantingHistoryModal = document.getElementById('plantingHistoryModal');
+      const productionPotentialModal = document.getElementById('productionPotentialModal');
+      if (event.target == plantingHistoryModal) {
+        plantingHistoryModal.style.display = 'none';
+      }
+      if (event.target == productionPotentialModal) {
+        productionPotentialModal.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

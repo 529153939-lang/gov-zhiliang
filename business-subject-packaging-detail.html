@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>包装中心详情 - 质量安全监督信息系统</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+    }
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .detail-header h2 {
+      margin: 0;
+    }
+    .info-section {
+      margin-bottom: 20px;
+    }
+    .info-section h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .info-item {
+      background: white;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .info-item label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #666;
+    }
+    .info-item value {
+      display: block;
+      color: #333;
+    }
+    .content {
+      padding: 20px;
+    }
+    .card {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <div class="card">
+        <div class="breadcrumb">
+          <a href="index.html">首页</a>
+          <span>></span>
+          <a href="#">经营主体管理</a>
+          <span>></span>
+          <a href="business-subject-packaging.html">包装中心</a>
+          <span>></span>
+          <span>包装中心详情</span>
+        </div>
+        
+        <div class="detail-header">
+          <h2>凤凰包装中心 - 详情</h2>
+          <button class="btn btn-default" onclick="window.history.back()">返回</button>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab-header">
+            <div class="tab-item active" onclick="switchTab('basic')">企业信息</div>
+            <div class="tab-item" onclick="switchTab('certification')">认证/资质信息</div>
+            <div class="tab-item" onclick="switchTab('sorting')">分拣站点</div>
+            <div class="tab-item" onclick="switchTab('personnel')">人员信息</div>
+            <div class="tab-item" onclick="switchTab('account')">账户信息</div>
+            <div class="tab-item" onclick="switchTab('log')">操作日志</div>
+          </div>
+          
+          <!-- 企业信息 -->
+          <div class="tab-content active" id="basic">
+            <div class="info-section">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 14px;">
+                <div><strong>主体名称：</strong>凤凰包装中心</div>
+                <div><strong>主体性质：</strong>包装中心</div>
+                <div><strong>主体备案编号：</strong>BZZX20200001</div>
+                <div><strong>联系电话：</strong>13800138000</div>
+                <div><strong>负责人：</strong>张三</div>
+                <div><strong>注册日期：</strong>2020-01-01</div>
+                <div><strong>经营地址：</strong>凤城市凤山街道凤凰村</div>
+                <div><strong>统一社会信用代码：</strong>91210682MA12345678</div>
+                <div><strong>注册资本：</strong>500万元</div>
+                <div><strong>法定代表人：</strong>张三</div>
+                <div><strong>法人身份证号：</strong>110101199001011234</div>
+                <div><strong>法人联系电话：</strong>13800138000</div>
+                <div><strong>企业类型：</strong>有限责任公司</div>
+                <div><strong>经营范围：</strong>农产品包装、分拣、销售；农业技术推广服务</div>
+                <div><strong>营业期限：</strong>2020-01-01 至 2030-12-31</div>
+                <div><strong>营业执照（附件）：</strong><a href="#">营业执照.pdf</a></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 认证/资质信息 -->
+          <div class="tab-content" id="certification">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>认证类型</th>
+                    <th>认证编号</th>
+                    <th>认证起始日期</th>
+                    <th>认证截止日期</th>
+                    <th>认证状态</th>
+                    <th>证书附件</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>有机认证</td>
+                    <td>OC20200001</td>
+                    <td>2020-06-01</td>
+                    <td>2023-05-31</td>
+                    <td><span class="status-tag active">有效</span></td>
+                    <td><a href="#">有机认证证书.pdf</a></td>
+                  </tr>
+                  <tr>
+                    <td>绿色食品认证</td>
+                    <td>GF20200002</td>
+                    <td>2020-07-01</td>
+                    <td>2023-06-30</td>
+                    <td><span class="status-tag active">有效</span></td>
+                    <td><a href="#">绿色食品认证证书.pdf</a></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <!-- 分页 -->
+              <div class="pagination" style="margin-top: 10px;">
+                <div class="page-item">
+                  <a href="#" class="page-link">上一页</a>
+                </div>
+                <div class="page-item active">
+                  <a href="#" class="page-link">1</a>
+                </div>
+                <div class="page-item">
+                  <a href="#" class="page-link">下一页</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 分拣站点 -->
+          <div class="tab-content" id="sorting">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>站点名称</th>
+                    <th>地址</th>
+                    <th>负责人</th>
+                    <th>联系方式</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>凤凰分拣站1</td>
+                    <td>凤城市凤山街道凤凰村1组</td>
+                    <td>张三</td>
+                    <td>13800138000</td>
+                  </tr>
+                  <tr>
+                    <td>凤凰分拣站2</td>
+                    <td>凤城市凤山街道凤凰村2组</td>
+                    <td>李四</td>
+                    <td>13900139000</td>
+                  </tr>
+                  <tr>
+                    <td>花园分拣站</td>
+                    <td>凤城市凤山街道花园村</td>
+                    <td>王五</td>
+                    <td>13700137000</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <!-- 分页 -->
+              <div class="pagination" style="margin-top: 10px;">
+                <div class="page-item">
+                  <a href="#" class="page-link">上一页</a>
+                </div>
+                <div class="page-item active">
+                  <a href="#" class="page-link">1</a>
+                </div>
+                <div class="page-item">
+                  <a href="#" class="page-link">2</a>
+                </div>
+                <div class="page-item">
+                  <a href="#" class="page-link">下一页</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 人员信息 -->
+          <div class="tab-content" id="personnel">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>人员</th>
+                    <th>职责</th>
+                    <th>账号</th>
+                    <th>账号状态</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>张三</td>
+                    <td>管理员</td>
+                    <td>zhangsan</td>
+                    <td><span class="status-tag active">正常</span></td>
+                  </tr>
+                  <tr>
+                    <td>李四</td>
+                    <td>分拣员</td>
+                    <td>lisi</td>
+                    <td><span class="status-tag active">正常</span></td>
+                  </tr>
+                  <tr>
+                    <td>王五</td>
+                    <td>分拣员</td>
+                    <td>wangwu</td>
+                    <td><span class="status-tag active">正常</span></td>
+                  </tr>
+                  <tr>
+                    <td>赵六</td>
+                    <td>分拣员</td>
+                    <td>zhaoliu</td>
+                    <td><span class="status-tag">禁用</span></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <!-- 分页 -->
+              <div class="pagination" style="margin-top: 10px;">
+                <div class="page-item">
+                  <a href="#" class="page-link">上一页</a>
+                </div>
+                <div class="page-item active">
+                  <a href="#" class="page-link">1</a>
+                </div>
+                <div class="page-item">
+                  <a href="#" class="page-link">2</a>
+                </div>
+                <div class="page-item">
+                  <a href="#" class="page-link">下一页</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 账户信息 -->
+          <div class="tab-content" id="account">
+            <div class="info-section">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 14px;">
+                <div><strong>账号状态：</strong><span class="status-tag active">正常</span></div>
+                <div><strong>实名认证：</strong>已认证</div>
+                <div><strong>注册时间：</strong>2020-01-01 10:00:00</div>
+                <div><strong>最后登录：</strong>2026-02-26 15:30:00</div>
+                <div><strong>登录次数：</strong>1234</div>
+                <div><strong>账号操作：</strong><button class="btn btn-danger">禁用账号</button></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 操作日志 -->
+          <div class="tab-content" id="log">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>操作时间</th>
+                    <th>操作类型</th>
+                    <th>操作人</th>
+                    <th>操作内容</th>
+                    <th>IP地址</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2026-02-27 10:30:00</td>
+                    <td>编辑</td>
+                    <td>管理员</td>
+                    <td>更新了包装中心信息</td>
+                    <td>192.168.1.100</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-26 16:45:00</td>
+                    <td>添加</td>
+                    <td>管理员</td>
+                    <td>添加了新的分拣站点</td>
+                    <td>192.168.1.100</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-25 09:15:00</td>
+                    <td>编辑</td>
+                    <td>管理员</td>
+                    <td>更新了认证信息</td>
+                    <td>192.168.1.100</td>
+                  </tr>
+                  <tr>
+                    <td>2026-02-24 14:20:00</td>
+                    <td>登录</td>
+                    <td>张三</td>
+                    <td>包装中心账号登录</td>
+                    <td>192.168.1.200</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <!-- 分页 -->
+              <div class="pagination" style="margin-top: 10px;">
+                <div class="page-item">
+                  <a href="#" class="page-link">上一页</a>
+                </div>
+                <div class="page-item active">
+                  <a href="#" class="page-link">1</a>
+                </div>
+                <div class="page-item">
+                  <a href="#" class="page-link">2</a>
+                </div>
+                <div class="page-item">
+                  <a href="#" class="page-link">3</a>
+                </div>
+                <div class="page-item">
+                  <a href="#" class="page-link">下一页</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function switchTab(tabId) {
+      // 隐藏所有标签内容
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // 移除所有标签头的活动状态
+      const tabItems = document.querySelectorAll('.tab-item');
+      tabItems.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 显示当前标签内容
+      document.getElementById(tabId).classList.add('active');
+      
+      // 设置当前标签头为活动状态
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

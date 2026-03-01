@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生产管理 - 生产记录</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">生产管理</a>
+      <span>></span>
+      <span>生产记录</span>
+    </div>
+    <h2 class="page-title">生产记录管理</h2>
+    
+    <!-- 筛选条件 -->
+    <div class="filter-row" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; background: #f5f7fa; border-radius: 4px; margin-bottom: 12px;">
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">记录类型</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="施肥">施肥</option>
+          <option value="浇水">浇水</option>
+          <option value="除草">除草</option>
+          <option value="打药">打药</option>
+          <option value="采收">采收</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">农户姓名</label>
+        <input type="text" class="form-control" placeholder="输入农户姓名" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">作物</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="番茄">番茄</option>
+          <option value="黄瓜">黄瓜</option>
+          <option value="草莓">草莓</option>
+          <option value="水稻">水稻</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">记录日期</label>
+        <input type="date" class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+        <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">查询</button>
+        <button class="btn btn-default" style="padding: 6px 16px; font-size: 13px;">重置</button>
+      </div>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div class="mt-20">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>记录编号</th>
+            <th>记录类型</th>
+            <th>农户姓名</th>
+            <th>地块大棚</th>
+            <th>作物</th>
+            <th>操作内容</th>
+            <th>记录日期</th>
+            <th>记录来源</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PR-20260212-001</td>
+            <td>施肥</td>
+            <td>张大山</td>
+            <td>1号番茄 (DP-2024-001)</td>
+            <td>番茄</td>
+            <td>复合肥 (15-15-15) 15kg</td>
+            <td>2026-02-12</td>
+            <td>APP手动</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail('PR-20260212-001')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>PR-20260212-002</td>
+            <td>施药</td>
+            <td>李有田</td>
+            <td>2号黄瓜 (DP-2024-002)</td>
+            <td>黄瓜</td>
+            <td>吡虫啉 200ml</td>
+            <td>2026-02-12</td>
+            <td>APP手动</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail('PR-20260212-002')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>PR-20260212-003</td>
+            <td>灌溉</td>
+            <td>王翠花</td>
+            <td>3号辣椒 (DP-2024-003)</td>
+            <td>辣椒</td>
+            <td>灌溉 2小时</td>
+            <td>2026-02-12</td>
+            <td>设备同步</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail('PR-20260212-003')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>PR-20260212-004</td>
+            <td>采收</td>
+            <td>赵小麦</td>
+            <td>4号草莓 (DP-2024-004)</td>
+            <td>草莓</td>
+            <td>草莓 15kg</td>
+            <td>2026-02-12</td>
+            <td>APP手动</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail('PR-20260212-004')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>PR-20260211-001</td>
+            <td>播种</td>
+            <td>钱水稻</td>
+            <td>水稻田 (DK-2024-001)</td>
+            <td>水稻</td>
+            <td>水稻种子 5kg</td>
+            <td>2026-02-11</td>
+            <td>语音转写</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail('PR-20260211-001')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>PR-20260211-002</td>
+            <td>修剪</td>
+            <td>孙果树</td>
+            <td>果园 (GY-2024-001)</td>
+            <td>苹果</td>
+            <td>冬季修剪</td>
+            <td>2026-02-11</td>
+            <td>APP手动</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default" onclick="viewDetail('PR-20260211-002')">查看详情</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">3</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function viewDetail(recordId) {
+      // 跳转到详情页面
+      window.location.href = `production-record-detail.html?id=${recordId}`;
+    }
+  </script>
+</body>
+</html>

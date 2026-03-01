@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>子码追溯详情</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+    .container {
+      width: 100%;
+      min-height: 100vh;
+    }
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .detail-header h2 {
+      margin: 0;
+    }
+    .info-section {
+      margin-bottom: 20px;
+    }
+    .info-section h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .content {
+      padding: 20px;
+    }
+    .card {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    /* 溯源码详情页特有样式 */
+    .commitment-list {
+      margin-top: 10px;
+    }
+    
+    .commitment-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .commitment-item input {
+      margin-right: 10px;
+    }
+    
+    .ml-10 {
+      margin-left: 10px;
+    }
+    
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #f0f0f0;
+      border-radius: 5px;
+      flex-wrap: wrap;
+    }
+    
+    .flow-node {
+      padding: 10px 20px;
+      background: #2662b7;
+      color: white;
+      border-radius: 20px;
+      text-align: center;
+      margin: 0 10px;
+    }
+    
+    .flow-arrow {
+      width: 40px;
+      height: 2px;
+      background: #333;
+      position: relative;
+    }
+    
+    .flow-arrow::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -4px;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 8px solid #333;
+    }
+    
+    .flow-node.farmer {
+      background: #4CAF50;
+    }
+    
+    .flow-node.collector {
+      background: #FF9800;
+    }
+    
+    .flow-node.market {
+      background: #2196F3;
+    }
+    
+    .flow-node.distributor {
+      background: #9C27B0;
+    }
+    
+    .flow-node.consumer {
+      background: #F44336;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <div class="card">
+        <div class="breadcrumb">
+          <a href="index.html">首页</a>
+          <span>></span>
+          <a href="traceability-management.html">追溯明细</a>
+          <span>></span>
+          <span>子码追溯详情</span>
+        </div>
+        
+        <div class="detail-header">
+          <h2>子码追溯详情</h2>
+          <button class="btn btn-default" onclick="window.history.back()">返回</button>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab-header">
+            <div class="tab-item active" onclick="switchTab('basic')">基本信息</div>
+            <div class="tab-item" onclick="switchTab('certificate')">承诺合格证</div>
+            <div class="tab-item" onclick="switchTab('detection')">检测信息</div>
+            <div class="tab-item" onclick="switchTab('circulation')">流通信息</div>
+          </div>
+          
+          <!-- 基本信息 -->
+          <div class="tab-content active" id="basic">
+            <div class="info-section">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 14px;">
+                <div><strong>根追溯码：</strong>FC2026-001234</div>
+                <div><strong>二维码：</strong><a href="#" class="media-link">查看二维码</a></div>
+                <div><strong>产品名称：</strong>番茄</div>
+                <div><strong>品牌/品种：</strong>普罗旺斯</div>
+                <div><strong>生码主体：</strong>张大山 (红旗镇顺利村)</div>
+                <div><strong>主体类型：</strong>农户</div>
+                <div><strong>联系电话：</strong>138****1234</div>
+                <div><strong>生码地址：</strong>凤城市红旗镇顺利村三组</div>
+                <div><strong>批次号：</strong>B2026-001</div>
+                <div><strong>生码日期：</strong>2026-02-12</div>
+                <div><strong>产品重量：</strong>5kg</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 承诺达标合格证 -->
+          <div class="tab-content" id="certificate">
+            <div class="info-section">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 14px;">
+                <div><strong>合格证编号：</strong>HQ2026-001</div>
+                <div><strong>开具日期：</strong>2026-02-12</div>
+                <div><strong>开具人：</strong>张大山</div>
+                <div><strong>联系电话：</strong>138****1234</div>
+              </div>
+              
+              <div class="mt-20">
+                <h4>承诺事项：</h4>
+                <div class="commitment-list">
+                  <div class="commitment-item">
+                    <input type="checkbox" checked disabled>
+                    <span>不使用禁用的农药、非法添加物</span>
+                  </div>
+                  <div class="commitment-item">
+                    <input type="checkbox" checked disabled>
+                    <span>遵守农药安全间隔期、兽药休药期</span>
+                  </div>
+                  <div class="commitment-item">
+                    <input type="checkbox" checked disabled>
+                    <span>销售的农产品符合国家农产品安全强制性标准</span>
+                  </div>
+                  <div class="commitment-item">
+                    <input type="checkbox" checked disabled>
+                    <span>对承诺的真实性负责，愿承担相应法律责任</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-20">
+                <button class="btn btn-default">PDF下载</button>
+                <button class="btn btn-default ml-10">图片预览</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 检测信息 -->
+          <div class="tab-content" id="detection">
+            <div class="info-section">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>检测类型</th>
+                    <th>检测机构</th>
+                    <th>检测日期</th>
+                    <th>检测项目</th>
+                    <th>检测结果</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>快速检测</td>
+                    <td>凤城市农产品检测中心</td>
+                    <td>2026-02-11</td>
+                    <td>有机磷、氨基甲酸酯类、拟除虫菊酯类</td>
+                    <td><span class="status-tag active">合格</span></td>
+                    <td>
+                      <div class="action-buttons">
+                        <button class="btn btn-default" onclick="viewReport()">查看报告</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- 流通信息 -->
+          <div class="tab-content" id="circulation">
+            <div class="info-section">
+              <h4>流通记录：</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>销售去向</th>
+                    <th>销售时间</th>
+                    <th>购买方</th>
+                    <th>销售数量</th>
+                    <th>销售单价</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>王权富经-经纪人收购</td>
+                    <td>2026-02-12 10:30</td>
+                    <td>王权富（经纪人）</td>
+                    <td>100kg</td>
+                    <td>8元/kg</td>
+                  </tr>
+                  <tr>
+                    <td>凤城市农贸批发市场</td>
+                    <td>2026-02-12 14:20</td>
+                    <td>李经理（收购商）</td>
+                    <td>80kg</td>
+                    <td>9元/kg</td>
+                  </tr>
+                  <tr>
+                    <td>大红旗超市</td>
+                    <td>2026-02-12 16:45</td>
+                    <td>赵经理（超市采购）</td>
+                    <td>40kg</td>
+                    <td>8.5元/kg</td>
+                  </tr>
+                  <tr>
+                    <td>百姓菜市场</td>
+                    <td>2026-02-12 17:45</td>
+                    <td>赵大妈（菜贩）</td>
+                    <td>40kg</td>
+                    <td>8.5元/kg</td>
+                  </tr>
+                  <tr>
+                    <td>客户1</td>
+                    <td>2026-02-13 16:45</td>
+                    <td>***（终端消费者）</td>
+                    <td>10kg</td>
+                    <td>18.5元/kg</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <div class="mt-30">
+                <h4>流通路径：</h4>
+                <div class="flow-path" style="position: relative; height: 400px; overflow: hidden;">
+                  <svg width="100%" height="400" viewBox="0 0 800 400" style="position: absolute; top: 30px; left: 30px;">
+                    <!-- 连接线 -->
+                    <line x1="100" y1="150" x2="200" y2="150" stroke="#17a2b8" stroke-width="2"/>
+                    <line x1="250" y1="150" x2="350" y2="150" stroke="#17a2b8" stroke-width="2"/>
+                    <line x1="400" y1="150" x2="500" y2="150" stroke="#17a2b8" stroke-width="2"/>
+                    <line x1="550" y1="150" x2="650" y2="150" stroke="#17a2b8" stroke-width="2"/>
+                    <line x1="500" y1="150" x2="500" y2="50" stroke="#17a2b8" stroke-width="2"/>
+                    <line x1="500" y1="50" x2="600" y2="50" stroke="#17a2b8" stroke-width="2"/>
+                    <line x1="500" y1="50" x2="400" y2="50" stroke="#17a2b8" stroke-width="2"/>
+                    <line x1="500" y1="150" x2="500" y2="250" stroke="#17a2b8" stroke-width="2"/>
+                    <line x1="500" y1="250" x2="600" y2="250" stroke="#17a2b8" stroke-width="2"/>
+                    
+                    <!-- 农户节点 -->
+                    <circle cx="100" cy="150" r="20" fill="#a8e6cf" stroke="#28a745" stroke-width="2"/>
+                    <text x="100" y="190" text-anchor="middle" font-size="12" fill="#333333">农户</text>
+                    <text x="100" y="205" text-anchor="middle" font-size="10" fill="#666666">张大山</text>
+                    
+                    <!-- 经纪人节点 -->
+                    <circle cx="250" cy="150" r="20" fill="#dcedc1" stroke="#8bc34a" stroke-width="2"/>
+                    <text x="250" y="190" text-anchor="middle" font-size="12" fill="#333333">经纪人</text>
+                    <text x="250" y="205" text-anchor="middle" font-size="10" fill="#666666">王权富贵</text>
+                    
+                    <!-- 收购节点 -->
+                    <circle cx="400" cy="150" r="20" fill="#ffd93d" stroke="#ffc107" stroke-width="2"/>
+                    <text x="400" y="190" text-anchor="middle" font-size="12" fill="#333333">收购</text>
+                    <text x="400" y="205" text-anchor="middle" font-size="10" fill="#666666">凤城市农贸批发市场</text>
+                    
+                    <!-- 商超节点 -->
+                    <circle cx="500" cy="150" r="20" fill="#ffadad" stroke="#ff5722" stroke-width="2"/>
+                    <text x="500" y="190" text-anchor="middle" font-size="12" fill="#333333">商超</text>
+                    <text x="500" y="205" text-anchor="middle" font-size="10" fill="#666666">大红福超市</text>
+                    
+                    <!-- 终端节点 1 -->
+                    <circle cx="650" cy="150" r="20" fill="#b39ddb" stroke="#9c27b0" stroke-width="2"/>
+                    <text x="650" y="190" text-anchor="middle" font-size="12" fill="#333333">终端</text>
+                    <text x="650" y="205" text-anchor="middle" font-size="10" fill="#666666">客户1</text>
+                    
+                    <!-- 终端节点 2 -->
+                    <circle cx="400" cy="50" r="20" fill="#b39ddb" stroke="#9c27b0" stroke-width="2"/>
+                    <text x="400" y="90" text-anchor="middle" font-size="12" fill="#333333">终端</text>
+                    <text x="400" y="105" text-anchor="middle" font-size="10" fill="#666666">客户2</text>
+                    
+                    <!-- 终端节点 3 -->
+                    <circle cx="600" cy="50" r="20" fill="#b39ddb" stroke="#9c27b0" stroke-width="2"/>
+                    <text x="600" y="90" text-anchor="middle" font-size="12" fill="#333333">终端</text>
+                    <text x="600" y="105" text-anchor="middle" font-size="10" fill="#666666">客户3</text>
+                    
+                    <!-- 百姓菜市场节点 -->
+                    <circle cx="600" cy="250" r="20" fill="#ffadad" stroke="#dc3545" stroke-width="2"/>
+                    <text x="600" y="290" text-anchor="middle" font-size="12" fill="#333333">市场</text>
+                    <text x="600" y="305" text-anchor="middle" font-size="10" fill="#666666">百姓菜市场</text>
+                    
+                    <!-- 百姓菜市场终端节点 -->
+                    <circle cx="700" cy="250" r="20" fill="#b39ddb" stroke="#9c27b0" stroke-width="2"/>
+                    <text x="700" y="290" text-anchor="middle" font-size="12" fill="#333333">终端</text>
+                    <text x="700" y="305" text-anchor="middle" font-size="10" fill="#666666">赵大妈</text>
+                    <line x1="650" y1="250" x2="700" y2="250" stroke="#17a2b8" stroke-width="2"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function switchTab(tabId) {
+      // 隐藏所有标签内容
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // 移除所有标签头的活动状态
+      const tabItems = document.querySelectorAll('.tab-item');
+      tabItems.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 显示当前标签内容
+      document.getElementById(tabId).classList.add('active');
+      
+      // 设置当前标签头为活动状态
+      event.target.classList.add('active');
+    }
+    
+    function viewReport() {
+      // 显示检测报告影像凭证
+      alert('检测报告影像凭证');
+    }
+  </script>
+</body>
+</html>

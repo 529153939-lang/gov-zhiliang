@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>系统管理 - 角色管理</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">系统管理</a>
+      <span>></span>
+      <span>角色管理</span>
+    </div>
+    <h2 class="page-title">角色管理</h2>
+    
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="left-tools">
+        <button class="btn btn-primary">添加</button>
+        <button class="btn btn-default">编辑</button>
+        <button class="btn btn-danger">删除</button>
+      </div>
+      <div class="right-tools">
+        <div class="search-box">
+          <input type="text" class="form-control" placeholder="搜索角色">
+          <button class="btn btn-default">搜索</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 数据表格 -->
+    <div class="mt-20">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><input type="checkbox"></th>
+            <th>序号</th>
+            <th>角色名称</th>
+            <th>角色描述</th>
+            <th>创建时间</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>1</td>
+            <td>系统管理员</td>
+            <td>拥有系统所有功能的访问和操作权限</td>
+            <td>2020-01-01</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default">编辑</button>
+                <button class="btn btn-default" onclick="assignPermission(1)">分配权限</button>
+                <button class="btn btn-danger">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>2</td>
+            <td>质量安全组人员</td>
+            <td>拥有系统所有功能的访问和操作权限，除系统管理功能外</td>
+            <td>2020-01-01</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default">编辑</button>
+                <button class="btn btn-default" onclick="assignPermission(2)">分配权限</button>
+                <button class="btn btn-danger">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>3</td>
+            <td>只读用户</td>
+            <td>只能查看系统数据，不能进行修改操作</td>
+            <td>2020-01-02</td>
+            <td><span class="status-tag active">正常</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default">编辑</button>
+                <button class="btn btn-default" onclick="assignPermission(3)">分配权限</button>
+                <button class="btn btn-danger">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>4</td>
+            <td>审计人员</td>
+            <td>只能查看系统操作日志和审计信息</td>
+            <td>2020-01-03</td>
+            <td><span class="status-tag inactive">禁用</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-default">编辑</button>
+                <button class="btn btn-default" onclick="assignPermission(4)">分配权限</button>
+                <button class="btn btn-danger">删除</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination">
+      <div class="page-item">
+        <a href="#" class="page-link">上一页</a>
+      </div>
+      <div class="page-item active">
+        <a href="#" class="page-link">1</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">2</a>
+      </div>
+      <div class="page-item">
+        <a href="#" class="page-link">下一页</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function assignPermission(id) {
+      // 跳转到权限配置页面
+      window.location.href = `system-permission.html?roleId=${id}`;
+    }
+  </script>
+</body>
+</html>

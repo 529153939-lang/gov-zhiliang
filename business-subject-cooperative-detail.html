@@ -62,6 +62,115 @@
       border-radius: 0;
       box-shadow: none;
     }
+    
+    /* 状态标签样式 - 素雅风格 */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+    .status-badge.status-active {
+      background-color: #f6ffed;
+      color: #52c41a;
+      border-color: #b7eb8f;
+    }
+    .status-badge.status-pending {
+      background-color: #fffbe6;
+      color: #faad14;
+      border-color: #ffe58f;
+    }
+    .status-badge.status-inactive {
+      background-color: #f5f5f5;
+      color: #8c8c8c;
+      border-color: #d9d9d9;
+    }
+    
+    /* 按钮样式 - 素雅风格 */
+    .btn-sm {
+      padding: 5px 14px;
+      font-size: 13px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+    .btn-outline {
+      background-color: #fff;
+      color: #595959;
+      border-color: #d9d9d9;
+    }
+    .btn-outline:hover {
+      color: #40a9ff;
+      border-color: #40a9ff;
+    }
+    .btn-danger-outline {
+      background-color: #fff;
+      color: #ff4d4f;
+      border-color: #ffccc7;
+    }
+    .btn-danger-outline:hover {
+      background-color: #fff1f0;
+      border-color: #ff4d4f;
+    }
+    .btn-primary {
+      background-color: #1890ff;
+      color: white;
+      border: 1px solid #1890ff;
+    }
+    .btn-primary:hover {
+      background-color: #40a9ff;
+      border-color: #40a9ff;
+    }
+    
+    /* 关联农户表格样式 */
+    .farmer-table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .farmer-table th {
+      background-color: #fafafa;
+      color: #262626;
+      font-weight: 600;
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: left;
+    }
+    .farmer-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: middle;
+    }
+    .farmer-table tbody tr:hover {
+      background-color: #fafafa;
+    }
+    .farmer-table .farmer-name {
+      font-weight: 500;
+      color: #262626;
+    }
+    .farmer-table .farmer-phone {
+      color: #595959;
+      font-family: 'Courier New', monospace;
+    }
+    .farmer-table .greenhouse-count {
+      color: #1890ff;
+      font-weight: 500;
+    }
+    .farmer-table .farmer-address {
+      color: #595959;
+      font-size: 13px;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .farmer-table .action-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
   </style>
 </head>
@@ -90,6 +199,7 @@
             <div class="tab-item" onclick="switchTab('certification')">认证/资质信息</div>
             <div class="tab-item" onclick="switchTab('land')">授权地块</div>
             <div class="tab-item" onclick="switchTab('greenhouse')">关联大棚资产</div>
+            <div class="tab-item" onclick="switchTab('farmers')">关联农户</div>
             <div class="tab-item" onclick="switchTab('account')">账户信息</div>
             <div class="tab-item" onclick="switchTab('log')">操作日志</div>
           </div>
@@ -204,6 +314,7 @@
                     <th>大棚名称</th>
                     <th>大棚编号</th>
                     <th>所属地块</th>
+                    <th>农户</th>
                     <th>大棚类型</th>
                     <th>建设面积</th>
                     <th>种植作物</th>
@@ -217,34 +328,112 @@
                     <td>大棚1</td>
                     <td>DP20200001</td>
                     <td>凤凰地块1</td>
+                    <td>张三</td>
                     <td>日光温室</td>
                     <td>1000㎡</td>
                     <td>草莓</td>
                     <td>2020-03-01</td>
                     <td><span class="status-tag active">正常</span></td>
-                    <td><button class="btn btn-default">查看详情</button></td>
+                    <td><button class="btn btn-default" onclick="viewGreenhouseDetail('DP20200001')">查看详情</button></td>
                   </tr>
                   <tr>
                     <td>大棚2</td>
                     <td>DP20200002</td>
                     <td>凤凰地块1</td>
+                    <td>李四</td>
                     <td>日光温室</td>
                     <td>1200㎡</td>
                     <td>蓝莓</td>
                     <td>2020-04-01</td>
                     <td><span class="status-tag active">正常</span></td>
-                    <td><button class="btn btn-default">查看详情</button></td>
+                    <td><button class="btn btn-default" onclick="viewGreenhouseDetail('DP20200002')">查看详情</button></td>
                   </tr>
                   <tr>
                     <td>大棚3</td>
                     <td>DP20200003</td>
                     <td>凤凰地块2</td>
+                    <td>王五</td>
                     <td>连栋温室</td>
                     <td>2000㎡</td>
                     <td>蔬菜</td>
                     <td>2020-05-01</td>
                     <td><span class="status-tag active">正常</span></td>
-                    <td><button class="btn btn-default">查看详情</button></td>
+                    <td><button class="btn btn-default" onclick="viewGreenhouseDetail('DP20200003')">查看详情</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- 关联农户 -->
+          <div class="tab-content" id="farmers">
+            <div class="info-section">
+              <table class="table farmer-table">
+                <thead>
+                  <tr>
+                    <th style="width: 12%;">农户名称</th>
+                    <th style="width: 15%;">联系电话</th>
+                    <th style="width: 28%;">家庭地址</th>
+                    <th style="width: 12%;">关联大棚数量</th>
+                    <th style="width: 10%;">状态</th>
+                    <th style="width: 23%;">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="farmer-name">张三</td>
+                    <td class="farmer-phone">13800138000</td>
+                    <td class="farmer-address">凤城市凤山街道凤凰村1组</td>
+                    <td class="greenhouse-count">2</td>
+                    <td><span class="status-badge status-active">有效</span></td>
+                    <td class="action-btns">
+                      <button class="btn btn-sm btn-outline">取消关联</button>
+                      <button class="btn btn-sm btn-danger-outline">删除</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="farmer-name">李四</td>
+                    <td class="farmer-phone">13900139000</td>
+                    <td class="farmer-address">凤城市凤山街道凤凰村2组</td>
+                    <td class="greenhouse-count">1</td>
+                    <td><span class="status-badge status-active">有效</span></td>
+                    <td class="action-btns">
+                      <button class="btn btn-sm btn-outline">取消关联</button>
+                      <button class="btn btn-sm btn-danger-outline">删除</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="farmer-name">王五</td>
+                    <td class="farmer-phone">13700137000</td>
+                    <td class="farmer-address">凤城市凤山街道凤凰村3组</td>
+                    <td class="greenhouse-count">1</td>
+                    <td><span class="status-badge status-active">有效</span></td>
+                    <td class="action-btns">
+                      <button class="btn btn-sm btn-outline">取消关联</button>
+                      <button class="btn btn-sm btn-danger-outline">删除</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="farmer-name">赵六</td>
+                    <td class="farmer-phone">13600136000</td>
+                    <td class="farmer-address">凤城市凤山街道凤凰村4组</td>
+                    <td class="greenhouse-count">0</td>
+                    <td><span class="status-badge status-pending">待通过</span></td>
+                    <td class="action-btns">
+                      <button class="btn btn-sm btn-primary">通过</button>
+                      <button class="btn btn-sm btn-danger-outline">删除</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="farmer-name">钱七</td>
+                    <td class="farmer-phone">13500135000</td>
+                    <td class="farmer-address">凤城市凤山街道凤凰村5组</td>
+                    <td class="greenhouse-count">1</td>
+                    <td><span class="status-badge status-inactive">失效</span></td>
+                    <td class="action-btns">
+                      <button class="btn btn-sm btn-outline">取消关联</button>
+                      <button class="btn btn-sm btn-danger-outline">删除</button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -334,6 +523,21 @@
       
       // 设置当前标签头为活动状态
       event.target.classList.add('active');
+    }
+    
+    function viewGreenhouseDetail(greenhouseId) {
+      try {
+        // 尝试在iframe中打开
+        if (parent && parent.loadPage) {
+          parent.loadPage('land-management-detail.html?id=' + greenhouseId);
+        } else {
+          // 直接打开页面
+          window.location.href = 'land-management-detail.html?id=' + greenhouseId;
+        }
+      } catch (error) {
+        // 出错时直接打开页面
+        window.location.href = 'land-management-detail.html?id=' + greenhouseId;
+      }
     }
   </script>
 </body>

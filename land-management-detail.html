@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>生产大棚详情</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       margin: 0;
@@ -89,6 +90,229 @@
       border-radius: 0;
       box-shadow: none;
     }
+    
+    /* 抽屉样式 */
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: white;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.15);
+      z-index: 1000;
+      transition: right 0.3s ease;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .drawer.open {
+      right: 0;
+    }
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      display: none;
+    }
+    .drawer-overlay.show {
+      display: block;
+    }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .drawer-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+    }
+    .drawer-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #999;
+    }
+    .form-item {
+      margin-bottom: 15px;
+    }
+    .form-item label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #666;
+    }
+    .form-item input,
+    .form-item select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .drawer-footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    
+    /* 环境数据样式 */
+    .environment-overview {
+      margin-bottom: 20px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .section-header h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #262626;
+    }
+    .environment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .environment-card {
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 6px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+    .environment-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-color: #1890ff;
+    }
+    .card-title {
+      margin: 0 0 15px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #595959;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .data-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .data-label {
+      font-size: 13px;
+      color: #8c8c8c;
+    }
+    .data-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: #262626;
+    }
+    .data-note {
+      font-size: 12px;
+      color: #52c41a;
+    }
+    
+    /* 图表区域 */
+    .chart-section {
+      margin-bottom: 30px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #262626;
+      margin: 0 0 15px 0;
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .chart-controls {
+      display: flex;
+      gap: 8px;
+    }
+    .chart-controls .btn.active {
+      background-color: #1890ff;
+      color: white;
+      border-color: #1890ff;
+    }
+    
+    /* 历史数据区域 */
+    .history-section {
+      margin-bottom: 20px;
+    }
+    .environment-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .environment-table th {
+      background-color: #fafafa;
+      color: #262626;
+      font-weight: 600;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .environment-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: middle;
+    }
+    .environment-table tbody tr:hover {
+      background-color: #fafafa;
+    }
+    .btn-outline {
+      background-color: #fff;
+      color: #595959;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      padding: 4px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-outline:hover {
+      color: #40a9ff;
+      border-color: #40a9ff;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .environment-grid {
+        grid-template-columns: 1fr;
+      }
+      .data-grid {
+        grid-template-columns: 1fr;
+      }
+      .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -123,51 +347,19 @@
           <!-- 大棚基本信息 -->
           <div class="tab-content active" id="basic">
             <div class="info-section">
-              <h3 id="basic-info">一、大棚基本信息</h3>
-              <div class="info-grid">
-                <div class="info-item">
-                  <label>大棚编号：</label>
-                  <value>DP-2024-001</value>
-                </div>
-                <div class="info-item">
-                  <label>所在检地点：</label>
-                  <value>DQ-2026-001 红旗镇胜利村蔬菜基地</value>
-                </div>
-                <div class="info-item">
-                  <label>设施类型：</label>
-                  <value>日光温室（土墙）</value>
-                </div>
-                <div class="info-item">
-                  <label>建造年份：</label>
-                  <value>2022年</value>
-                </div>
-                <div class="info-item">
-                  <label>大棚规格：</label>
-                  <value>长度80m × 宽度10m × 脊高4.5m</value>
-                </div>
-                <div class="info-item">
-                  <label>种植面积：</label>
-                  <value>2.5亩（实际种植面积）</value>
-                </div>
-                <div class="info-item">
-                  <label>保温方式：</label>
-                  <value>棉被覆盖/自动卷膜</value>
-                </div>
-                <div class="info-item">
-                  <label>灌溉方式：</label>
-                  <value>滴灌</value>
-                </div>
-                <div class="info-item">
-                  <label>当前作物：</label>
-                  <value>番茄（品种：普罗旺斯）</value>
-                </div>
-                <div class="info-item">
-                  <label>定植日期：</label>
-                  <value>2026-01-15</value>
-                </div>
-                <div class="info-item">
-                  <label>预计采收：</label>
-                  <value>2026-03-20</value>
+              <div class="text-info">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 14px;">
+                  <div><strong>大棚编号：</strong>DP-2024-001</div>
+                  <div><strong>所在检地点：</strong>DQ-2026-001 红旗镇胜利村蔬菜基地</div>
+                  <div><strong>设施类型：</strong>日光温室（土墙）</div>
+                  <div><strong>建造年份：</strong>2022年</div>
+                  <div><strong>大棚规格：</strong>长度80m × 宽度10m × 脊高4.5m</div>
+                  <div><strong>种植面积：</strong>2.5亩（实际种植面积）</div>
+                  <div><strong>保温方式：</strong>棉被覆盖/自动卷膜</div>
+                  <div><strong>灌溉方式：</strong>滴灌</div>
+                  <div><strong>当前作物：</strong>番茄（品种：普罗旺斯）</div>
+                  <div><strong>定植日期：</strong>2026-01-15</div>
+                  <div><strong>预计采收：</strong>2026-03-20</div>
                 </div>
               </div>
             </div>
@@ -176,7 +368,6 @@
           <!-- 物联网设备清单 -->
           <div class="tab-content" id="device">
             <div class="info-section">
-              <h3 id="device-info">二、物联网设备清单</h3>
               <table class="table">
                 <thead>
                   <tr>
@@ -218,54 +409,162 @@
                   </tr>
                 </tbody>
               </table>
-              <button class="btn btn-default mt-10">查看历史数据</button>
             </div>
           </div>
           
           <!-- 实时环境数据 -->
           <div class="tab-content" id="environment">
             <div class="info-section">
-              <h3 id="environment-info">三、实时环境数据</h3>
-              <div class="info-grid">
-                <div class="info-item">
-                  <label>温度：</label>
-                  <value>23.5°C（适宜 20-28°C）</value>
+              <!-- 当前环境数据 -->
+              <div class="environment-overview">
+                <div class="section-header">
+                  <h3>当前环境数据</h3>
                 </div>
-                <div class="info-item">
-                  <label>湿度：</label>
-                  <value>75%（适宜 60-85%）</value>
-                </div>
-                <div class="info-item">
-                  <label>土壤湿度：</label>
-                  <value>65%（适宜 60-80%）</value>
-                </div>
-                <div class="info-item">
-                  <label>光照强度：</label>
-                  <value>38500 Lux</value>
-                </div>
-                <div class="info-item">
-                  <label>CO2浓度：</label>
-                  <value>420 ppm</value>
-                </div>
-                <div class="info-item">
-                  <label>数据更新时间：</label>
-                  <value>2026-02-12 10:25:15</value>
+                
+                <div class="environment-grid">
+                  <!-- 基础环境数据 -->
+                  <div class="environment-card">
+                    <h4 class="card-title">基础环境</h4>
+                    <div class="data-grid">
+                      <div class="data-item">
+                        <span class="data-label">温度</span>
+                        <span class="data-value">23.5°C</span>
+                        <span class="data-note">（适宜 20-28°C）</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">湿度</span>
+                        <span class="data-value">75%</span>
+                        <span class="data-note">（适宜 60-85%）</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">土壤湿度</span>
+                        <span class="data-value">65%</span>
+                        <span class="data-note">（适宜 60-80%）</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">光照强度</span>
+                        <span class="data-value">38500 Lux</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">CO2浓度</span>
+                        <span class="data-value">420 ppm</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">数据更新时间</span>
+                        <span class="data-value">2026-02-12 10:25:15</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- 土壤数据 -->
+                  <div class="environment-card">
+                    <h4 class="card-title">土壤数据</h4>
+                    <div class="data-grid">
+                      <div class="data-item">
+                        <span class="data-label">土质</span>
+                        <span class="data-value">壤土</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">水分</span>
+                        <span class="data-value">65%</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">养分</span>
+                        <span class="data-value">中</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">光照</span>
+                        <span class="data-value">充足</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">PH值</span>
+                        <span class="data-value">6.5</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">EC值</span>
+                        <span class="data-value">1.2</span>
+                      </div>
+                      <div class="data-item">
+                        <span class="data-label">污染</span>
+                        <span class="data-value">无</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               
-              <div class="chart-container">
-                <div class="chart-legend">
-                  <span class="legend-item"><span class="legend-color" style="background-color: #f44336;"></span>温度(℃)</span>
-                  <span class="legend-item"><span class="legend-color" style="background-color: #2196F3;"></span>湿度(%)</span>
-                  <span class="legend-item"><span class="legend-color" style="background-color: #4CAF50;"></span>土壤湿度(%)</span>
+              <!-- 环境数据趋势图 -->
+              <div class="chart-section">
+                <h3 class="section-title">环境数据趋势</h3>
+                <div class="chart-container">
+                  <div class="chart-header">
+                    <div class="chart-legend">
+                      <span class="legend-item"><span class="legend-color" style="background-color: #f44336;"></span>温度(℃)</span>
+                      <span class="legend-item"><span class="legend-color" style="background-color: #2196F3;"></span>湿度(%)</span>
+                      <span class="legend-item"><span class="legend-color" style="background-color: #4CAF50;"></span>土壤湿度(%)</span>
+                    </div>
+                    <div class="chart-controls">
+                      <button class="btn btn-sm btn-default active" onclick="updateChart('24h')">24小时趋势</button>
+                      <button class="btn btn-sm btn-default" onclick="updateChart('7d')">7天趋势</button>
+                    </div>
+                  </div>
+                  <canvas id="environmentChart" style="height: 300px; width: 100%;"></canvas>
                 </div>
-                <div style="height: 300px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
-                  <p>环境数据趋势图</p>
-                </div>
-                <div style="margin-top: 10px;">
-                  <button class="btn btn-sm btn-default">24小时趋势</button>
-                  <button class="btn btn-sm btn-default">7天趋势</button>
-                </div>
+              </div>
+              
+              <!-- 历史检测数据列表 -->
+              <div class="history-section">
+                <h3 class="section-title">历史检测数据</h3>
+                <table class="table environment-table">
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>土质</th>
+                      <th>水分</th>
+                      <th>养分</th>
+                      <th>光照</th>
+                      <th>PH值</th>
+                      <th>EC值</th>
+                      <th>污染</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>2026-03-01 08:00</td>
+                      <td>壤土</td>
+                      <td>65%</td>
+                      <td>中</td>
+                      <td>充足</td>
+                      <td>6.5</td>
+                      <td>1.2</td>
+                      <td>无</td>
+                      <td><button class="btn btn-sm btn-outline" onclick="editRecord('2026-03-01 08:00')">编辑</button></td>
+                    </tr>
+                    <tr>
+                      <td>2026-02-29 08:00</td>
+                      <td>壤土</td>
+                      <td>63%</td>
+                      <td>中</td>
+                      <td>充足</td>
+                      <td>6.4</td>
+                      <td>1.1</td>
+                      <td>无</td>
+                      <td><button class="btn btn-sm btn-outline" onclick="editRecord('2026-02-29 08:00')">编辑</button></td>
+                    </tr>
+                    <tr>
+                      <td>2026-02-28 08:00</td>
+                      <td>壤土</td>
+                      <td>64%</td>
+                      <td>中</td>
+                      <td>充足</td>
+                      <td>6.5</td>
+                      <td>1.2</td>
+                      <td>无</td>
+                      <td><button class="btn btn-sm btn-outline" onclick="editRecord('2026-02-28 08:00')">编辑</button></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -273,23 +572,12 @@
           <!-- 负责人信息 -->
           <div class="tab-content" id="person">
             <div class="info-section">
-              <h3 id="person-info">四、负责人信息</h3>
-              <div class="info-grid">
-                <div class="info-item">
-                  <label>承包负责人：</label>
-                  <value>张建国 133****1234</value>
-                </div>
-                <div class="info-item">
-                  <label>实际负责人：</label>
-                  <value>张建国 133****1234</value>
-                </div>
-                <div class="info-item">
-                  <label>技术负责人：</label>
-                  <value>王技术员 133****5678（农业局）</value>
-                </div>
-                <div class="info-item">
-                  <label>承包合同号：</label>
-                  <value>HT-2024-001</value>
+              <div class="text-info">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; font-size: 14px;">
+                  <div><strong>承包负责人：</strong>张建国 133****1234</div>
+                  <div><strong>实际负责人：</strong>张建国 133****1234</div>
+                  <div><strong>技术负责人：</strong>王技术员 133****5678（农业局）</div>
+                  <div><strong>承包合同号：</strong>HT-2024-001</div>
                 </div>
               </div>
             </div>
@@ -298,7 +586,6 @@
           <!-- 种植历史记录 -->
           <div class="tab-content" id="history">
             <div class="info-section">
-              <h3 id="history-info">五、种植历史记录</h3>
               <table class="table">
                 <thead>
                   <tr>
@@ -404,6 +691,68 @@
       </div>
     </div>
   </div>
+  
+  <!-- 编辑抽屉 -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="editDrawer">
+    <div class="drawer-header">
+      <h3 class="drawer-title">编辑环境数据</h3>
+      <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+    </div>
+    <div class="drawer-content">
+      <div class="form-item">
+        <label>土质：</label>
+        <select id="soilType">
+          <option value="壤土">壤土</option>
+          <option value="砂土">砂土</option>
+          <option value="黏土">黏土</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      <div class="form-item">
+        <label>水分：</label>
+        <input type="text" id="moisture" value="65%">
+      </div>
+      <div class="form-item">
+        <label>养分：</label>
+        <select id="nutrient">
+          <option value="高">高</option>
+          <option value="中" selected>中</option>
+          <option value="低">低</option>
+        </select>
+      </div>
+      <div class="form-item">
+        <label>光照：</label>
+        <select id="light">
+          <option value="充足" selected>充足</option>
+          <option value="中等">中等</option>
+          <option value="不足">不足</option>
+        </select>
+      </div>
+      <div class="form-item">
+        <label>PH值：</label>
+        <input type="text" id="phValue" value="6.5">
+      </div>
+      <div class="form-item">
+        <label>EC值：</label>
+        <input type="text" id="ecValue" value="1.2">
+      </div>
+      <div class="form-item">
+        <label>污染：</label>
+        <select id="pollution">
+          <option value="无" selected>无</option>
+          <option value="轻度">轻度</option>
+          <option value="中度">中度</option>
+          <option value="重度">重度</option>
+        </select>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn btn-default" onclick="closeDrawer()">取消</button>
+      <button class="btn btn-primary" onclick="saveData()">保存</button>
+    </div>
+  </div>
+  
   <script>
     function switchTab(tabId) {
       // 隐藏所有标签内容
@@ -424,6 +773,109 @@
       // 设置当前标签头为活动状态
       event.target.classList.add('active');
     }
+    
+    // 环境数据图表
+    let environmentChart;
+    
+    function initChart() {
+      const ctx = document.getElementById('environmentChart').getContext('2d');
+      
+      environmentChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+          datasets: [
+            {
+              label: '温度(℃)',
+              data: [20, 19, 18, 22, 25, 26, 24, 22],
+              borderColor: '#f44336',
+              backgroundColor: 'rgba(244, 67, 54, 0.1)',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: '湿度(%)',
+              data: [80, 82, 85, 75, 65, 60, 70, 75],
+              borderColor: '#2196F3',
+              backgroundColor: 'rgba(33, 150, 243, 0.1)',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: '土壤湿度(%)',
+              data: [65, 64, 63, 62, 65, 66, 64, 65],
+              borderColor: '#4CAF50',
+              backgroundColor: 'rgba(76, 175, 80, 0.1)',
+              tension: 0.4,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false
+            }
+          }
+        }
+      });
+    }
+    
+    function updateChart(type) {
+      // 更新按钮状态
+      document.querySelectorAll('.chart-controls .btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      if (type === '24h') {
+        environmentChart.data.labels = ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
+        environmentChart.data.datasets[0].data = [20, 19, 18, 22, 25, 26, 24, 22];
+        environmentChart.data.datasets[1].data = [80, 82, 85, 75, 65, 60, 70, 75];
+        environmentChart.data.datasets[2].data = [65, 64, 63, 62, 65, 66, 64, 65];
+      } else if (type === '7d') {
+        environmentChart.data.labels = ['2/25', '2/26', '2/27', '2/28', '2/29', '3/1', '3/2'];
+        environmentChart.data.datasets[0].data = [22, 23, 24, 23, 22, 23, 24];
+        environmentChart.data.datasets[1].data = [75, 70, 65, 70, 75, 72, 70];
+        environmentChart.data.datasets[2].data = [65, 64, 63, 64, 65, 66, 65];
+      }
+      environmentChart.update();
+    }
+    
+    // 抽屉功能
+    function openEditDrawer() {
+      document.getElementById('drawerOverlay').classList.add('show');
+      document.getElementById('editDrawer').classList.add('open');
+    }
+    
+    function closeDrawer() {
+      document.getElementById('drawerOverlay').classList.remove('show');
+      document.getElementById('editDrawer').classList.remove('open');
+    }
+    
+    function saveData() {
+      // 模拟保存数据
+      alert('数据已保存！');
+      closeDrawer();
+    }
+    
+    function editRecord(time) {
+      // 打开编辑抽屉并填充数据
+      openEditDrawer();
+      document.querySelector('.drawer-title').textContent = `编辑记录 (${time})`;
+    }
+    
+    // 页面加载完成后初始化图表
+    document.addEventListener('DOMContentLoaded', function() {
+      initChart();
+    });
   </script>
 </body>
 </html>

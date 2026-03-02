@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>农资库存</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .material-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .material-header h2 {
+      margin: 0;
+    }
+
+    .material-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .material-table th {
+      background-color: #fafafa;
+      color: #262626;
+      font-weight: 600;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .material-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: middle;
+    }
+    .material-table tbody tr:hover {
+      background-color: #fafafa;
+    }
+    .status-normal {
+      color: #52c41a;
+    }
+    .status-low {
+      color: #faad14;
+    }
+    .status-empty {
+      color: #f5222d;
+    }
+    .btn-sm {
+      padding: 4px 12px;
+      font-size: 13px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 20px;
+      gap: 5px;
+    }
+    .pagination button {
+      padding: 4px 12px;
+      border: 1px solid #d9d9d9;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .pagination button.active {
+      background-color: #1890ff;
+      color: white;
+      border-color: #1890ff;
+    }
+    .pagination button:disabled {
+      cursor: not-allowed;
+      color: #bfbfbf;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">生产管理</a>
+      <span>></span>
+      <span>农资库存</span>
+    </div>
+    
+    <div class="material-header">
+      <h2 class="page-title">农资库存</h2>
+      <div class="btn-group">
+        <button class="btn btn-default">导出</button>
+        <button class="btn btn-default">打印</button>
+      </div>
+    </div>
+    
+    <!-- 筛选条件 -->
+    <div class="filter-row" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; background: #f5f7fa; border-radius: 4px; margin-bottom: 12px;">
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">主体名称</label>
+        <input type="text" class="form-control" placeholder="输入主体名称" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">主体类型</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="enterprise">涉农企业</option>
+          <option value="cooperative">专业合作社</option>
+          <option value="farm">家庭农场</option>
+          <option value="farmer">一般农户</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">农资类型</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="pesticide">农药</option>
+          <option value="veterinary">兽药</option>
+          <option value="fertilizer">化肥</option>
+          <option value="seed">种子</option>
+          <option value="other">其他</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">库存状态</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="normal">正常</option>
+          <option value="low">库存不足</option>
+          <option value="empty">库存为零</option>
+        </select>
+      </div>
+      <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+        <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">查询</button>
+        <button class="btn btn-default" style="padding: 6px 16px; font-size: 13px;">重置</button>
+      </div>
+    </div>
+    
+    <div class="table-container">
+      <table class="table material-table">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>主体名称</th>
+            <th>农资类型</th>
+            <th>农资名称</th>
+            <th>规格</th>
+            <th>库存数量</th>
+            <th>单位</th>
+            <th>当月录入量</th>
+            <th>当月使用量</th>
+            <th>库存状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>凤凰果蔬专业合作社</td>
+            <td>农药</td>
+            <td>低虫啉</td>
+            <td>200ml/瓶</td>
+            <td>50</td>
+            <td>瓶</td>
+            <td>20</td>
+            <td>15</td>
+            <td><span class="status-normal">正常</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>胜利村家庭农场</td>
+            <td>化肥</td>
+            <td>复合肥</td>
+            <td>50kg/袋</td>
+            <td>8</td>
+            <td>袋</td>
+            <td>10</td>
+            <td>12</td>
+            <td><span class="status-low">库存不足</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>张建国农户</td>
+            <td>种子</td>
+            <td>番茄种子</td>
+            <td>100粒/包</td>
+            <td>0</td>
+            <td>包</td>
+            <td>0</td>
+            <td>5</td>
+            <td><span class="status-empty">库存为零</span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>红旗镇农业公司</td>
+            <td>兽药</td>
+            <td>禽用疫苗</td>
+            <td>10ml/支</td>
+            <td>30</td>
+            <td>支</td>
+            <td>25</td>
+            <td>10</td>
+            <td><span class="status-normal">正常</span></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>绿色生态种植园</td>
+            <td>化肥</td>
+            <td>有机肥</td>
+            <td>25kg/袋</td>
+            <td>15</td>
+            <td>袋</td>
+            <td>20</td>
+            <td>10</td>
+            <td><span class="status-normal">正常</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="pagination">
+      <button disabled>上一页</button>
+      <button class="active">1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>4</button>
+      <button>5</button>
+      <button>下一页</button>
+    </div>
+  </div>
+</body>
+</html>

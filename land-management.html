@@ -8,27 +8,47 @@
 </head>
 <body>
   <div class="card">
-    <div class="breadcrumb">
+    <div class="breadcrumb" style="margin-bottom: 12px;">
       <a href="index.html">首页</a>
       <span>></span>
       <a href="#">土地管理</a>
       <span>></span>
           <span>地块信息</span>
         </div>
-        <h2 class="page-title">地块信息</h2>
+        <h2 class="page-title" style="margin-bottom: 12px;">地块信息</h2>
     
-    <!-- 工具栏 -->
-    <div class="toolbar">
-      <div class="right-tools">
-        <div class="search-box">
-          <input type="text" class="form-control" placeholder="搜索大棚地块">
-          <button class="btn btn-default">搜索</button>
-        </div>
+    <!-- 筛选条件 -->
+    <div class="filter-row" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; background: #f5f7fa; border-radius: 4px; margin-bottom: 12px;">
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">所在镇村</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="红旗镇胜利村">红旗镇胜利村</option>
+          <option value="白云镇和平村">白云镇和平村</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">当前作物</label>
+        <select class="form-control" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+          <option value="">全部</option>
+          <option value="番茄">番茄</option>
+          <option value="黄瓜">黄瓜</option>
+          <option value="辣椒">辣椒</option>
+          <option value="草莓">草莓</option>
+        </select>
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">负责人</label>
+        <input type="text" class="form-control" placeholder="输入负责人姓名" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+        <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">查询</button>
+        <button class="btn btn-default" style="padding: 6px 16px; font-size: 13px;">重置</button>
       </div>
     </div>
     
     <!-- 数据表格 -->
-    <div class="mt-20">
+    <div style="margin-top: 12px;">
       <table class="table">
         <thead>
           <tr>
@@ -157,7 +177,7 @@
     </div>
     
     <!-- 分页 -->
-    <div class="pagination">
+    <div class="pagination" style="margin-top: 12px;">
       <div class="page-item">
         <a href="#" class="page-link">上一页</a>
       </div>

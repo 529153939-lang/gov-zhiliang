@@ -5,6 +5,121 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>气象监督</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .weather-card {
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 15px;
+      transition: all 0.3s ease;
+    }
+    .weather-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-color: #1890ff;
+    }
+    .weather-card h4 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #595959;
+    }
+    .current-weather {
+      text-align: center;
+    }
+    .weather-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #262626;
+      margin: 10px 0;
+    }
+    .weather-label {
+      font-size: 14px;
+      color: #8c8c8c;
+      margin: 5px 0;
+    }
+    .weather-chart {
+      height: 200px;
+    }
+    .disaster-warning {
+      background: #fff1f0;
+      border: 1px solid #ffccc7;
+      border-radius: 8px;
+      padding: 15px;
+    }
+    .warning-title {
+      color: #ff4d4f;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .warning-item {
+      display: flex;
+      align-items: flex-start;
+      margin: 8px 0;
+      font-size: 13px;
+      color: #595959;
+    }
+    .warning-item::before {
+      content: '●';
+      color: #ff4d4f;
+      margin-right: 8px;
+      font-size: 10px;
+      margin-top: 6px;
+    }
+    .temperature-chart {
+      height: 200px;
+    }
+    .agricultural-index {
+      text-align: center;
+    }
+    .index-item {
+      margin: 15px 0;
+    }
+    .index-label {
+      font-size: 13px;
+      color: #8c8c8c;
+      margin-bottom: 5px;
+    }
+    .index-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #52c41a;
+    }
+    .index-value.unsuitable {
+      color: #ff4d4f;
+    }
+    .index-suggestion {
+      font-size: 12px;
+      color: #595959;
+      margin-top: 5px;
+      text-align: left;
+    }
+    .weather-image {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .weather-image img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    @media (max-width: 1200px) {
+      .weather-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .weather-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="card">
@@ -15,124 +130,349 @@
       <span>></span>
       <span>气象监督</span>
     </div>
-    <h2 class="page-title">气象监督</h2>
     
-    <!-- 工具栏 -->
-    <div class="toolbar">
-      <div class="left-tools">
-        <button class="btn btn-default">刷新数据</button>
-        <button class="btn btn-default">导出</button>
+    <!-- 标题和刷新按钮 -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <h2 class="page-title" style="margin: 0;">气象监督</h2>
+      <button class="btn btn-default" onclick="refreshData()">刷新数据</button>
+    </div>
+    
+    <!-- 气象数据网格 -->
+    <div class="weather-grid">
+      <!-- 当前气象状况 -->
+      <div class="weather-card">
+        <h4>当前气象状况</h4>
+        <div class="current-weather">
+          <div class="weather-value">4.5°C</div>
+          <div class="weather-label">当前气温</div>
+          <div class="weather-value">65%</div>
+          <div class="weather-label">空气湿度</div>
+          <div class="weather-value">3.2 m/s</div>
+          <div class="weather-label">风速</div>
+          <div class="weather-value">12,000 Lux</div>
+          <div class="weather-label">光照强度</div>
+          <div class="weather-chart" id="hourlyForecastChart"></div>
+        </div>
       </div>
-      <div class="right-tools">
-        <div class="search-box">
-          <input type="text" class="form-control" placeholder="搜索">
-          <button class="btn btn-default">搜索</button>
+      
+      <!-- 灾害预警 -->
+      <div class="weather-card">
+        <h4>灾害预警</h4>
+        <div class="disaster-warning">
+          <div class="warning-title">寒潮蓝色预警生效中</div>
+          <div class="warning-item">预计未来48小时全县气温将下降8°C以上，部分山区可能出现霜冻</div>
+          <div class="warning-item">今日 08:00 (气象发布) 发布寒潮蓝色预警信号</div>
+          <div class="warning-item">系统建议措施：</div>
+          <div class="warning-item">1. 草莓大棚加强二层膜</div>
+          <div class="warning-item">2. 露地蔬菜及时收获</div>
+        </div>
+        <div style="margin-top: 20px;">
+          <div id="windDirectionChart" style="height: 120px;"></div>
+        </div>
+      </div>
+      
+      <!-- 历史同期气温对比 -->
+      <div class="weather-card">
+        <h4>历史同期气温对比</h4>
+        <div style="font-size: 12px; color: #8c8c8c; margin-bottom: 10px;">(暖冷研判)</div>
+        <div class="temperature-chart" id="temperatureCompareChart"></div>
+      </div>
+      
+      <!-- 农业气象指数 -->
+      <div class="weather-card">
+        <h4>农业气象指数</h4>
+        <div class="agricultural-index">
+          <div class="index-item">
+            <div class="index-label">作物生长指数</div>
+            <div class="index-value">适宜</div>
+          </div>
+          <div class="index-item">
+            <div class="index-label">病害发生指数</div>
+            <div class="index-value unsuitable">较不适宜</div>
+          </div>
+          <div class="index-item">
+            <div class="index-label">中等等级</div>
+            <div class="index-value">适宜</div>
+          </div>
+          <div class="index-item">
+            <div class="index-label">今日农事建议</div>
+            <div class="index-suggestion">• 设施蔬菜做好防寒保暖工作</div>
+            <div class="index-suggestion">• 果园清园，减少病虫害越冬基数</div>
+            <div class="index-suggestion">• 麦田镇压，提墒保苗</div>
+          </div>
         </div>
       </div>
     </div>
     
-    <!-- 数据卡片 -->
-    <div class="d-flex gap-10">
-      <div class="data-card flex-1">
-        <div class="data-value">18.5°C</div>
-        <div class="data-label">当前温度</div>
+    <!-- 年度气象历史数据趋势 -->
+    <div style="margin-top: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="font-size: 16px; font-weight: 600; color: #262626; margin: 0;">年度气象历史数据趋势</h3>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <label for="yearSelect" style="font-size: 14px; color: #666;">选择年份：</label>
+          <select id="yearSelect" style="padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px;" onchange="updateAnnualTrendChart()">
+            <option value="2024">2024年</option>
+            <option value="2025" selected>2025年</option>
+            <option value="2026">2026年</option>
+          </select>
+        </div>
       </div>
-      <div class="data-card flex-1">
-        <div class="data-value">65%</div>
-        <div class="data-label">当前湿度</div>
-      </div>
-      <div class="data-card flex-1">
-        <div class="data-value">1013hPa</div>
-        <div class="data-label">当前气压</div>
-      </div>
-      <div class="data-card flex-1">
-        <div class="data-value">东南风 3级</div>
-        <div class="data-label">当前风向风速</div>
-      </div>
-    </div>
-    
-    <!-- 图表区域 -->
-    <div class="mt-20">
-      <h3>温度变化趋势</h3>
-      <div class="chart-container">
-        <!-- 这里可以放置图表，例如使用ECharts -->
-        <div id="temperatureChart" style="width: 100%; height: 400px;"></div>
-      </div>
-    </div>
-    
-    <div class="mt-20">
-      <h3>湿度变化趋势</h3>
-      <div class="chart-container">
-        <!-- 这里可以放置图表，例如使用ECharts -->
-        <div id="humidityChart" style="width: 100%; height: 400px;"></div>
-      </div>
-    </div>
-    
-    <div class="mt-20">
-      <h3>未来7天天气预报</h3>
-      <div class="chart-container">
-        <!-- 这里可以放置图表，例如使用ECharts -->
-        <div id="forecastChart" style="width: 100%; height: 400px;"></div>
+      <div style="background: #fafafa; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px;">
+        <div id="annualTrendChart" style="height: 400px;"></div>
       </div>
     </div>
   </div>
   
   <script>
-    // 模拟图表数据
-    // 实际项目中应该使用ECharts等图表库
+    // 初始化图表
+    let hourlyForecastChart, windDirectionChart, temperatureCompareChart, annualTrendChart;
+    
+    function initCharts() {
+      // 未来24小时小时预报图表
+      hourlyForecastChart = echarts.init(document.getElementById('hourlyForecastChart'));
+      hourlyForecastChart.setOption({
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['12h', '14h', '16h', '18h', '20h', '22h', '24h']
+        },
+        yAxis: {
+          type: 'value',
+          name: '温度 (°C)'
+        },
+        series: [{
+          data: [6, 7, 8, 7, 5, 4, 3],
+          type: 'line',
+          smooth: true,
+          lineStyle: {
+            color: '#1890ff'
+          },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: 'rgba(24, 144, 255, 0.3)' },
+              { offset: 1, color: 'rgba(24, 144, 255, 0.1)' }
+            ])
+          }
+        }]
+      });
+      
+      // 风向玫瑰图
+      windDirectionChart = echarts.init(document.getElementById('windDirectionChart'));
+      windDirectionChart.setOption({
+        radar: {
+          indicator: [
+            { name: '东风', max: 100 },
+            { name: '南风', max: 100 },
+            { name: '西风', max: 100 },
+            { name: '北风', max: 100 },
+            { name: '东北风', max: 100 },
+            { name: '东南风', max: 100 },
+            { name: '西南风', max: 100 },
+            { name: '西北风', max: 100 }
+          ],
+          shape: 'circle',
+          splitNumber: 4
+        },
+        series: [{
+          type: 'radar',
+          data: [{
+            value: [30, 20, 10, 40, 15, 25, 15, 35],
+            name: '风向分布',
+            areaStyle: {
+              color: 'rgba(255, 77, 79, 0.3)'
+            },
+            lineStyle: {
+              color: '#ff4d4f'
+            }
+          }]
+        }]
+      });
+      
+      // 历史同期气温对比图表
+      temperatureCompareChart = echarts.init(document.getElementById('temperatureCompareChart'));
+      temperatureCompareChart.setOption({
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['今年', '去年同期']
+        },
+        xAxis: {
+          type: 'category',
+          data: ['2月5日', '2月6日', '2月7日', '2月8日', '2月9日', '2月10日', '2月11日']
+        },
+        yAxis: {
+          type: 'value',
+          name: '温度 (°C)'
+        },
+        series: [
+          {
+            name: '今年',
+            data: [5, 6, 5, 4, 3, 4, 5],
+            type: 'line',
+            lineStyle: {
+              color: '#f44336'
+            }
+          },
+          {
+            name: '去年同期',
+            data: [3, 4, 3, 2, 1, 2, 3],
+            type: 'line',
+            lineStyle: {
+              color: '#4CAF50',
+              type: 'dashed'
+            }
+          }
+        ]
+      });
+      
+      // 年度气象历史数据趋势图表
+      annualTrendChart = echarts.init(document.getElementById('annualTrendChart'));
+      
+      // 月度数据
+      const monthlyData = {
+        '2024': {
+          months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          temperature: [5.2, 6.8, 10.5, 15.2, 20.1, 24.5, 27.8, 27.2, 22.5, 16.8, 10.2, 6.5],
+          humidity: [68, 65, 62, 60, 65, 70, 75, 78, 72, 68, 70, 72],
+          production: [85, 92, 105, 120, 135, 145, 150, 148, 140, 125, 105, 90],
+          value: [59.5, 64.4, 73.5, 84, 94.5, 101.5, 105, 103.6, 98, 87.5, 73.5, 63]
+        },
+        '2025': {
+          months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          temperature: [4.8, 7.2, 11.0, 15.8, 20.5, 25.0, 28.2, 27.6, 23.0, 17.2, 10.8, 7.0],
+          humidity: [65, 63, 60, 58, 62, 68, 72, 75, 70, 65, 68, 70],
+          production: [90, 98, 110, 125, 140, 150, 155, 152, 145, 130, 110, 95],
+          value: [63, 68.6, 77, 87.5, 98, 105, 108.5, 106.4, 101.5, 91, 77, 66.5]
+        },
+        '2026': {
+          months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          temperature: [5.0, 7.5, 11.5, 16.1, 21.0, 25.5, 28.5, 28.0, 23.5, 17.5, 11.0, 7.2],
+          humidity: [67, 65, 62, 60, 63, 69, 73, 76, 71, 67, 69, 71],
+          production: [95, 102, 115, 130, 145, 155, 160, 158, 150, 135, 115, 100],
+          value: [66.5, 71.4, 80.5, 91, 101.5, 108.5, 112, 110.6, 105, 94.5, 80.5, 70]
+        }
+      };
+      
+      // 初始化年度趋势图表
+      function initAnnualTrendChart(year) {
+        const data = monthlyData[year];
+        annualTrendChart.setOption({
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data: ['平均温度 (°C)', '平均湿度 (%)', '产量 (吨)', '产值 (万元)']
+          },
+          xAxis: {
+            type: 'category',
+            data: data.months
+          },
+          yAxis: [
+            {
+              type: 'value',
+              name: '气象数据',
+              position: 'left'
+            },
+            {
+              type: 'value',
+              name: '生产数据',
+              position: 'right'
+            }
+          ],
+          series: [
+            {
+              name: '平均温度 (°C)',
+              type: 'line',
+              data: data.temperature,
+              lineStyle: {
+                color: '#c23531'
+              }
+            },
+            {
+              name: '平均湿度 (%)',
+              type: 'line',
+              data: data.humidity,
+              lineStyle: {
+                color: '#2f4554'
+              }
+            },
+            {
+              name: '产量 (吨)',
+              type: 'line',
+              yAxisIndex: 1,
+              data: data.production,
+              lineStyle: {
+                color: '#61a0a8'
+              }
+            },
+            {
+              name: '产值 (万元)',
+              type: 'line',
+              yAxisIndex: 1,
+              data: data.value,
+              lineStyle: {
+                color: '#d48265'
+              }
+            }
+          ]
+        });
+      }
+      
+      // 初始化图表
+      initAnnualTrendChart('2025');
+      
+      // 更新年度趋势图表
+      function updateAnnualTrendChart() {
+        const year = document.getElementById('yearSelect').value;
+        initAnnualTrendChart(year);
+      }
+    }
+    
+    // 刷新数据
+    function refreshData() {
+      // 显示加载状态
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = '刷新中...';
+      btn.disabled = true;
+      
+      // 模拟数据刷新
+      setTimeout(() => {
+        // 随机更新一些数据
+        const temperature = (Math.random() * 10 + 1).toFixed(1);
+        const humidity = Math.floor(Math.random() * 30 + 50);
+        const windSpeed = (Math.random() * 5 + 1).toFixed(1);
+        const lightIntensity = Math.floor(Math.random() * 5000 + 10000);
+        
+        // 更新页面数据
+        document.querySelectorAll('.weather-value')[0].textContent = temperature + '°C';
+        document.querySelectorAll('.weather-value')[1].textContent = humidity + '%';
+        document.querySelectorAll('.weather-value')[2].textContent = windSpeed + ' m/s';
+        document.querySelectorAll('.weather-value')[3].textContent = lightIntensity.toLocaleString() + ' Lux';
+        
+        // 恢复按钮状态
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        // 显示成功提示
+        alert('数据刷新成功！');
+      }, 1000);
+    }
+    
+    // 页面加载完成后初始化图表
     document.addEventListener('DOMContentLoaded', function() {
-      // 温度变化趋势图表
-      const temperatureChart = document.getElementById('temperatureChart');
-      temperatureChart.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-          <div style="text-align: center;">
-            <h4>温度变化趋势</h4>
-            <p>00:00: 15°C</p>
-            <p>03:00: 14°C</p>
-            <p>06:00: 13°C</p>
-            <p>09:00: 16°C</p>
-            <p>12:00: 19°C</p>
-            <p>15:00: 20°C</p>
-            <p>18:00: 18°C</p>
-            <p>21:00: 16°C</p>
-          </div>
-        </div>
-      `;
+      initCharts();
       
-      // 湿度变化趋势图表
-      const humidityChart = document.getElementById('humidityChart');
-      humidityChart.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-          <div style="text-align: center;">
-            <h4>湿度变化趋势</h4>
-            <p>00:00: 70%</p>
-            <p>03:00: 75%</p>
-            <p>06:00: 80%</p>
-            <p>09:00: 75%</p>
-            <p>12:00: 65%</p>
-            <p>15:00: 60%</p>
-            <p>18:00: 65%</p>
-            <p>21:00: 70%</p>
-          </div>
-        </div>
-      `;
-      
-      // 未来7天天气预报图表
-      const forecastChart = document.getElementById('forecastChart');
-      forecastChart.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-          <div style="text-align: center;">
-            <h4>未来7天天气预报</h4>
-            <p>今天: 晴 15-20°C</p>
-            <p>明天: 多云 14-19°C</p>
-            <p>后天: 阴 13-18°C</p>
-            <p>第4天: 晴 14-19°C</p>
-            <p>第5天: 晴 15-21°C</p>
-            <p>第6天: 多云 16-22°C</p>
-            <p>第7天: 晴 17-23°C</p>
-          </div>
-        </div>
-      `;
+      // 窗口大小改变时重新调整图表大小
+      window.addEventListener('resize', function() {
+        if (hourlyForecastChart) hourlyForecastChart.resize();
+        if (windDirectionChart) windDirectionChart.resize();
+        if (temperatureCompareChart) temperatureCompareChart.resize();
+        if (annualTrendChart) annualTrendChart.resize();
+      });
     });
   </script>
 </body>

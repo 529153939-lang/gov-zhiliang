@@ -527,15 +527,11 @@
     
     function viewGreenhouseDetail(greenhouseId) {
       try {
-        // 尝试在iframe中打开
-        if (parent && parent.loadPage) {
-          parent.loadPage('land-management-detail.html?id=' + greenhouseId);
-        } else {
-          // 直接打开页面
-          window.location.href = 'land-management-detail.html?id=' + greenhouseId;
-        }
+        // 直接跳转到大棚详情页，确保可靠跳转
+        window.location.href = 'land-management-detail.html?id=' + greenhouseId;
       } catch (error) {
-        // 出错时直接打开页面
+        console.error('跳转失败:', error);
+        // 出错时再次尝试
         window.location.href = 'land-management-detail.html?id=' + greenhouseId;
       }
     }

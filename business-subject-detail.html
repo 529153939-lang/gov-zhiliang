@@ -222,7 +222,7 @@
                     <td>草莓</td>
                     <td>2020-03-01</td>
                     <td><span class="status-tag active">正常</span></td>
-                    <td><button class="btn btn-default">查看详情</button></td>
+                    <td><button class="btn btn-default" onclick="viewGreenhouseDetail('DP20200001')">查看详情</button></td>
                   </tr>
                   <tr>
                     <td>大棚2</td>
@@ -233,7 +233,7 @@
                     <td>蓝莓</td>
                     <td>2020-04-01</td>
                     <td><span class="status-tag active">正常</span></td>
-                    <td><button class="btn btn-default">查看详情</button></td>
+                    <td><button class="btn btn-default" onclick="viewGreenhouseDetail('DP20200002')">查看详情</button></td>
                   </tr>
                   <tr>
                     <td>大棚3</td>
@@ -244,7 +244,7 @@
                     <td>蔬菜</td>
                     <td>2020-05-01</td>
                     <td><span class="status-tag active">正常</span></td>
-                    <td><button class="btn btn-default">查看详情</button></td>
+                    <td><button class="btn btn-default" onclick="viewGreenhouseDetail('DP20200003')">查看详情</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -362,6 +362,17 @@
       
       // 设置当前标签头为活动状态
       event.target.classList.add('active');
+    }
+    
+    function viewGreenhouseDetail(greenhouseId) {
+      try {
+        // 直接跳转到大棚详情页，确保可靠跳转
+        window.location.href = 'land-management-detail.html?id=' + greenhouseId;
+      } catch (error) {
+        console.error('跳转失败:', error);
+        // 出错时再次尝试
+        window.location.href = 'land-management-detail.html?id=' + greenhouseId;
+      }
     }
   </script>
 </body>

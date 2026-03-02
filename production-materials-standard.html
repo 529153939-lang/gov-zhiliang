@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>农资标准存量设置</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .material-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .material-header h2 {
+      margin: 0;
+    }
+
+    .material-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .material-table th {
+      background-color: #fafafa;
+      color: #262626;
+      font-weight: 600;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .material-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: middle;
+    }
+    .material-table tbody tr:hover {
+      background-color: #fafafa;
+    }
+    .btn-sm {
+      padding: 4px 12px;
+      font-size: 13px;
+      margin-right: 5px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 20px;
+      gap: 5px;
+    }
+    .pagination button {
+      padding: 4px 12px;
+      border: 1px solid #d9d9d9;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .pagination button.active {
+      background-color: #1890ff;
+      color: white;
+      border-color: #1890ff;
+    }
+    .pagination button:disabled {
+      cursor: not-allowed;
+      color: #bfbfbf;
+    }
+    .tabs {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .tab-header {
+      display: flex;
+    }
+    .tab-item {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-right: 20px;
+      font-size: 14px;
+    }
+    .tab-item.active {
+      border-bottom-color: #1890ff;
+      color: #1890ff;
+      font-weight: 500;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* 右侧抽屉样式 */
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: white;
+      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+    }
+    .drawer.open {
+      right: 0;
+    }
+    .drawer-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .drawer-header h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .drawer-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #999;
+    }
+    .drawer-body {
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #333;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .form-group input:disabled {
+      background-color: #f5f5f5;
+      cursor: not-allowed;
+    }
+    .drawer-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      display: none;
+    }
+    .overlay.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="breadcrumb">
+      <a href="index.html">首页</a>
+      <span>></span>
+      <a href="#">生产管理</a>
+      <span>></span>
+      <a href="production-materials.html">农资库存</a>
+      <span>></span>
+      <span>农资标准存量设置</span>
+    </div>
+    
+    <div class="material-header">
+      <h2 class="page-title">农资标准存量设置</h2>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="addNewItem()">新增</button>
+        <button class="btn btn-default" onclick="goBack()">返回</button>
+      </div>
+    </div>
+    
+    <!-- 搜索条件 -->
+    <div class="filter-row" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 16px; background: #f5f7fa; border-radius: 4px; margin-bottom: 12px;">
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">农资名称</label>
+        <input type="text" class="form-control" placeholder="输入农资名称" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-group" style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 14px; color: #333; white-space: nowrap;">规格</label>
+        <input type="text" class="form-control" placeholder="输入规格" style="width: 140px; padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; height: 32px;">
+      </div>
+      <div class="filter-actions" style="display: flex; gap: 8px; margin-left: auto;">
+        <button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">查询</button>
+        <button class="btn btn-default" style="padding: 6px 16px; font-size: 13px;">重置</button>
+      </div>
+    </div>
+    
+    <!-- Tab 表格 -->
+    <div class="tabs">
+      <div class="tab-header">
+        <div class="tab-item active" onclick="switchTab('pesticide')">农药</div>
+        <div class="tab-item" onclick="switchTab('fertilizer')">化肥</div>
+        <div class="tab-item" onclick="switchTab('seed')">种子</div>
+        <div class="tab-item" onclick="switchTab('veterinary')">兽药</div>
+      </div>
+      
+      <!-- 农药标签内容 -->
+      <div class="tab-content active" id="pesticide">
+        <table class="table material-table">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>农资名称</th>
+              <th>规格</th>
+              <th>单位使用量</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>低虫啉</td>
+              <td>200ml/瓶</td>
+              <td>10ml/亩</td>
+              <td>
+                <button class="btn btn-sm btn-default" onclick="editItem(1)">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(1)">删除</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>多菌灵</td>
+              <td>50g/袋</td>
+              <td>5g/亩</td>
+              <td>
+                <button class="btn btn-sm btn-default" onclick="editItem(2)">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(2)">删除</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- 化肥标签内容 -->
+      <div class="tab-content" id="fertilizer">
+        <table class="table material-table">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>农资名称</th>
+              <th>规格</th>
+              <th>单位使用量</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>复合肥</td>
+              <td>50kg/袋</td>
+              <td>25kg/亩</td>
+              <td>
+                <button class="btn btn-sm btn-default" onclick="editItem(3)">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(3)">删除</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>有机肥</td>
+              <td>25kg/袋</td>
+              <td>50kg/亩</td>
+              <td>
+                <button class="btn btn-sm btn-default" onclick="editItem(4)">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(4)">删除</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- 种子标签内容 -->
+      <div class="tab-content" id="seed">
+        <table class="table material-table">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>农资名称</th>
+              <th>规格</th>
+              <th>单位使用量</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>番茄种子</td>
+              <td>100粒/包</td>
+              <td>50粒/亩</td>
+              <td>
+                <button class="btn btn-sm btn-default" onclick="editItem(5)">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(5)">删除</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>黄瓜种子</td>
+              <td>50粒/包</td>
+              <td>30粒/亩</td>
+              <td>
+                <button class="btn btn-sm btn-default" onclick="editItem(6)">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(6)">删除</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- 兽药标签内容 -->
+      <div class="tab-content" id="veterinary">
+        <table class="table material-table">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>农资名称</th>
+              <th>规格</th>
+              <th>单位使用量</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>禽用疫苗</td>
+              <td>10ml/支</td>
+              <td>0.5ml/只</td>
+              <td>
+                <button class="btn btn-sm btn-default" onclick="editItem(7)">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(7)">删除</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>兽用抗生素</td>
+              <td>5g/袋</td>
+              <td>1g/10kg体重</td>
+              <td>
+                <button class="btn btn-sm btn-default" onclick="editItem(8)">编辑</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(8)">删除</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 右侧抽屉 -->
+  <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <h3 id="drawerTitle">新增农资标准设置</h3>
+      <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <div class="form-group">
+        <label for="materialName">农资名称</label>
+        <input type="text" id="materialName" placeholder="请输入农资名称">
+      </div>
+      <div class="form-group">
+        <label for="materialSpec">规格</label>
+        <input type="text" id="materialSpec" placeholder="请输入规格">
+      </div>
+      <div class="form-group">
+        <label for="materialUsage">单位使用量</label>
+        <input type="text" id="materialUsage" placeholder="请输入单位使用量">
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn btn-default" onclick="closeDrawer()">取消</button>
+      <button class="btn btn-primary" onclick="saveItem()">保存</button>
+    </div>
+  </div>
+  
+  <script>
+    function switchTab(tabId) {
+      // 隐藏所有标签内容
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // 移除所有标签头的活动状态
+      const tabItems = document.querySelectorAll('.tab-item');
+      tabItems.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // 显示当前标签内容
+      document.getElementById(tabId).classList.add('active');
+      
+      // 设置当前标签头为活动状态
+      event.target.classList.add('active');
+    }
+    
+    function addNewItem() {
+      // 打开新增抽屉
+      document.getElementById('drawerTitle').textContent = '新增农资标准设置';
+      document.getElementById('materialName').value = '';
+      document.getElementById('materialSpec').value = '';
+      document.getElementById('materialUsage').value = '';
+      document.getElementById('materialName').disabled = false;
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('overlay').classList.add('show');
+    }
+    
+    function editItem(id) {
+      // 打开编辑抽屉
+      document.getElementById('drawerTitle').textContent = '编辑农资标准设置';
+      // 模拟数据填充
+      const materialData = {
+        1: {name: '低虫啉', spec: '200ml/瓶', usage: '10ml/亩'},
+        2: {name: '多菌灵', spec: '50g/袋', usage: '5g/亩'},
+        3: {name: '复合肥', spec: '50kg/袋', usage: '25kg/亩'},
+        4: {name: '有机肥', spec: '25kg/袋', usage: '50kg/亩'},
+        5: {name: '番茄种子', spec: '100粒/包', usage: '50粒/亩'},
+        6: {name: '黄瓜种子', spec: '50粒/包', usage: '30粒/亩'},
+        7: {name: '禽用疫苗', spec: '10ml/支', usage: '0.5ml/只'},
+        8: {name: '兽用抗生素', spec: '5g/袋', usage: '1g/10kg体重'}
+      };
+      
+      if (materialData[id]) {
+        document.getElementById('materialName').value = materialData[id].name;
+        document.getElementById('materialSpec').value = materialData[id].spec;
+        document.getElementById('materialUsage').value = materialData[id].usage;
+        document.getElementById('materialName').disabled = true; // 编辑时农资名称不可修改
+      }
+      
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('overlay').classList.add('show');
+    }
+    
+    function deleteItem(id) {
+      // 删除农资标准设置
+      if (confirm('确定要删除这个农资标准设置吗？')) {
+        alert('删除农资标准设置 ID: ' + id);
+      }
+    }
+    
+    function closeDrawer() {
+      // 关闭抽屉
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+    }
+    
+    function saveItem() {
+      // 保存农资标准设置
+      const name = document.getElementById('materialName').value;
+      const spec = document.getElementById('materialSpec').value;
+      const usage = document.getElementById('materialUsage').value;
+      
+      if (!name || !spec || !usage) {
+        alert('请填写完整信息');
+        return;
+      }
+      
+      alert('保存成功！');
+      closeDrawer();
+    }
+    
+    function goBack() {
+      // 返回上一页
+      window.history.back();
+    }
+  </script>
+</body>
+</html>

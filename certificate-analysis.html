@@ -170,81 +170,7 @@
       </div>
     </div>
     
-    <!-- 追溯-合格证关联率 -->
-    <div class="card">
-      <h3 class="card-title">
-        追溯-合格证关联率
-        <span class="tooltip-icon" data-tooltip="(有关联溯源码的合格证数 / 总合格证数) * 100% - 统计关联了溯源码的合格证占比">
-          <svg t="1772329946582" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2144" width="200" height="200"><path d="M512 128c212.064 0 384 171.936 384 384s-171.936 384-384 384S128 724.064 128 512 299.936 128 512 128z m0 64C335.296 192 192 335.296 192 512s143.296 320 320 320 320-143.296 320-320S688.704 192 512 192z m6.848 429.728a48 48 0 1 1 0 96 48 48 0 0 1 0-96zM516.576 320a32 32 0 0 1 32 32v182.848a32 32 0 1 1-64 0V352a32 32 0 0 1 32-32z" fill="#bfbfbf" p-id="2145"></path></svg>
-        </span>
-      </h3>
-      <div class="chart-container">
-        <canvas id="traceabilityRelationChart" style="width: 100%; height: 300px;"></canvas>
-      </div>
-    </div>
-    
-    <!-- 合格证详情列表 -->
-    <div class="card">
-      <h3 class="card-title">合格证详情列表</h3>
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>合格证编号</th>
-              <th>生码主体</th>
-              <th>产品名称</th>
-              <th>开具日期</th>
-              <th>有效期至</th>
-              <th>承诺事项数量</th>
-              <th>关联溯源码</th>
-              <th>状态</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>HGZ202601001</td>
-              <td>凤凰农业有限公司</td>
-              <td>草莓</td>
-              <td>2026-01-15</td>
-              <td>2026-04-15</td>
-              <td>3</td>
-              <td>是</td>
-              <td>有效</td>
-            </tr>
-            <tr>
-              <td>HGZ202601002</td>
-              <td>绿源蔬菜合作社</td>
-              <td>蔬菜</td>
-              <td>2026-01-18</td>
-              <td>2026-04-18</td>
-              <td>2</td>
-              <td>是</td>
-              <td>有效</td>
-            </tr>
-            <tr>
-              <td>HGZ202601003</td>
-              <td>果丰家庭农场</td>
-              <td>蓝莓</td>
-              <td>2026-01-20</td>
-              <td>2026-04-20</td>
-              <td>4</td>
-              <td>否</td>
-              <td>有效</td>
-            </tr>
-            <tr>
-              <td>HGZ202601004</td>
-              <td>海鲜养殖合作社</td>
-              <td>水产品</td>
-              <td>2026-01-22</td>
-              <td>2026-04-22</td>
-              <td>3</td>
-              <td>是</td>
-              <td>有效</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+
   </div>
   
   <script>
@@ -364,34 +290,7 @@
         }
       });
       
-      // 追溯-合格证关联率
-      const traceabilityRelationCtx = document.getElementById('traceabilityRelationChart').getContext('2d');
-      const traceabilityRelationChart = new Chart(traceabilityRelationCtx, {
-        type: 'doughnut',
-        data: {
-          labels: ['已关联溯源码', '未关联溯源码'],
-          datasets: [{
-            data: [980, 265],
-            backgroundColor: [
-              '#5AD8A6',
-              '#E86452'
-            ]
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-            },
-            title: {
-              display: true,
-              text: '关联率: 78.7%'
-            }
-          }
-        }
-      });
+
     }
     
     // 更新数据

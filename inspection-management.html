@@ -414,7 +414,7 @@
             <thead>
               <tr>
                 <th>检测申请编号</th>
-                <th>检测主体</th>
+                <th>检测主体-资产</th>
                 <th>样品名称</th>
                 <th>检测项目</th>
                 <th>类型</th>
@@ -430,7 +430,7 @@
             <tbody>
               <tr data-status="pass">
                 <td>JC-202602110001</td>
-                <td>张三</td>
+                <td>张三 - 大棚1 (DP20200001)</td>
                 <td>红颜草莓</td>
                 <td>农药定性</td>
                 <td>主体申请</td>
@@ -444,7 +444,7 @@
               </tr>
               <tr data-status="fail">
                 <td>JC-202602110002</td>
-                <td>李四</td>
+                <td>李四 - 大棚2 (DP20200002)</td>
                 <td>蓝莓</td>
                 <td>有机磷(定量)</td>
                 <td>抽检</td>
@@ -458,7 +458,7 @@
               </tr>
               <tr data-status="progress">
                 <td>JC-202602110003</td>
-                <td>王五</td>
+                <td>王五 - 大棚3 (DP20200003)</td>
                 <td>西瓜</td>
                 <td>农药定性</td>
                 <td>主体申请</td>
@@ -472,7 +472,7 @@
               </tr>
               <tr data-status="progress">
                 <td>JC-202602110004</td>
-                <td>赵六</td>
+                <td>赵六 - 大棚4 (DP20200004)</td>
                 <td>番茄</td>
                 <td>重金属检测</td>
                 <td>主体申请</td>
@@ -486,7 +486,7 @@
               </tr>
               <tr data-status="progress">
                 <td>JC-202602100006</td>
-                <td>孙七</td>
+                <td>孙七 - 大棚5 (DP20200005)</td>
                 <td>葡萄</td>
                 <td>农药定性</td>
                 <td>主体申请</td>
@@ -531,7 +531,7 @@
             <thead>
               <tr>
                 <th>检测申请编号</th>
-                <th>检测主体</th>
+                <th>检测主体-资产</th>
                 <th>样品名称</th>
                 <th>检测项目</th>
                 <th>类型</th>
@@ -547,7 +547,7 @@
             <tbody>
               <tr data-status="pass">
                 <td>JC-202602110001</td>
-                <td>张三</td>
+                <td>张三 - 大棚1 (DP20200001)</td>
                 <td>红颜草莓</td>
                 <td>农药定性</td>
                 <td>主体申请</td>
@@ -592,7 +592,7 @@
             <thead>
               <tr>
                 <th>检测申请编号</th>
-                <th>检测主体</th>
+                <th>检测主体-资产</th>
                 <th>样品名称</th>
                 <th>检测项目</th>
                 <th>类型</th>
@@ -608,7 +608,7 @@
             <tbody>
               <tr data-status="fail">
                 <td>JC-202602110002</td>
-                <td>李四</td>
+                <td>李四 - 大棚2 (DP20200002)</td>
                 <td>蓝莓</td>
                 <td>有机磷(定量)</td>
                 <td>抽检</td>
@@ -653,7 +653,7 @@
             <thead>
               <tr>
                 <th>检测申请编号</th>
-                <th>检测主体</th>
+                <th>检测主体-资产</th>
                 <th>样品名称</th>
                 <th>检测项目</th>
                 <th>类型</th>
@@ -669,7 +669,7 @@
             <tbody>
               <tr data-status="progress" data-substatus="pending">
                 <td>JC-202602110003</td>
-                <td>王五</td>
+                <td>王五 - 大棚3 (DP20200003)</td>
                 <td>西瓜</td>
                 <td>农药定性</td>
                 <td>主体申请</td>
@@ -683,7 +683,7 @@
               </tr>
               <tr data-status="progress" data-substatus="testing">
                 <td>JC-202602110004</td>
-                <td>赵六</td>
+                <td>赵六 - 大棚4 (DP20200004)</td>
                 <td>番茄</td>
                 <td>重金属检测</td>
                 <td>主体申请</td>
@@ -697,7 +697,7 @@
               </tr>
               <tr data-status="progress" data-substatus="rejected">
                 <td>JC-202602100006</td>
-                <td>孙七</td>
+                <td>孙七 - 大棚5 (DP20200005)</td>
                 <td>葡萄</td>
                 <td>农药定性</td>
                 <td>主体申请</td>
@@ -771,8 +771,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label>大棚资产</label>
-            <select id="greenhouseSelect" class="form-control">
+            <label>大棚资产 <span style="color: #999; font-weight: normal; font-size: 12px;">(支持选择多个资产，批量生成抽检信息)</span></label>
+            <select id="greenhouseSelect" class="form-control" multiple style="height: 100px;">
               <option value="">请先选择农户</option>
             </select>
           </div>
@@ -1526,7 +1526,7 @@
         const options = greenhouses[farmerId].map(greenhouse => 
           `<option value="${greenhouse.value}">${greenhouse.text}</option>`
         ).join('');
-        greenhouseSelect.innerHTML = `<option value="">请选择大棚资产</option>${options}`;
+        greenhouseSelect.innerHTML = options;
       } else {
         greenhouseSelect.innerHTML = '<option value="">该农户暂无大棚资产</option>';
       }
@@ -1536,7 +1536,8 @@
     function submitAddInspection() {
       const farmerId = document.getElementById('farmerSelect').value;
       const farmerName = document.getElementById('farmerSearch').value;
-      const greenhouseId = document.getElementById('greenhouseSelect').value;
+      const greenhouseSelect = document.getElementById('greenhouseSelect');
+      const selectedGreenhouses = Array.from(greenhouseSelect.selectedOptions).map(option => option.text);
       const inspectionItem = document.getElementById('inspectionItemSelect').value;
       const inspectionCenter = document.getElementById('inspectionCenterSelect').value;
       
@@ -1546,7 +1547,7 @@
         return;
       }
       
-      if (!greenhouseId) {
+      if (selectedGreenhouses.length === 0) {
         alert('请选择大棚资产');
         return;
       }
@@ -1557,7 +1558,7 @@
       }
       
       // 构建提示信息
-      let alertMessage = '新增抽检成功！\n农户：' + farmerName + '\n大棚：' + document.getElementById('greenhouseSelect').options[document.getElementById('greenhouseSelect').selectedIndex].text + '\n检测项目：' + document.getElementById('inspectionItemSelect').options[document.getElementById('inspectionItemSelect').selectedIndex].text;
+      let alertMessage = '新增抽检成功！\n农户：' + farmerName + '\n大棚：' + selectedGreenhouses.join(', ') + '\n检测项目：' + document.getElementById('inspectionItemSelect').options[document.getElementById('inspectionItemSelect').selectedIndex].text;
       
       // 如果选择了检测中心，添加到提示信息中
       if (inspectionCenter) {

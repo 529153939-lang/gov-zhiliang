@@ -361,6 +361,59 @@
     </div>
   </div>
   <script>
+    // 获取URL参数
+    function getURLParams() {
+      const params = {};
+      const search = window.location.search.substring(1);
+      search.split('&').forEach(param => {
+        const [key, value] = param.split('=');
+        params[key] = value;
+      });
+      return params;
+    }
+    
+    // 根据类型显示不同内容
+    function initPage() {
+      const params = getURLParams();
+      const type = params.type || 'enterprise';
+      const id = params.id || '1';
+      
+      // 修改页面标题和内容
+      if (type === 'individual') {
+        // 修改页面标题
+        document.querySelector('.detail-header h2').textContent = '蓝旗包装中心 - 详情';
+        
+        // 修改标签页标题
+        document.querySelector('.tab-header .tab-item:first-child').textContent = '个人信息';
+        
+        // 修改个人信息内容
+        const basicInfo = document.getElementById('basic');
+        basicInfo.innerHTML = `
+          <div class="info-section">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 14px;">
+              <div><strong>主体名称：</strong>蓝旗包装中心</div>
+              <div><strong>主体性质：</strong>包装中心</div>
+              <div><strong>主体备案编号：</strong>BZZX20200005</div>
+              <div><strong>联系电话：</strong>13500135000</div>
+              <div><strong>负责人：</strong>孙七</div>
+              <div><strong>注册日期：</strong>2020-05-05</div>
+              <div><strong>经营地址：</strong>凤城市蓝旗镇蓝旗村</div>
+              <div><strong>身份证号：</strong>210682199001011234</div>
+              <div><strong>性别：</strong>男</div>
+              <div><strong>出生日期：</strong>1990-01-01</div>
+              <div><strong>民族：</strong>汉族</div>
+              <div><strong>籍贯：</strong>辽宁省凤城市</div>
+
+              <div><strong>身份证（附件）：</strong><a href="#">身份证.pdf</a></div>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', initPage);
+    
     function switchTab(tabId) {
       // 隐藏所有标签内容
       const tabContents = document.querySelectorAll('.tab-content');

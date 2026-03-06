@@ -58,7 +58,8 @@
           <tr>
             <th>序号</th>
             <th>包装中心名称</th>
-            <th>统一社会信用代码</th>
+            <th>类型</th>
+            <th>统一社会信用代码/身份证</th>
             <th>负责人</th>
             <th>联系电话</th>
             <th>注册日期</th>
@@ -71,6 +72,7 @@
           <tr>
             <td>1</td>
             <td>凤凰包装中心</td>
+            <td>企业</td>
             <td>91210682MA12345678</td>
             <td>张三</td>
             <td>13800138000</td>
@@ -79,13 +81,14 @@
             <td><span class="status-tag active">正常</span></td>
             <td>
               <div class="action-buttons">
-                <button class="btn btn-default" onclick="viewDetail(1)">查看详情</button>
+                <button class="btn btn-default" onclick="viewDetail(1, 'enterprise')">查看详情</button>
               </div>
             </td>
           </tr>
           <tr>
             <td>2</td>
             <td>花园包装中心</td>
+            <td>企业</td>
             <td>91210682MA87654321</td>
             <td>李四</td>
             <td>13900139000</td>
@@ -94,13 +97,14 @@
             <td><span class="status-tag active">正常</span></td>
             <td>
               <div class="action-buttons">
-                <button class="btn btn-default" onclick="viewDetail(2)">查看详情</button>
+                <button class="btn btn-default" onclick="viewDetail(2, 'enterprise')">查看详情</button>
               </div>
             </td>
           </tr>
           <tr>
             <td>3</td>
             <td>草河包装中心</td>
+            <td>企业</td>
             <td>91210682MA13579246</td>
             <td>王五</td>
             <td>13700137000</td>
@@ -109,13 +113,14 @@
             <td><span class="status-tag active">正常</span></td>
             <td>
               <div class="action-buttons">
-                <button class="btn btn-default" onclick="viewDetail(3)">查看详情</button>
+                <button class="btn btn-default" onclick="viewDetail(3, 'enterprise')">查看详情</button>
               </div>
             </td>
           </tr>
           <tr>
             <td>4</td>
             <td>刘家包装中心</td>
+            <td>企业</td>
             <td>91210682MA24680135</td>
             <td>赵六</td>
             <td>13600136000</td>
@@ -124,14 +129,15 @@
             <td><span class="status-tag active">正常</span></td>
             <td>
               <div class="action-buttons">
-                <button class="btn btn-default" onclick="viewDetail(4)">查看详情</button>
+                <button class="btn btn-default" onclick="viewDetail(4, 'enterprise')">查看详情</button>
               </div>
             </td>
           </tr>
           <tr>
             <td>5</td>
             <td>蓝旗包装中心</td>
-            <td>91210682MA98765432</td>
+            <td>个人</td>
+            <td>210682199001011234</td>
             <td>孙七</td>
             <td>13500135000</td>
             <td>2020-05-05</td>
@@ -139,7 +145,7 @@
             <td><span class="status-tag active">正常</span></td>
             <td>
               <div class="action-buttons">
-                <button class="btn btn-default" onclick="viewDetail(5)">查看详情</button>
+                <button class="btn btn-default" onclick="viewDetail(5, 'individual')">查看详情</button>
               </div>
             </td>
           </tr>
@@ -168,9 +174,9 @@
   </div>
   
   <script>
-    function viewDetail(id) {
-      // 跳转到详情页面
-      window.location.href = `business-subject-packaging-detail.html?id=${id}`;
+    function viewDetail(id, type) {
+      // 跳转到详情页面，并传递类型参数
+      window.location.href = `business-subject-packaging-detail.html?id=${id}&type=${type}`;
     }
   </script>
 </body>
